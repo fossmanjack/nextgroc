@@ -16,33 +16,66 @@
 	<link rel="stylesheet" href="css/localstyles.css" />
 	<!-- endbuild -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans" />
-	<title>Insert Title Here</title>
+	<title>Nextcloud :: Grocery</title>
 </head>
 
 <body>
 	<header>
 	</header>
-
-	<div class="container">
+	<nav class="navbar navbar-dark sticky-top">
+		<div class="container">
+			<div class="row">
+				<div class="col-1">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#listNavBar">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+				<div class="col">
+					<h2 class="text-center">Grocery list</h2>
+				</div>
+				<div class="col-1">
+					<!-- sweep button goes here -->
+				</div>
+			</div>
+		</div>
+	</nav>
+<!--
+	<div class="container-fluid px-0">
 		<div class="row row-content">
+-->
 			<div id="accordion">
-				<a data-toggle="collapse" data-target="#bootstrap">
-					<div class="card">
+				<a class="collapsed" data-toggle="collapse" data-target="#diet-pepsi">
+					<div class="container list-item">
 <!-- the row that displays -->
-						<div role="tab" class="card-header">
-							<button class="btn" type="button">
-								<span class="col col-1 fa fa-square-o" />
-							</button>
-							<h4 class="col col-9">Diet pepsi</h4>
-							<h4 class="col col-2">Qty: 24pk cans</h4>
+						<div role="tab" class="row">
+<!--
+							<div class="col col-1">
+								<button class="btn" type="button">
+									<span class="fa fa-square-o align-middle" />
+								</button>
+							</div>
+							<div class="col col-8">
+								<h4>Diet pepsi</h4>
+							</div>
+							<div class="col col-3 align-self-right">
+								<p class="text-right">24pk</p>
+							</div>
+-->
+							<div class="col">
+								<h4><button class="btn" type="button"><span class="fa fa-square-o" /></button>Diet pepsi</h4>
+							</div>
+							<div class="col">
+								<p class="text-right">24pk</p>
+							</div>
 						</div>
 <!-- begin fold-out -->
-						<div class="collapse show" id="bootstrap" data-parent="#accordion">
-							<div class="card-body">
-								<div class="row row-content">
-									<div class="col-4">
-										<img src="img/diet-pepsi.jpg" class="img-fluid" />
-									</div>
+						<div class="collapse" id="diet-pepsi" data-parent="#accordion">
+<!-- image block -->
+							<div class="row row-content">
+								<div class="col-4">
+									<img src="img/diet-pepsi.jpg" class="img-fluid" />
+								</div>
+								<div class="col-8">
 									<div class="container">
 										<div class="row row-content">
 											<div class="col">
@@ -57,10 +90,105 @@
 									</div>
 								</div>
 							</div>
+<!-- end image block -->
+<!-- begin below-image block -->
+							<div class="row row-content">
+								<div class="col-1">
+									<button class="btn" type="button">
+										<span class="fa fa-square-o" />
+									</button>
+								</div>
+								<div class="col-2">
+									Staple
+								</div>
+								<div class="col align-right">
+									<p class="text-right">Last purchased: 2022-05-16</p>
+								</div>
+							</div>
+							<div class="row row-content">
+								<div class="col">
+									Notes:
+								</div>
+							</div>
+<!-- end below-image block -->
 						</div>
 <!-- end fold-out -->
 					</div>
 				</a>
+<!-- end item 1 -->
+<!-- begin item 2 -->
+				<a class="collapsed" data-toggle="collapse" data-target="#whole-milk">
+					<div class="container list-item">
+<!-- the row that displays -->
+						<div role="tab" class="row">
+<!--
+							<div class="col col-1">
+								<button class="btn" type="button">
+									<span class="fa fa-square-o align-middle" />
+								</button>
+							</div>
+							<div class="col col-8">
+								<h4>Whole milk</h4>
+							</div>
+							<div class="col col-3 align-self-right">
+								<p class="text-right"></p>
+							</div>
+-->
+							<div class="col">
+								<h4><button class="btn" type="button"><span class="fa fa-square-o" /></button>Whole milk</h4>
+							</div>
+							<div class="col">
+								<p class="text-right"></p>
+							</div>
+						</div>
+<!-- begin fold-out -->
+						<div class="collapse" id="whole-milk" data-parent="#accordion">
+<!-- image block -->
+							<div class="row row-content">
+								<div class="col-4">
+									<img src="img/whole-milk.jpg" class="img-fluid" />
+								</div>
+								<div class="col-8">
+									<div class="container">
+										<div class="row row-content">
+											<div class="col">
+												Price: $4.59
+											</div>
+										</div>
+										<div class="row row-content">
+											<div class="col">
+												Location: HEB cold case
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+<!-- end image block -->
+<!-- begin below-image block -->
+							<div class="row row-content">
+								<div class="col-1">
+									<button class="btn" type="button">
+										<span class="fa fa-square-o" />
+									</button>
+								</div>
+								<div class="col-2">
+									Staple
+								</div>
+								<div class="col align-right">
+									<p class="text-right">Last purchased: 2022-05-16</p>
+								</div>
+							</div>
+							<div class="row row-content">
+								<div class="col">
+									Notes: A2 milk preferred but not required
+								</div>
+							</div>
+<!-- end below-image block -->
+						</div>
+<!-- end fold-out -->
+					</div>
+				</a>
+<!-- end item 2 -->
 			</div>
 		</div>
 	</div>
@@ -73,6 +201,7 @@
 	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="js/scripts.js"></script>
+	<script src="js/classes.js"></script>
 	<!-- endbuild -->
 </body>
 

@@ -1,0 +1,6 @@
+$header-bg-dark: #0082C9;
+$header-bg-light: #5dc3fb;
+
+.nextcloud-header {
+	background-image: linear-gradient($header-bg-dark, $header-bg-light);
+}
