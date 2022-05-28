@@ -1,3 +1,8 @@
+.nextcloud-header {
+  background-image: linear-gradient(to right, #0082C9, #5dc3fb); }
+
 .list-item {
-	border: 1px solid #aaaaaa;
-}
+  border: 1px solid #aaaaaa; }
+
+.boughtItem {
+  text-decoration: line-through; }

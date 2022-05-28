@@ -1,6 +1,20 @@
 $header-bg-dark: #0082C9;
 $header-bg-light: #5dc3fb;
+$color-pale: #eeeeee;
 
 .nextcloud-header {
-	background-image: linear-gradient($header-bg-dark, $header-bg-light);
+	background-image: linear-gradient(to right, $header-bg-dark, $header-bg-light);
+}
+
+// for debugging
+.list-item {
+	border: 1px solid #aaaaaa;
+}
+
+.needItem {
+
+}
+
+.boughtItem {
+	text-decoration: line-through;
 }
