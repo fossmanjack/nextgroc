@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags always come first -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- build:css css/main.css -->
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+
+	<!-- Additional CSS must be placed after bootstrap.css -->
+	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css" />
+	<link rel="stylesheet" href="css/localstyles.css" />
+	<!-- endbuild -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans" />
+	<title>Nextcloud :: Grocery</title>
+</head>
+
+<body>
+	<header>
+		<h4 id="list-title">List Title</h4>
+	</header>
+
+	<div id="list-goes-here">
+	</div>
+
+	<input type="text" name="text" id="item-input">
+
+
+	<footer>
+	</footer>
+
+	<!-- build:js js/main.js -->
+	<!-- jQuery must come first, then Popper.js, then the Bootstrap JavaScript plugins.-->
+	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/scripts.js"></script>
+	<script src="js/basicClasses.js"></script>
+	<script src="js/generateList.js"></script>
+	<!-- endbuild -->
+
+	<script>
+		const testList = new BasicList("Test List");
+		const item1 = new BasicItem("Whole milk", "1 gal");
+		const item2 = new BasicItem("Bologna");
+		const item3 = new BasicItem("White bread");
+		const item4 = new BasicItem("American cheese");
+		const item5 = new BasicItem("Mayonnaise");
+		const item6 = new BasicItem("Potato chips");
+		item4.bought = true;
+
+		testList.addItem(item1);
+		testList.addItem(item2);
+		testList.addItem(item3);
+		testList.addItem(item4);
+		testList.addItem(item5);
+		testList.addItem(item6);
+
+		$(document).ready(function() {
+			const tar = document.getElementById("list-goes-here");
+			const inputField = document.getElementById("item-input");
+			loadList(testList);
+			generateList(tar, testList);
+			inputField.addEventListener('keypress', function(e) {
+				if(e.keyCode === 13) {
+					tryAddItem(inputField.value, tar, testList);
+				}
+			});
+		});
+
+		function tryAddItem(name, tar, tList) {
+			testList.addItemByName(name) ? generateList(tar, tList) : null;
+			document.getElementById("item-input").value = "";
+		}
+
+	</script>
+
+</body>
+
+</html>
+
+

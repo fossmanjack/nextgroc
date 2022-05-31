@@ -1,10 +1,12 @@
 class ListItem {
-	constructor(name="") {
+	constructor(name="list item", qty="1") {
 		this.itemName = name; 			// string
+		this.qty = qty;					// string (to allow for "1 case" etc)
 		this.itemPrice = 0;				// float
 		this.itemLoc = "";				// string
 		this.itemPic = "";				// string
-		this.itemBarcode = 0;			// int
+		this.itemBarcode = 0;			// string
+		this.url = "";					// string
 		this.notes = "";				// string
 		this.need = true;				// bool
 		this.bought = false;			// bool
