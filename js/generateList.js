@@ -55,7 +55,9 @@ function generateList(root, _List) {
 
 function generateListElement(root, ind, el) {
 	// make the button first
-	// <button class="btn" type="button" id="item0check"><span class="fa fa-square-o" id="item0checkbox" />
+	// root - the <li> attached to the <ul>
+	// ind - the index of the listItem
+	// el - the listItem we're working on
 
 	let btn = document.createElement('button');
 	btn.classList.add('btn');
@@ -66,7 +68,7 @@ function generateListElement(root, ind, el) {
 	let checkBox = document.createElement('span');
 	checkBox.classList.add('fa');
 	el.bought ? checkBox.classList.add('fa-check-square') : checkBox.classList.add('fa-square-o');
-	checkBox.id = `item${ind}check`;
+	checkBox.id = `item${ind}checkbox`;
 	btn.appendChild(checkBox);
 	btn.addEventListener("click", function() { checkItem(ind, el) } );
 
@@ -79,15 +81,18 @@ function generateListElement(root, ind, el) {
 }
 
 function checkItem(ind, el) {
+	// ind - the index of the listItem
+	// el - the listItem
+	const checkBox = document.getElementById(`item${ind}checkbox`);
 	if(el.bought) { // toggle everything to un-bought
 		document.getElementById(`item${ind}`).style.textDecoration = ""; // remove strikethrough
-		document.getElementById(`item${ind}check`).classList.remove('fa-check-square');
-		document.getElementById(`item${ind}check`).classList.add('fa-square-o');
-		el.bought = false;
+		checkBox.classList.remove('fa-check-square');
+		checkBox.classList.add('fa-square-o');
+		el.setState("needed");
 	} else { // toggle everything to bought
 		document.getElementById(`item${ind}`).style.textDecoration = "line-through";
-		document.getElementById(`item${ind}check`).classList.add('fa-check-square');
-		document.getElementById(`item${ind}check`).classList.remove('fa-square-o');
-		el.bought = true;
+		checkBox.classList.add('fa-check-square');
+		checkBox.classList.remove('fa-square-o');
+		el.setState("bought");
 	}
 }

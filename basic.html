@@ -28,7 +28,7 @@
 	</div>
 
 	<input type="text" name="text" id="item-input">
-
+	<button class="btn btn-primary" name="sweepButton" id="sweep-button"><span class="fa fa-solid fa-broom"></span></button>
 
 	<footer>
 	</footer>
@@ -38,6 +38,7 @@
 	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
 	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
 	<script src="js/scripts.js"></script>
 	<script src="js/basicClasses.js"></script>
 	<script src="js/generateList.js"></script>
@@ -51,6 +52,7 @@
 		const item4 = new BasicItem("American cheese");
 		const item5 = new BasicItem("Mayonnaise");
 		const item6 = new BasicItem("Potato chips");
+		const item7 = new BasicItem("!@#$%^&*()-_=+[]{}\|,.<>?/\'\":;");
 		item4.bought = true;
 
 		testList.addItem(item1);
@@ -59,10 +61,12 @@
 		testList.addItem(item4);
 		testList.addItem(item5);
 		testList.addItem(item6);
+		testList.addItem(item7);
 
 		$(document).ready(function() {
 			const tar = document.getElementById("list-goes-here");
 			const inputField = document.getElementById("item-input");
+			const sweeper = document.getElementById("sweep-button");
 			loadList(testList);
 			generateList(tar, testList);
 			inputField.addEventListener('keypress', function(e) {
@@ -70,11 +74,19 @@
 					tryAddItem(inputField.value, tar, testList);
 				}
 			});
+			sweeper.addEventListener('click', function() { sweepList(testList); });
 		});
 
 		function tryAddItem(name, tar, tList) {
 			testList.addItemByName(name) ? generateList(tar, tList) : null;
 			document.getElementById("item-input").value = "";
+		}
+
+		function sweepList(tList) {
+			console.log("Sweeping list...");
+			const tar = document.getElementById("list-goes-here");
+			tList.sweep();
+			generateList(tar, tList);
 		}
 
 	</script>
