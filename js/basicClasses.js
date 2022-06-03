@@ -1,5 +1,5 @@
 //import { debugMsg } from './debug.mjs';
-
+/*
 const debugMsg = (fun, params) => {
 	console.log("****** DEBUG ******");
 	console.log(`Calling function ${fun} with:`);
@@ -10,6 +10,7 @@ const debugMsg = (fun, params) => {
 }
 
 const debug = false;
+*/
 
 const camelize = str => str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase());
 const sanitize = str => str.replace(/[~!@#$%^&*().,<>?_=+:;\'\"\/\-\[\]\{\}\\\|\`]/g, '');

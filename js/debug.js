@@ -1,4 +1,6 @@
-export const debugMsg = (fun, params) => {
+const debug = true;
+
+const debugMsg = (fun, params) => {
 	console.log("****** DEBUG ******");
 	console.log(`Calling function ${fun} with:`);
 	for(i in params) {
@@ -6,3 +8,4 @@ export const debugMsg = (fun, params) => {
 	}
 	console.log("*******************");
 }
+
