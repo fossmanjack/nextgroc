@@ -48,7 +48,14 @@ class BasicItem {
 		}
 	}
 	setName(str) {
-		this.itemName = sanitize(name) ? sanitize(name) : "list item";
+	//	this.itemName = sanitize(name) ? sanitize(name) : "list item";
+		str = sanitize(str);
+		if(str) {
+			this.itemName = str;
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 

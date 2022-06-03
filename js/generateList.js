@@ -92,6 +92,14 @@ function generateListElement(root, ind, el) {
 	disp.appendChild(document.createTextNode(`${el.itemName}\t${el.qty}`));
 	//disp.addEventListener("click", function() { editItemText(disp, el) });
 	disp.contentEditable = true;
+	disp.addEventListener('blur', function() { commitItemText(disp, el); });
+	disp.addEventListener('beforeinput', function(e) {
+		debug ? debugMsg('input', [ disp, e, e.keyCode ]) : null;
+		if(e.inputType === 'insertParagraph') {
+			disp.blur();
+			e = null;
+		}
+	});
 	root.appendChild(disp);
 /*
 	// item name and quantity contained within one span
@@ -174,4 +182,13 @@ function editItemText(span, el) {
 //*/
 }
 
-
+function commitItemText(span, el) {
+	input = span.textContent;
+	//el.setName(input) ? return true : { span.textContent = el.itemName; return false; };
+	if(el.setName(input)) {
+		return true;
+	} else {
+		span.textContent = el.itemName;
+		return false;
+	}
+}
