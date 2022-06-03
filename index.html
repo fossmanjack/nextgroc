@@ -21,177 +21,16 @@
 
 <body>
 	<header>
+		<h4 id="list-title">List Title</h4>
 	</header>
-	<nav class="navbar nextcloud-header navbar-dark sticky-top">
-		<div class="container">
-			<div class="row">
-				<div class="col-1">
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#listNavBar">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-				</div>
-				<div class="col">
-					<h2 class="text-center">Grocery list</h2>
-				</div>
-				<div class="col-1">
-					<!-- sweep button goes here -->
-				</div>
-			</div>
-		</div>
-	</nav>
-<!--
-	<div class="container-fluid px-0">
-		<div class="row row-content">
--->
-			<div id="accordion">
-				<a class="collapsed" data-toggle="collapse" data-target="#item0pane">
-					<div class="container list-item">
-<!-- the row that displays -->
-						<div role="tab" class="row">
-<!--
-							<div class="col col-1">
-								<button class="btn" type="button">
-									<span class="fa fa-square-o align-middle" />
-								</button>
-							</div>
-							<div class="col col-8">
-								<h4>Diet pepsi</h4>
-							</div>
-							<div class="col col-3 align-self-right">
-								<p class="text-right">24pk</p>
-							</div>
--->
-							<div class="col">
-								<h4><button class="btn" type="button" id="item0check"><span class="fa fa-square-o" id="item0checkbox" /></button><span id="item1text" class="needItem">Diet pepsi</span></h4>
-							</div>
-							<div class="col">
-								<p class="text-right" id="item0qty">24pk</p>
-							</div>
-						</div>
-<!-- begin fold-out -->
-						<div class="collapse" id="item0pane" data-parent="#accordion">
-<!-- image block -->
-							<div class="row row-content">
-								<div class="col-4">
-									<img id="item0pic" src="img/diet-pepsi.jpg" class="img-fluid" />
-								</div>
-								<div class="col-8">
-									<div class="container">
-										<div class="row row-content">
-											<div class="col">
-												Price: $7.99
-											</div>
-										</div>
-										<div class="row row-content">
-											<div class="col">
-												Location: Walmart B6
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-<!-- end image block -->
-<!-- begin below-image block -->
-							<div class="row row-content">
-								<div class="col-1">
-									<button class="btn" type="button">
-										<span class="fa fa-square-o" />
-									</button>
-								</div>
-								<div class="col-2">
-									Staple
-								</div>
-								<div class="col align-right">
-									<p class="text-right">Last purchased: 2022-05-16</p>
-								</div>
-							</div>
-							<div class="row row-content">
-								<div class="col">
-									Notes:
-								</div>
-							</div>
-<!-- end below-image block -->
-						</div>
-<!-- end fold-out -->
-					</div>
-				</a>
-<!-- end item 1 -->
-<!-- begin item 2 -->
-				<a class="collapsed" data-toggle="collapse" data-target="#whole-milk">
-					<div class="container list-item">
-<!-- the row that displays -->
-						<div role="tab" class="row">
-<!--
-							<div class="col col-1">
-								<button class="btn" type="button">
-									<span class="fa fa-square-o align-middle" />
-								</button>
-							</div>
-							<div class="col col-8">
-								<h4>Whole milk</h4>
-							</div>
-							<div class="col col-3 align-self-right">
-								<p class="text-right"></p>
-							</div>
--->
-							<div class="col">
-								<h4><button class="btn" type="button"><span class="fa fa-square-o" /></button>Whole milk</h4>
-							</div>
-							<div class="col">
-								<p class="text-right"></p>
-							</div>
-						</div>
-<!-- begin fold-out -->
-						<div class="collapse" id="whole-milk" data-parent="#accordion">
-<!-- image block -->
-							<div class="row row-content">
-								<div class="col-4">
-									<img src="img/whole-milk.jpg" class="img-fluid" />
-								</div>
-								<div class="col-8">
-									<div class="container">
-										<div class="row row-content">
-											<div class="col">
-												Price: $4.59
-											</div>
-										</div>
-										<div class="row row-content">
-											<div class="col">
-												Location: HEB cold case
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-<!-- end image block -->
-<!-- begin below-image block -->
-							<div class="row row-content">
-								<div class="col-1">
-									<button class="btn" type="button">
-										<span class="fa fa-square-o" />
-									</button>
-								</div>
-								<div class="col-2">
-									Staple
-								</div>
-								<div class="col align-right">
-									<p class="text-right">Last purchased: 2022-05-16</p>
-								</div>
-							</div>
-							<div class="row row-content">
-								<div class="col">
-									Notes: A2 milk preferred but not required
-								</div>
-							</div>
-<!-- end below-image block -->
-						</div>
-<!-- end fold-out -->
-					</div>
-				</a>
-<!-- end item 2 -->
-			</div>
-		</div>
+
+	<div id="list-goes-here">
 	</div>
+
+	<input type="text" name="text" id="item-input">
+	<button class="btn btn-primary" name="sweepButton" id="sweep-button"><span class="fa fa-solid fa-broom"></span></button>
+	<button class="btn btn-success" name="resetButton" id="reset-button"><span class="fa fa-solid fa-refresh"></span></button>
+
 	<footer>
 	</footer>
 
@@ -200,11 +39,60 @@
 	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
 	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
 	<script src="js/scripts.js"></script>
-	<script src="js/classes.js"></script>
+	<script src="js/basicClasses.js"></script>
+	<script src="js/generateList.js"></script>
 	<!-- endbuild -->
 
 	<script>
+		const testList = new BasicList("Test List");
+		const item1 = new BasicItem("Whole milk", "1 gal");
+		const item2 = new BasicItem("Bologna");
+		const item3 = new BasicItem("White bread");
+		const item4 = new BasicItem("American cheese");
+		const item5 = new BasicItem("Mayonnaise");
+		const item6 = new BasicItem("Potato chips");
+		const item7 = new BasicItem("!@#$%^&*()-_=+[]{}\|,.<>?/\'\":;");
+		item4.bought = true;
+
+		testList.addItem(item1);
+		testList.addItem(item2);
+		testList.addItem(item3);
+		testList.addItem(item4);
+		testList.addItem(item5);
+		testList.addItem(item6);
+		testList.addItem(item7);
+
+		$(document).ready(function() {
+			const tar = document.getElementById("list-goes-here");
+			const inputField = document.getElementById("item-input");
+			const sweeper = document.getElementById("sweep-button");
+			const reset = document.getElementById("reset-button");
+			loadList(testList);
+			generateList(tar, testList);
+			inputField.addEventListener('keypress', function(e) {
+				if(e.keyCode === 13) {
+					tryAddItem(inputField.value, tar, testList);
+				}
+			});
+			sweeper.addEventListener('click', function() { sweepList(testList); });
+			reset.addEventListener('click', function() { generateList(tar, testList); });
+		});
+
+		function tryAddItem(name, tar, tList) {
+			testList.addItemByName(name) ? generateList(tar, tList) : null;
+			document.getElementById("item-input").value = "";
+		}
+
+		function sweepList(tList) {
+			console.log("Sweeping list...");
+			const tar = document.getElementById("list-goes-here");
+			tList.sweep();
+			generateList(tar, tList);
+		}
+
+	</script>
 
 </body>
 

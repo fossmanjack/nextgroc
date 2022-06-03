@@ -1,4 +1,4 @@
-const debug = true;
+//import { debugMsg } from './debug.mjs';
 
 const debugMsg = (fun, params) => {
 	console.log("****** DEBUG ******");
@@ -9,9 +9,11 @@ const debugMsg = (fun, params) => {
 	console.log("*******************");
 }
 
-const camelize = str => str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
-const sanitize = str => str.replace(/[!@#$%^&*().,<>?_=+:;\'\"\/\-\[\]\{\}\\\|]/g, '');
-// ! @ # $ % ^ & * ( ) - _ = + [ ] { } \ | , . < > ? / ' " : ;
+const debug = false;
+
+const camelize = str => str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase());
+const sanitize = str => str.replace(/[~!@#$%^&*().,<>?_=+:;\'\"\/\-\[\]\{\}\\\|\`]/g, '');
+// ! @ # $ % ^ & * ( ) - _ = + [ ] { } \ | , . < > ? / ' " : ; ` ~
 
 class BasicItem {
 	constructor(name, qty="1") {
@@ -44,6 +46,9 @@ class BasicItem {
 				this.bought = false;
 		}
 	}
+	setName(str) {
+		this.itemName = sanitize(name) ? sanitize(name) : "list item";
+	}
 }
 
 class BasicList {
@@ -74,6 +79,9 @@ class BasicList {
 	}
 	getNeeded() {
 		return this.listItems.filter(this.filterNeeded);
+	}
+	getLibrary() {
+		return this.listItems;
 	}
 	sweep() {
 		this.listItems.forEach(function(el) {

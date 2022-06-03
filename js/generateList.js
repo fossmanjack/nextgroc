@@ -21,6 +21,19 @@
 //arrToUl(div, myArray);
 
 //const checkBox = id => { document.createElement('span').class = "fa fa-square-o"; }
+//import { debugMsg } from './debug.mjs';
+/*j
+let debugMsg = (fun, params) => {
+	console.log("****** DEBUG ******");
+	console.log(`Calling function ${fun} with:`);
+	for(i in params) {
+		console.log("\t", params[i]);
+	}
+	console.log("*******************");
+}
+
+let debug = true;
+*/
 
 function generateList(root, _List) {
 	let ul = document.createElement('ul');
@@ -77,7 +90,37 @@ function generateListElement(root, ind, el) {
 	disp.id = `item${ind}`;
 	el.bought ? disp.style.textDecoration = "line-through" : null;
 	disp.appendChild(document.createTextNode(`${el.itemName}\t${el.qty}`));
+	//disp.addEventListener("click", function() { editItemText(disp, el) });
+	disp.contentEditable = true;
 	root.appendChild(disp);
+/*
+	// item name and quantity contained within one span
+	let disp = document.createElement('span');
+	disp.id = `item${ind}`;
+	el.bought ? disp.style.textDecoration = "line-through" : null;
+
+	// item name span
+	let nameSpan = document.createElement('span');
+	nameSpan.id = `item${ind}name-span`;
+	let itemText = document.createTextNode(`${el.itemName}`);
+	itemText.id = `item${ind}text`;
+	nameSpan.appendChild(itemText);
+	nameSpan.addEventListener("click", function() {  editItemText(nameSpan, el) });
+
+	// item quantity span
+	let qtySpan = document.createElement('span');
+	qtySpan.id = `item${ind}qty-span`;
+	let itemQty = document.createTextNode(`${el.qty}`);
+	itemQty.id = `item${ind}qty`;
+	// itemQty.addEventListener("click", editItemText()); // let's get the first one working
+	qtySpan.appendChild(itemQty);
+
+	// put them together
+	// They each need to be in their own span
+	disp.appendChild(nameSpan);
+	disp.appendChild(qtySpan);
+	root.appendChild(disp);
+*/
 }
 
 function checkItem(ind, el) {
@@ -96,3 +139,39 @@ function checkItem(ind, el) {
 		el.setState("bought");
 	}
 }
+
+function editItemText(span, el) {
+	// el = the span containing the text element to be edited
+//	debug ? debugMsg("editItemText", [ span, el ]) : null;
+//	alert("editItemText!");
+	// tob = span.firstChild; // text element
+	// tob = span.textContent;
+///* until we get the thing working don't even do anything
+	console.log(span.children);
+	console.log(span.textContent);
+	ibox = document.createElement('input');
+	ibox.type = 'text';
+	ibox.name = 'text';
+	ibox.value = span.textContent;
+	console.log(ibox);
+	span.appendChild = ibox;
+	ibox.addEventListener('keypress', function(e) {
+		if(e.keyCode === 13) {
+			el.setName(ibox.value);
+			span.textContent = el.itemName;
+			span.removeChild(ibox);
+		}
+	});
+
+
+
+	//
+	// <input type="text" name="text" id="item-input">
+	//		inputField.addEventListener('keypress', function(e) {
+	//			if(e.keyCode === 13) {
+	//				tryAddItem(inputField.value, tar, testList);
+	//			}
+//*/
+}
+
+
