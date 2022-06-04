@@ -72,6 +72,7 @@
 			const reset = document.getElementById("reset-button");
 			loadList(testList);
 			generateList(tar, testList);
+			addEditListeners();
 			inputField.addEventListener('keypress', function(e) {
 				if(e.keyCode === 13) {
 					tryAddItem(inputField.value, tar, testList);
@@ -84,6 +85,7 @@
 		function tryAddItem(name, tar, tList) {
 			testList.addItemByName(name) ? generateList(tar, tList) : null;
 			document.getElementById("item-input").value = "";
+			addEventListeners();
 		}
 
 		function sweepList(tList) {
@@ -93,6 +95,26 @@
 			generateList(tar, tList);
 		}
 
+		function addEditListeners() {
+			const listEls = document.getElementById('list-goes-here');
+			const spans = listEls.getElementsByTagName('span');
+
+			for(let el of spans) {
+//			spans.forEach(function(el) {
+				debug ? debugMsg("addEventListeners", [ el ]) : null;
+				if(el.contentEditable) {
+					el.addEventListener('blur', function() { commitFieldEdit(el); });
+					el.addEventListener('beforeinput', function(e) {
+						debug ? debugMsg('beforeinput', [ e, e.which ]) : null;
+						if(e.inputType === 'insertParagraph') {
+							el.blur();
+							e.preventDefault();
+						}
+					});
+				}
+//			});
+			}
+		}
 	</script>
 
 </body>

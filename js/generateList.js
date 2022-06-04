@@ -35,10 +35,13 @@ let debugMsg = (fun, params) => {
 let debug = true;
 */
 
+const _Index = new Map();
+
 function generateList(root, _List) {
 	let ul = document.createElement('ul');
 	let li;
 	const needed = _List.getNeeded();
+//	const _Index = new Map();
 
 	root.textContent = '';
 
@@ -72,19 +75,22 @@ function generateListElement(root, ind, el) {
 	// ind - the index of the listItem
 	// el - the listItem we're working on
 
+	const idStr = el.getCamelName();
+	_Index.set(idStr, el);
 	let btn = document.createElement('button');
 	btn.classList.add('btn');
 	btn.type = 'button';
-	btn.id = `item${ind}check`;
+	btn.id = `${idStr}-checkbox-btn`;
 	root.appendChild(btn);
 
 	let checkBox = document.createElement('span');
 	checkBox.classList.add('fa');
 	el.bought ? checkBox.classList.add('fa-check-square') : checkBox.classList.add('fa-square-o');
-	checkBox.id = `item${ind}checkbox`;
+	checkBox.id = `${idStr}-checkbox`;
 	btn.appendChild(checkBox);
 	btn.addEventListener("click", function() { checkItem(ind, el) } );
 
+/*
 	//let disp = `${el.itemName}\t${el.qty}`;
 	let disp = document.createElement('span');
 	disp.id = `item${ind}`;
@@ -97,10 +103,34 @@ function generateListElement(root, ind, el) {
 		debug ? debugMsg('input', [ disp, e, e.keyCode ]) : null;
 		if(e.inputType === 'insertParagraph') {
 			disp.blur();
-			e = null;
+			e.preventDefault();
 		}
 	});
+	debug ? disp.addEventListener('input', function(e) {
+		debugMsg('input', [ e ]);
+	}) : null;
 	root.appendChild(disp);
+*/
+
+	// let's make two spans, one for name and one for qty
+
+	let itemName = document.createElement('span');
+	itemName.id = `${idStr}-itemName`;
+	itemName.setAttribute("data-field", "itemName");
+	itemName.setAttribute("data-parent", idStr);
+	itemName.contentEditable = true;
+	el.bought ? itemName.style.textDecoration = "line-through" : null;
+	itemName.appendChild(document.createTextNode(`${el.itemName}`));
+	root.appendChild(itemName);
+
+	let qty = document.createElement('span');
+	qty.id = `${idStr}-qty`;
+	qty.setAttribute("data-field", "qty");
+	qty.setAttribute("data-parent", idStr);
+	qty.contentEditable = true;
+	qty.appendChild(document.createTextNode(`${el.qty}`));
+	qty.style.marginLeft = "15px";
+	root.appendChild(qty);
 /*
 	// item name and quantity contained within one span
 	let disp = document.createElement('span');
@@ -134,14 +164,15 @@ function generateListElement(root, ind, el) {
 function checkItem(ind, el) {
 	// ind - the index of the listItem
 	// el - the listItem
-	const checkBox = document.getElementById(`item${ind}checkbox`);
+	const idStr = el.getCamelName();
+	const checkBox = document.getElementById(`${idStr}-checkbox`);
 	if(el.bought) { // toggle everything to un-bought
-		document.getElementById(`item${ind}`).style.textDecoration = ""; // remove strikethrough
+		document.getElementById(`${idStr}-itemName`).style.textDecoration = ""; // remove strikethrough
 		checkBox.classList.remove('fa-check-square');
 		checkBox.classList.add('fa-square-o');
 		el.setState("needed");
 	} else { // toggle everything to bought
-		document.getElementById(`item${ind}`).style.textDecoration = "line-through";
+		document.getElementById(`${idStr}-itemName`).style.textDecoration = "line-through";
 		checkBox.classList.add('fa-check-square');
 		checkBox.classList.remove('fa-square-o');
 		el.setState("bought");
@@ -192,3 +223,18 @@ function commitItemText(span, el) {
 		return false;
 	}
 }
+
+function commitFieldEdit(span) {
+	let input = span.textContent;
+	const ob = _Index.get(span.getAttribute("data-parent"));
+
+	debug ? debugMsg('commitFieldEdit', [ span, span.getAttribute("data-field") ]) : null;
+
+	if(ob.setProp(span.getAttribute("data-field"), input)) {
+		return true;
+	} else {
+		span.textContent = ob[span.getAttribute("data-field")];
+		return false;
+	}
+}
+

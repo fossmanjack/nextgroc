@@ -50,11 +50,21 @@ class BasicItem {
 	setName(str) {
 	//	this.itemName = sanitize(name) ? sanitize(name) : "list item";
 		str = sanitize(str);
+		debug ? debugMsg('setName', [ str ]) : null;
 		if(str) {
 			this.itemName = str;
 			return true;
 		} else {
 			return false;
+		}
+	}
+	setProp(prop, str) {
+		debug ? debugMsg('setProp', [ prop, str ]) : null;
+		if(prop === "itemName") {
+			return this.setName(str);
+		} else {
+			this[prop] = str;
+			return true;
 		}
 	}
 }
