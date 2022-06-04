@@ -22,7 +22,15 @@ class BasicItem {
 		this.qty = qty;
 		this.needed = true;
 		this.bought = false;
+		this.#creationDate = Date.now();
+		this.modifyDate = this.#creationDate;
+		this.#oid = this.generateOid();
 	}
+	generateOid() {
+		let str = `${this.itemName}${this.#creationDate}`;
+		return window.btoa(unescape(encodeURIComponent( str )));
+	}
+	getOid() { return this.#oid; }
 	getCamelName() { return camelize(this.itemName); }
 	setState(state) {
 	// there are three states:
