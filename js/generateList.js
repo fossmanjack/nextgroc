@@ -236,5 +236,19 @@ function commitFieldEdit(span) {
 		span.textContent = ob[span.getAttribute("data-field")];
 		return false;
 	}
+
+	// there's a potential problem here, in that the same object is being
+	// re-inserted into the map using the new name string as a key.  The old
+	// key is also still present and appears to point to the same object.
+	//
+	// Actually this only happened once -- and I'm not fully sure how.  Cannot
+	// seem to duplicate now.  The only "issue" I can see is that the idStr doesn't
+	// update with the name field, but that might not be an issue since the new
+	// idStr should be reflected if the list is ever regenerated, and until then
+	// the old referents should still work.
+	//
+	// It might be useful to have a hidden immutable index id, like a github
+	// commit string, with each object in a library.  There might be problems with
+	// collisions otherwise, though I think I've done okay at preventing that.
 }
 
