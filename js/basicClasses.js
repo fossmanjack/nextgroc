@@ -22,15 +22,15 @@ class BasicItem {
 		this.qty = qty;
 		this.needed = true;
 		this.bought = false;
-		this.#creationDate = Date.now();
-		this.modifyDate = this.#creationDate;
-		this.#oid = this.generateOid();
+		this.creationDate = Date.now();
+		this.modifyDate = this.creationDate;
+		this.oid = this.generateOid();
 	}
 	generateOid() {
-		let str = `${this.itemName}${this.#creationDate}`;
-		return window.btoa(unescape(encodeURIComponent( str )));
+		let str = `${this.itemName}${this.creationDate}`;
+		return window.btoa(unescape(encodeURIComponent( str ))).slice(0, 12);
 	}
-	getOid() { return this.#oid; }
+	getOid() { return this.oid; }
 	getCamelName() { return camelize(this.itemName); }
 	setState(state) {
 	// there are three states:
@@ -118,9 +118,14 @@ class BasicList {
 
 function loadList(_List) {
 	document.getElementById("list-title").innerHTML = _List.listName;
+	/*
 	for(i in _List.getNeeded()) {
 		console.log(_List.getNeeded()[i]);
 	}
+	*/
+	_List.getNeeded().forEach(function(o) {
+		console.log(o);
+	});
 }
 
 
