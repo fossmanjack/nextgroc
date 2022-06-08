@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags always come first -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- build:css css/main.css -->
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+
+	<!-- Additional CSS must be placed after bootstrap.css -->
+	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css" />
+	<link rel="stylesheet" href="css/localstyles.css" />
+	<!-- endbuild -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans" />
+	<title>Nextcloud :: Grocery</title>
+</head>
+<!--
+
+The purpose of this file is to work out the static layout of the accordion items
+using bootstrap components.  We can then adapt that layout to a dynamic build-out.
+No objects or additional JS will be used here; this is a static test only.
+
+I think I'm going to go ahead and use Bootstrap 5 for this.
+
+Structure outline:
+
+> (a) | List name | (b)->
+> (c) List item | Qty: q-> | (d)->
+
+
+a: Sidebar/list of lists
+b: Sort options
+c: Checkbox
+d: 
+
+We need a few functions available on the item header line:
+- check item
+- expand accordion/display details
+- remove item from list
+- drag to rearrange
+- click text to edit
+
+Options:
+- I think I'm going to make it so clicking on the bar opens the accordion and
+makes everything editable, since editing the content is not an all-the-time thing
+- Maybe have an "edit" button either add contentEditable to all the features or 
+pop up an editable modal
+
+-->
+
+<body>
+	<header>
+	</header>
+	<nav class="navbar nextcloud-header navbar-dark sticky-top">
+		<div class="container">
+			<div class="row">
+				<div class="col-1">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#listNavBar">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+				<div class="col">
+					<h2 class="text-center">Grocery list</h2>
+				</div>
+				<div class="col-1">
+					<!-- sweep button goes here -->
+				</div>
+			</div>
+		</div>
+	</nav>
+<!--
+	<div class="container-fluid px-0">
+		<div class="row row-content">
+-->
+			<div id="accordion">
+				<a class="collapsed" data-toggle="collapse" data-target="#item0pane">
+					<div class="container list-item">
+<!-- the row that displays -->
+						<div role="tab" class="row">
+<!--
+							<div class="col col-1">
+								<button class="btn" type="button">
+									<span class="fa fa-square-o align-middle" />
+								</button>
+							</div>
+							<div class="col col-8">
+								<h4>Diet pepsi</h4>
+							</div>
+							<div class="col col-3 align-self-right">
+								<p class="text-right">24pk</p>
+							</div>
+-->
+							<div class="col-10">
+								<h4><button class="btn" type="button" id="item0check"><span class="fa fa-square-o" id="item0checkbox" /></button><span id="item1text" class="needItem" contentEditable>Diet pepsi</span></h4>
+							</div>
+							<div class="col-2">
+								<span class="text-right" style="color: '#bbbbbb'">Qty: </span><span class="text-right" id="item0qty" contentEditable>24pk</p>
+							</div>
+						</div>
+<!-- begin fold-out -->
+						<div class="collapse" id="item0pane" data-parent="#accordion">
+<!-- image block -->
+							<div class="row row-content">
+								<div class="col-4">
+									<img id="item0pic" src="img/diet-pepsi.jpg" class="img-fluid" />
+								</div>
+								<div class="col-8">
+									<div class="container">
+										<div class="row row-content">
+											<div class="col">
+												Price: $7.99
+											</div>
+										</div>
+										<div class="row row-content">
+											<div class="col">
+												Location: Walmart B6
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+<!-- end image block -->
+<!-- begin below-image block -->
+							<div class="row row-content">
+								<div class="col-1">
+									<button class="btn" type="button">
+										<span class="fa fa-square-o" />
+									</button>
+								</div>
+								<div class="col-2">
+									Staple
+								</div>
+								<div class="col align-right">
+									<p class="text-right">Last purchased: 2022-05-16</p>
+								</div>
+							</div>
+							<div class="row row-content">
+								<div class="col">
+									Notes:
+								</div>
+							</div>
+<!-- end below-image block -->
+						</div>
+<!-- end fold-out -->
+					</div>
+				</a>
+<!-- end item 1 -->
+<!-- begin item 2 -->
+				<a class="collapsed" data-toggle="collapse" data-target="#whole-milk">
+					<div class="container list-item">
+<!-- the row that displays -->
+						<div role="tab" class="row">
+<!--
+							<div class="col col-1">
+								<button class="btn" type="button">
+									<span class="fa fa-square-o align-middle" />
+								</button>
+							</div>
+							<div class="col col-8">
+								<h4>Whole milk</h4>
+							</div>
+							<div class="col col-3 align-self-right">
+								<p class="text-right"></p>
+							</div>
+-->
+							<div class="col">
+								<h4><button class="btn" type="button"><span class="fa fa-square-o" /></button>Whole milk</h4>
+							</div>
+							<div class="col">
+								<p class="text-right"></p>
+							</div>
+						</div>
+<!-- begin fold-out -->
+						<div class="collapse" id="whole-milk" data-parent="#accordion">
+<!-- image block -->
+							<div class="row row-content">
+								<div class="col-4">
+									<img src="img/whole-milk.jpg" class="img-fluid" />
+								</div>
+								<div class="col-8">
+									<div class="container">
+										<div class="row row-content">
+											<div class="col">
+												Price: $4.59
+											</div>
+										</div>
+										<div class="row row-content">
+											<div class="col">
+												Location: HEB cold case
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+<!-- end image block -->
+<!-- begin below-image block -->
+							<div class="row row-content">
+								<div class="col-1">
+									<button class="btn" type="button">
+										<span class="fa fa-square-o" />
+									</button>
+								</div>
+								<div class="col-2">
+									Staple
+								</div>
+								<div class="col align-right">
+									<p class="text-right">Last purchased: 2022-05-16</p>
+								</div>
+							</div>
+							<div class="row row-content">
+								<div class="col">
+									Notes: A2 milk preferred but not required
+								</div>
+							</div>
+<!-- end below-image block -->
+						</div>
+<!-- end fold-out -->
+					</div>
+				</a>
+<!-- end item 2 -->
+			</div>
+		</div>
+	</div>
+	<footer>
+	</footer>
+
+	<!-- build:js js/main.js -->
+	<!-- jQuery must come first, then Popper.js, then the Bootstrap JavaScript plugins.-->
+	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="js/scripts.js"></script>
+	<script src="js/classes.js"></script>
+	<!-- endbuild -->
+
+	<script>
+
+</body>
+
+</html>
+
+
