@@ -29,13 +29,15 @@ I think I'm going to go ahead and use Bootstrap 5 for this.
 Structure outline:
 
 > (a) | List name | (b)->
-> (c) List item | Qty: q-> | (d)->
-
+> (c) List item | Qty: q-> | (f)
+> (d) [ input box ] (e)
 
 a: Sidebar/list of lists
 b: Sort options
 c: Checkbox
-d: 
+d: library
+e: sweep
+f: drag to rearrange
 
 We need a few functions available on the item header line:
 - check item
@@ -49,6 +51,12 @@ Options:
 makes everything editable, since editing the content is not an all-the-time thing
 - Maybe have an "edit" button either add contentEditable to all the features or 
 pop up an editable modal
+- First iteration: "edit" button adds an outline style and contentEditable to each
+field, and clicking "edit" again commits the changes
+	- Like, I *can* do it so leaving the field commits the changes, but we shouldn't
+	sacrifice usability for showing off, right?
+	- And this also allows us to provide a "cancel" function that restores all
+	previous values
 
 -->
 
