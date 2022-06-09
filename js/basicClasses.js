@@ -15,6 +15,7 @@ const debug = false;
 const camelize = str => str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase());
 const sanitize = str => str.replace(/[~!@#$%^&*().,<>?_=+:;\'\"\/\-\[\]\{\}\\\|\`]/g, '');
 // ! @ # $ % ^ & * ( ) - _ = + [ ] { } \ | , . < > ? / ' " : ; ` ~
+// it may not be necessary to strip all this out
 
 class BasicItem {
 	constructor(name, qty="1") {
@@ -25,6 +26,7 @@ class BasicItem {
 		this.creationDate = Date.now();
 		this.modifyDate = this.creationDate;
 		this.oid = this.generateOid();
+		this.DOMElement = this.generateDOM();
 	}
 	generateOid() {
 		let str = `${this.itemName}${this.creationDate}`;
@@ -72,8 +74,22 @@ class BasicItem {
 			return this.setName(str);
 		} else {
 			this[prop] = str;
+			this.updateDOM(prop, str);
 			return true;
 		}
+	}
+	generateDOM() {
+		// this builds a ... hm.  This might not actually work.  The plan here
+		// was to build a DOM element that the object could carry with it, and
+		// that might actually still work.  I'm pretty sure carrying the DOM with
+		// the object will make ordering the lists easier and might even enable
+		// dragging items from one list to another in the sidebar.
+		// While we're building it, might as well make it an accordion
+		// Also gonna need a Library version since that renders different
+		div = document.createElement('div');
+	}
+	updateDOM(prop, str) {
+		document.getElementById(`${this.oid}-${prop}`).innerText = str;
 	}
 }
 
