@@ -1,6 +1,6 @@
 $header-bg-dark: #0082C9;
 $header-bg-light: #5dc3fb;
-$color-pale: #eeeeee;
+$color-pale: #aaaaaa;
 
 body {
 	color: black;
@@ -8,6 +8,7 @@ body {
 
 .nextcloud-header {
 	background-image: linear-gradient(to right, $header-bg-dark, $header-bg-light);
+	color: white;
 }
 
 // for debugging
@@ -32,4 +33,23 @@ body {
 
 .notoggle::after {
 	content: none;
+}
+
+.label-text {
+	color: $color-pale;
+}
+
+.container {
+	outline-style: dotted;
+	outline-color: blue;
+}
+
+.row {
+	outline-style: dotted;
+	outline-color: green;
+}
+
+.col {
+	outline-style: dotted;
+	outline-color: red;
 }

@@ -234,18 +234,58 @@ field, and clicking "edit" again commits the changes
 		</div>
 	</div>
 
-<div class="accordion accordion-flush" id="accordionFlushExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="flush-headingOne">
-      	<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
-    </div>
-  </div>
-</div>
+	<div class="accordion accordion-flush" id="accordionFlushExample">
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="flush-headingOne">
+				<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
+					Accordion Item #1
+				</button>
+			</h2>
+			<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+				<div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+				</div>
+			</div>
+		</div>
+		<div class="accordion-item">
+			<div class="accordion-header" id="dietpepsi-header">
+				<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#dietpepsi-card" id="dietpepsi-expand">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col">
+								<span class="btn fa fa-square-o" type="button" id="dietpepsi-checkbox" />
+								<span id="dietpepsi-title">Diet Pepsi</span>
+							</div>
+							<div class="col text-end">
+								<span class="label-text">Qty:</span>
+								<span id="dietpepsi-qty">24pk</span>
+							</div>
+						</div>
+					</div>
+<!--
+
+					<span class="btn" type="button">
+						<span class="fa fa-square-o" id="dietpepsi-checkbox" />
+					</span>
+					<span id="dietpepsi-title">
+						Diet Pepsi
+					</span>
+					<span class="text-right">
+						<small>
+							<span class="label-text">
+								Qty:
+							</span>
+							24pk
+						</small>
+					</span>
+-->
+				</button>
+			<div>
+			<div id="dietpepsi-card" class="accordion-collapse collapse" data-bs-parent="accordionFlushExample">
+				<div class="accordion-body">Placeholder content to make sure the accordion works as expected
+				</div>
+			</div>
+		</div>
+	</div>
 	<footer>
 	</footer>
 
