@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
 
 	<!-- Additional CSS must be placed after bootstrap.css -->
-	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
+	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css" />
 	<link rel="stylesheet" href="css/localstyles.css" />
 	<!-- endbuild -->
@@ -60,6 +60,31 @@ field, and clicking "edit" again commits the changes
 
 -->
 
+<!--
+
+| Picture | (a)(b)(c) |
+|         | Price     |
+|         | Location  |
+|         | URL       |
+|         | Last      |
+|         | Interval  |
+|         | Due by    |
+| Notes               |
+|                     |
+|                     |
+
+Normal mode:
+
+a -> staple button
+b -> edit button
+c -> sweep button
+
+Edit mode:
+
+a -> bar code
+b -> commit button
+c -> revert button
+-->
 <body>
 	<header>
 	</header>
@@ -80,237 +105,185 @@ field, and clicking "edit" again commits the changes
 			</div>
 		</div>
 	</nav>
-<!--
-	<div class="container-fluid px-0">
-		<div class="row row-content">
--->
-			<div id="accordion">
-				<a class="collapsed listItem" data-toggle="collapse" data-target="#item0pane">
-					<div class="container list-item">
-<!-- the row that displays -->
-						<div role="tab" class="row">
-<!--
-							<div class="col col-1">
-								<button class="btn" type="button">
-									<span class="fa fa-square-o align-middle" />
-								</button>
-							</div>
-							<div class="col col-8">
-								<h4>Diet pepsi</h4>
-							</div>
-							<div class="col col-3 align-self-right">
-								<p class="text-right">24pk</p>
-							</div>
--->
-							<div class="col-10">
-								<h4><button class="btn" type="button" id="item0check"><span class="fa fa-square-o" id="item0checkbox" /></button><span id="item1text" class="needItem" contentEditable>Diet pepsi</span></h4>
-							</div>
-							<div class="col-2">
-								<span class="text-right" style="color: '#bbbbbb'">Qty: </span><span class="text-right" id="item0qty" contentEditable>24pk</p>
-							</div>
-						</div>
-<!-- begin fold-out -->
-						<div class="collapse" id="item0pane" data-parent="#accordion">
-<!-- image block -->
-							<div class="row row-content">
-								<div class="col-4">
-									<img id="item0pic" src="img/diet-pepsi.jpg" class="img-fluid" />
-								</div>
-								<div class="col-8">
-									<div class="container">
-										<div class="row row-content">
-											<div class="col">
-												Price: $7.99
-											</div>
-										</div>
-										<div class="row row-content">
-											<div class="col">
-												Location: Walmart B6
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-<!-- end image block -->
-<!-- begin below-image block -->
-							<div class="row row-content">
-								<div class="col-1">
-									<button class="btn" type="button">
-										<span class="fa fa-square-o" />
-									</button>
-								</div>
-								<div class="col-2">
-									Staple
-								</div>
-								<div class="col align-right">
-									<p class="text-right">Last purchased: 2022-05-16</p>
-								</div>
-							</div>
-							<div class="row row-content">
-								<div class="col">
-									Notes:
-								</div>
-							</div>
-<!-- end below-image block -->
-						</div>
-<!-- end fold-out -->
-					</div>
-				</a>
-<!-- end item 1 -->
-<!-- begin item 2 -->
-				<a class="collapsed" data-toggle="collapse" data-target="#whole-milk">
-					<div class="container list-item">
-<!-- the row that displays -->
-						<div role="tab" class="row">
-<!--
-							<div class="col col-1">
-								<button class="btn" type="button">
-									<span class="fa fa-square-o align-middle" />
-								</button>
-							</div>
-							<div class="col col-8">
-								<h4>Whole milk</h4>
-							</div>
-							<div class="col col-3 align-self-right">
-								<p class="text-right"></p>
-							</div>
--->
-							<div class="col">
-								<h4><button class="btn" type="button"><span class="fa fa-square-o" /></button>Whole milk</h4>
-							</div>
-							<div class="col">
-								<p class="text-right"></p>
-							</div>
-						</div>
-<!-- begin fold-out -->
-						<div class="collapse" id="whole-milk" data-parent="#accordion">
-<!-- image block -->
-							<div class="row row-content">
-								<div class="col-4">
-									<img src="img/whole-milk.jpg" class="img-fluid" />
-								</div>
-								<div class="col-8">
-									<div class="container">
-										<div class="row row-content">
-											<div class="col">
-												Price: $4.59
-											</div>
-										</div>
-										<div class="row row-content">
-											<div class="col">
-												Location: HEB cold case
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-<!-- end image block -->
-<!-- begin below-image block -->
-							<div class="row row-content">
-								<div class="col-1">
-									<button class="btn" type="button">
-										<span class="fa fa-square-o" />
-									</button>
-								</div>
-								<div class="col-2">
-									Staple
-								</div>
-								<div class="col align-right">
-									<p class="text-right">Last purchased: 2022-05-16</p>
-								</div>
-							</div>
-							<div class="row row-content">
-								<div class="col">
-									Notes: A2 milk preferred but not required
-								</div>
-							</div>
-<!-- end below-image block -->
-						</div>
-<!-- end fold-out -->
-					</div>
-				</a>
-<!-- end item 2 -->
-			</div>
-		</div>
-	</div>
 
 	<div class="accordion accordion-flush" id="accordionFlushExample">
 		<div class="accordion-item">
-			<h2 class="accordion-header" id="flush-headingOne">
-				<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne">
-					Accordion Item #1
+			<div class="accordion-header" id="dietPepsi-header">
+				<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#dietPepsi-card" id="dietpepsi-expand">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-8">
+								<span class="fa-regular fa-square" type="button" id="dietpepsi-checkbox"></span>
+								<span id="dietPepsi-title">Diet Pepsi</span>
+							</div>
+							<div class="col text-end">
+								<span class="label-text">Qty:</span>
+								<span id="dietPepsi-qty">24pk</span>
+							</div>
+						</div>
+					</div>
 				</button>
-			</h2>
-			<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-				<div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+			<div>
+			<div id="dietPepsi-card" class="accordion-collapse collapse" data-bs-parent="accordionFlushExample">
+				<div class="accordion-body">
+					<!-- <div class="container-fluid"> -->
+						<div class="row"> <!-- style="height: 168px;" -->
+							<div class="col-sm-6">
+								<img class="img-fluid" src="img/diet-pepsi.jpg" id="dietPepsi-img" />
+							</div>
+							<div class="col-sm-6">
+								<div class="container-flush">
+									<div class="row">
+										<div class="col">
+											<span class="label-text">Staple?</span>
+											<span class="btn fa-solid fa-toggle-off" id="dietPepsi-btn1"></span>
+											<span class="text-end">
+												<span class="btn btn-success fa-solid fa-pencil" id="dietPepsi-btn2"></span>
+												<span class="btn btn-primary fa-solid fa-broom" id="dietPepsi-btn3"></span>
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<span class="label-text">Location:</span><span id="dietPepsi-loc">HEB soda aisle</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<span class="label-text">Price:</span><span id="dietPepsi-loc">$7.49</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<span class="label-text">URL:</span><span id="dietPepsi-url"> - </span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<span class="label-text">Purchase by:</span><span id="dietPepsi-purBy">2022-06-16</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<span class="label-text">Last purchase:</span><span id="dietPepsi-last">2022-06-09</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<span class="label-text">Interval:</span><span class="dietPepsi-interval">7</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<span class="label-text">Notes</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col" id="dietPepsi-notes">
+								At least a 24-pack
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="accordion-item">
-			<div class="accordion-header" id="dietpepsi-header">
-				<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#dietpepsi-card" id="dietpepsi-expand">
+			<div class="accordion-header" id="wholeMilk-header">
+				<button class="accordion-button collapsed notoggle" type="button" data-bs-toggle="collapse" data-bs-target="#wholeMilk-card" id="wholeMilk-expand">
 					<div class="container-fluid">
 						<div class="row">
-							<div class="col">
-								<span class="btn fa fa-square-o" type="button" id="dietpepsi-checkbox" />
-								<span id="dietpepsi-title">Diet Pepsi</span>
+							<div class="col-8">
+								<span class="fa-regular fa-square-check" type="button" id="wholeMilk-checkbox"></span>
+								<span id="wholeMilk-title">Whole milk</span>
 							</div>
 							<div class="col text-end">
 								<span class="label-text">Qty:</span>
-								<span id="dietpepsi-qty">24pk</span>
+								<span id="wholeMilk-qty">1</span>
 							</div>
 						</div>
 					</div>
-<!--
-
-					<span class="btn" type="button">
-						<span class="fa fa-square-o" id="dietpepsi-checkbox" />
-					</span>
-					<span id="dietpepsi-title">
-						Diet Pepsi
-					</span>
-					<span class="text-right">
-						<small>
-							<span class="label-text">
-								Qty:
-							</span>
-							24pk
-						</small>
-					</span>
--->
 				</button>
 			<div>
-			<div id="dietpepsi-card" class="accordion-collapse collapse" data-bs-parent="accordionFlushExample">
-<!--
-
-| Picture | (a)(b)(c) |
-|         | Price     |
-|         | Location  |
-|         | URL       |
-|         | Last      |
-|         | Interval  |
-| Notes               |
-|                     |
-|                     |
-
-Normal mode:
-
-a -> staple button
-b -> edit button
-c -> sweep button
-
-Edit mode:
-
-a -> bar code
-b -> commit button
-c -> revert button
--->
-				<div class="accordion-body">Placeholder content to make sure the accordion works as expected
+			<div id="wholeMilk-card" class="accordion-collapse collapse" data-bs-parent="accordionFlushExample">
+				<div class="accordion-body">
+					<div class="row"> <!-- style="height: 168px;" -->
+						<div class="col-sm-6">
+							<img class="img-fluid" src="img/whole-milk.jpg" id="wholeMilk-img" />
+						</div>
+						<div class="col-sm-6">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col">
+										<span class="label-text">Staple?</span>
+										<span class="btn fa-solid fa-toggle-on" id="wholeMilk-btn1"></span>
+										<span class="text-end">
+											<span class="btn btn-success fa-solid fa-pencil" id="wholeMilk-btn2"></span>
+											<span class="btn btn-primary fa-solid fa-broom" id="wholeMilk-btn3"></span>
+										</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<span class="label-text">Location:</span><span id="wholeMilk-loc">HEB cold case</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<span class="label-text">Price:</span><span id="wholeMilk-loc">$3.49</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<span class="label-text">URL:</span><span id="wholeMilk-url"> - </span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<span class="label-text">Purchase by:</span><span id="wholeMilk-purBy">2022-06-13</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<span class="label-text">Last purchase:</span><span id="wholeMilk-last">2022-06-09</span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<span class="label-text">Interval:</span><span class="wholeMilk-interval">4</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<span class="label-text">Notes</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col" id="wholeMilk-notes">
+							A2 milk is preferred if you can find it
+						</div>
+					</div>
 				</div>
 			</div>
+
 		</div>
 	</div>
 	<footer>
+		<div class="container-fluid fixed-bottom">
+			<div class="row">
+				<div class="col">
+					<button class="btn btn-primary" id="library-button"><span class="fa-regular fa-bookmark"></span></button>
+					<input type="text" name="text" id="item-input">
+					<button class="btn btn-primary" name="sweepButton" id="sweep-button"><span class="fa fa-solid fa-broom"></span></button>
+					<button class="btn btn-success" name="resetButton" id="reset-button"><span class="fa fa-solid fa-refresh"></span></button>
+				</div>
+			</div>
+		</div>
 	</footer>
 
 	<!-- build:js js/main.js -->

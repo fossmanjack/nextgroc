@@ -19,7 +19,8 @@ body {
   content: none; }
 
 .label-text {
-  color: #aaaaaa; }
+  color: #aaaaaa;
+  margin-right: 5px; }
 
 .container {
   outline-style: dotted;
@@ -32,3 +33,8 @@ body {
 .col {
   outline-style: dotted;
   outline-color: red; }
+
+.item-pic {
+  display: block;
+  max-height: 100%;
+  width: auto; }

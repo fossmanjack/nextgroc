@@ -37,6 +37,7 @@ body {
 
 .label-text {
 	color: $color-pale;
+	margin-right: 5px;
 }
 
 .container {
@@ -52,4 +53,10 @@ body {
 .col {
 	outline-style: dotted;
 	outline-color: red;
+}
+
+.item-pic {
+	display: block;
+	max-height: 100%;
+	width: auto;
 }
