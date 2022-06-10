@@ -1,4 +1,11 @@
-class BasicItem {
+/* I was thinking of using a hash identifier but I don't think it's
+ * necessary.  Under normal usage the item name won't actually be
+ * edited all that often so we can just check for collisions on the
+ * rare occasion when it is.  The camelCase name will be the authoritative
+ * ID for each object.
+ */
+
+class Item {
 	constructor(name, qty="1") {
 		this.itemName = sanitize(name) ? sanitize(name) : "list item";
 		this.qty = qty;
