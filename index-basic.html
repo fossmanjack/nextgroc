@@ -24,7 +24,7 @@
 		<h4 id="list-title">List Title</h4>
 	</header>
 
-	<div id='list-root' class='accordion accordion-flush'>
+	<div id="list-goes-here">
 	</div>
 
 	<input type="text" name="text" id="item-input">
@@ -36,53 +36,27 @@
 
 	<!-- build:js js/main.js -->
 	<!-- jQuery must come first, then Popper.js, then the Bootstrap JavaScript plugins.-->
-	<!--<script src="node_modules/jquery/dist/jquery.slim.min.js"></script> -->
-	<!--<script src="node_modules/popper.js/dist/umd/popper.min.js"></script> -->
+	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
 	<script src="js/scripts.js"></script>
-	<script src="js/ListItem.js"></script>
+	<script src="js/debug.js"></script>
+	<script src="js/basicClasses.js"></script>
+	<script src="js/generateList.js"></script>
 	<!-- endbuild -->
 
 	<script>
-		const _TestList = [ ];
-		fetch('res/TestList.json')
-			.then(response => response.json())
-			.then(Data => {
-				Data.forEach((item) => _TestList.push(new ListItem(item)));
-				_TestList.forEach((item) => document.getElementById('list-root').appendChild(item.DOMElement));
-				//Data.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); });
-				console.log(Data);
-			});
+		const testList = new BasicList("Test List");
+		const item1 = new BasicItem("Whole milk", "1 gal");
+		const item2 = new BasicItem("Bologna");
+		const item3 = new BasicItem("White bread");
+		const item4 = new BasicItem("American cheese");
+		const item5 = new BasicItem("Mayonnaise");
+		const item6 = new BasicItem("Potato chips");
+		const item7 = new BasicItem("!@#$%^&*()-_=+[]{}\|,.<>?/\'\":;");
+		item4.bought = true;
 
-
-/*
-		$(document).ready(function() {
-			loadJSON('res/TestList.json', (item) => _TestList.push(new ListItem(item)));
-			_TestList.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); } );
-		});
-		function loadList(Data) {
-			Data.forEach((item) => _TestList.push(new ListItem(item)));
-			for(let i = 0; i<Data.length; i++) {
-				_TestList.push(new ListItem(Data[i]));
-			}
-		}
-*/
-
-
-/*
-		const item1 = new ListItem("Whole milk", "1 gal");
-		const item2 = new ListItem("Bologna");
-		const item3 = new ListItem("White bread");
-		const item4 = new ListItem("American cheese");
-		const item5 = new ListItem("Mayonnaise");
-		const item6 = new ListItem("Potato chips");
-		const item7 = new ListItem("!@#$%^&*()-_=+[]{}\|,.<>?/\'\":;");
-		item4.setState(1);
-
-		const TestList = [ item1, item2, item3, item4, item5, item6, item7 ];
-		TestList.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); } );
-*/
-/*
 		testList.addItem(item1);
 		testList.addItem(item2);
 		testList.addItem(item3);
@@ -141,7 +115,6 @@
 //			});
 			}
 		}
-*/
 	</script>
 
 </body>

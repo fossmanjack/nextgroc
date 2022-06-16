@@ -6,6 +6,7 @@
  */
 
 class ListItem {
+	/*
 	constructor(name, qty="") {
 		this.itemName = sanitize(name) ? sanitize(name) : "list item";	// string
 		this.oid = camelize(this.itemName);								// ID string, must be unique
@@ -17,14 +18,49 @@ class ListItem {
 		this.staple = false;											// bool
 		this.interval = 0;												// int
 		this.history = [ ];												// Array of ints
-		this.image = 'img/default.png';									// string
+		this.image = 'default.png';										// string
 		this.creationDate = Date.now();
 		this.modifyDate = this.creationDate;
 		this.DOMElement = this.generateDOM();
 	}
+	*/
+	constructor(props) {
+		let { itemName,
+			qty,
+			state,
+			loc,
+			price,
+			purBy,
+			url,
+			staple,
+			interval,
+			history,
+			image,
+			notes,
+			creationDate,
+			modifyDate,
+			DOMElement } = props;
+		this.itemName = sanitize(itemName) ? sanitize(itemName) : "list item";
+		this.qty = qty ? qty : "1";
+		this.loc = loc ? loc : "-";
+		this.price = price ? price : "-";
+		this.purBy = purBy ? purBy : "-";
+		this.url = url ? url : "-";
+		this.staple = staple ? true : false;
+		this.interval = interval ? interval : 0;
+		this.history = history && history.length ? history : [ ];
+		this.image = image ? image : 'default.png';
+		this.notes = notes ? notes : "";
+		this.setState(state) ? null : this.state = 0;
+		this.oid = camelize(this.itemName);
+		this.creationDate = creationDate ? creationDate : Date.now();
+		this.modifyDate = modifyDate ? modifyDate : creationDate;
+		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
+	}
 	getCamelName() { return camelize(this.itemName); }
 	setState(state) {
 		// Mostly updates styles
+		/*
 		state !== 0 ?
 			(state !== 1 ?
 				(state !== 2 ? {
@@ -33,6 +69,16 @@ class ListItem {
 				} : this.state = 2) :
 			this.state = 1) :
 		this.state = 0);
+		*/
+		if(!state || state !== 0 && state !== 1 && state !== 2)
+		{
+			console.log(`Invalid state ${state}!`);
+			return false;
+		}
+		this.state = state;
+		this.modifyDate = Date.now();
+		this.DOMElement = this.generateDOM();
+		return true;
 	}
 	setName(str) {
 	//	this.itemName = sanitize(name) ? sanitize(name) : "list item";
@@ -77,13 +123,13 @@ class ListItem {
 		root.appendChild(header);
 
 		let unfurl = document.createElement('button'); // accordion control button
-		unfurl.classList.add('accordion-button');
-		unfurl.classList.add('collapsed');
-		unfurl.classList.add('notoggle');
+		unfurl.classList.add('accordion-button', 'collapsed', 'notoggle');
+		//unfurl.classList.add('collapsed');
+		//unfurl.classList.add('notoggle');
 		unfurl.type = 'button';
 		unfurl.setAttribute('data-bs-toggle', 'collapse');
-		unfurl.setAttribute('data-bs-target', `${idStr}-card`);
-		unfurl.id = `{idStr}-expand`;
+		unfurl.setAttribute('data-bs-target', `#${idStr}-card`);
+		unfurl.id = `${idStr}-expand`;
 		header.appendChild(unfurl);
 
 		let titleBar = document.createElement('div'); // accordion title bar
@@ -92,7 +138,7 @@ class ListItem {
 
 		let trow = document.createElement('div');
 		trow.classList.add('row');
-		title.appendChild(trow);
+		titleBar.appendChild(trow);
 
 		let tcol1 = document.createElement('div');
 		tcol1.classList.add('col-8');
@@ -108,14 +154,14 @@ class ListItem {
 		let title = document.createElement('span'); // item name
 		title.id = `${idStr}-title`;
 		title.textContent = this.itemName;
-		title.setAttribute('data-edit-target', true)
+		title.setAttribute('data-edit-target', true);
 		this.state === 1 ? title.style.textDecoration = "line-through" : null;
 		tcol1.appendChild(title);
 
 		let qtyDiv = document.createElement('div');
-		qtyDiv.classList.add('col');
-		qtyDiv.classList.add('text-end');
-		tcol1.appendChild.qtyDiv;
+		qtyDiv.classList.add('col', 'text-end');
+		//qtyDiv.classList.add('text-end');
+		trow.appendChild(qtyDiv);
 
 		let qtyText = document.createElement('span'); // Qty:
 		qtyText.classList.add('label-text');
@@ -131,9 +177,9 @@ class ListItem {
 /* begin card */
 		let card = document.createElement('div'); // accordion card div
 		card.id=`${idStr}-card`
-		card.classList.add('accordion-collapse');
-		card.classList.add('collapse');
-		card.setAttribute('data-bs-parent', 'list-root'); // make sure to create this in the page
+		card.classList.add('accordion-collapse', 'collapse');
+		//card.classList.add('collapse');
+		card.setAttribute('data-bs-parent', '#list-root'); // make sure to create this in the page
 		root.appendChild(card);
 
 		let acBody = document.createElement('div'); // accordion body
@@ -142,7 +188,7 @@ class ListItem {
 
 		let bodyRow = document.createElement('div'); // image on left, text on right
 		bodyRow.classList.add('row');
-		acBody.appendChild('bodyRow');
+		acBody.appendChild(bodyRow);
 
 		let imgCol = document.createElement('div'); // image on left
 		imgCol.classList.add('col-sm-6');
@@ -151,158 +197,162 @@ class ListItem {
 		let imgTag = document.createElement('img'); // eventually a carousel
 		imgTag.classList.add('img-fluid');
 		imgTag.id = `${idStr}-img`;
-		imgTag.src = `img/${idStr}.jpg`
+		imgTag.src = `img/${this.image}`
 		imgCol.appendChild(imgTag);
+
+		let detailCol = document.createElement('div'); // text on right
+		detailCol.classList.add('col');
+		bodyRow.appendChild(detailCol);
 
 		let detailCont = document.createElement('div'); // detail container
 		detailCont.classList.add('container-flush');
-		bodyRow.appendChild('detailCont');
+		detailCol.appendChild(detailCont);
 
 		let detailRow = document.createElement('div');
 		detailRow.classList.add('row');
-		detailCont.appendChild('detailRow');
+		detailCont.appendChild(detailRow);
 
 		let btnCol = document.createElement('div'); // button column
 		btnCol.classList.add('col');
-		detailRow.appendChild('btnCol');
+		detailRow.appendChild(btnCol);
 
 		let stpTxt = document.createElement('span');
 		stpTxt.classList.add('label-text');
 		stpTxt.textContent = "Staple?"
-		btnCol.appendChild('stpTxt');
+		btnCol.appendChild(stpTxt);
 
 		let btn1 = document.createElement('button');
 		btn1.type = 'button';
 		btn1.id = `${idStr}-btn1`;
 		btn1.classList.add('btn', 'fa-solid', 'fa-lg');
 		btn1.classList.add(this.staple ? 'fa-toggle-on' : 'fa-toggle-off');
-		btnCol.appendChild('btn1');
+		btnCol.appendChild(btn1);
 
 		let btn2 = document.createElement('button');
 		btn2.type = 'button';
 		btn2.id = `${idStr}-btn2`;
 		btn2.classList.add('btn', 'btn-success', 'fa-solid', 'fa-lg', 'fa-pencil');
-		btnCol.appendChild('btn2');
+		btnCol.appendChild(btn2);
 
 		let btn3 = document.createElement('button');
 		btn3.type = 'button';
 		btn3.id = `${idStr}-btn3`;
 		btn3.classList.add('btn', 'btn-primary', 'fa-solid', 'fa-lg', 'fa-broom');
-		btncol.appendChild('btn3');
+		btnCol.appendChild(btn3);
 
 		let locRow = document.createElement('div'); // location row and column
 		locRow.classList.add('row');
-		detailCont.appendChild('locRow');
+		detailCont.appendChild(locRow);
 
 		let locCol = document.createElement('div');
 		locCol.classList.add('col');
-		locRow.appendChild('locCol');
+		locRow.appendChild(locCol);
 
 		let locText = document.createElement('span');
 		locText.classList.add('label-text');
 		locText.textContent = 'Location:';
-		locCol.appendChild('locText');
+		locCol.appendChild(locText);
 
 		let locVal = document.createElement('span');
 		locVal.id = `${idStr}-loc`;
 		locVal.setAttribute('data-edit-target', true);
 		locVal.textContent = (this.loc ? `${this.loc}` : '-');
-		locCol.appendChild('locVal');
+		locCol.appendChild(locVal);
 
 		let priceRow = document.createElement('div'); // price row and column
 		priceRow.classList.add('row');
-		detailCont.appendChild('priceRow');
+		detailCont.appendChild(priceRow);
 
 		let priceCol = document.createElement('div');
 		priceCol.classList.add('col');
-		priceRow.appendChild('priceCol');
+		priceRow.appendChild(priceCol);
 
 		let priceText = document.createElement('span');
 		priceText.classList.add('label-text');
 		priceText.textContent = 'Price:';
-		priceCol.appendChild('priceText');
+		priceCol.appendChild(priceText);
 
 		let priceVal = document.createElement('span');
 		priceVal.id = `${idStr}-price`;
 		priceVal.setAttribute('data-edit-target', true);
 		priceVal.textContent = (this.price ? `${this.price}` : '-');
-		priceCol.appendChild('priceVal');
+		priceCol.appendChild(priceVal);
 
 		let urlRow = document.createElement('div'); // url row and column
 		urlRow.classList.add('row');
-		detailCont.appendChild('urlRow');
+		detailCont.appendChild(urlRow);
 
 		let urlCol = document.createElement('div');
 		urlCol.classList.add('col');
-		urlRow.appendChild('urlCol');
+		urlRow.appendChild(urlCol);
 
 		let urlText = document.createElement('span');
 		urlText.classList.add('label-text');
 		urlText.textContent = 'URL:';
-		urlCol.appendChild('urlText');
+		urlCol.appendChild(urlText);
 
 		let urlVal = document.createElement('span');
 		urlVal.id = `${idStr}-url`;
 		urlVal.setAttribute('data-edit-target', true);
 		urlVal.textContent = (this.url ? `${this.url}` : '-');
-		urlCol.appendChild('urlVal');
+		urlCol.appendChild(urlVal);
 
 		let purByRow = document.createElement('div'); // purchase by row and column
 		purByRow.classList.add('row');
-		detailCont.appendChild('purByRow');
+		detailCont.appendChild(purByRow);
 
 		let purByCol = document.createElement('div');
 		purByCol.classList.add('col');
-		purByRow.appendChild('purByCol');
+		purByRow.appendChild(purByCol);
 
 		let purByText = document.createElement('span');
 		purByText.classList.add('label-text');
 		purByText.textContent = 'Purchase By:';
-		purByCol.appendChild('purByText');
+		purByCol.appendChild(purByText);
 
 		let purByVal = document.createElement('span');
 		purByVal.id = `${idStr}-purBy`;
 		purByVal.setAttribute('data-edit-target', true);
 		purByVal.textContent = (this.purBy ? `${this.purBy}` : '-');
-		purByCol.appendChild('purByVal');
+		purByCol.appendChild(purByVal);
 
 		let lastRow = document.createElement('div'); // last purchase row and column
 		lastRow.classList.add('row');
-		detailCont.appendChild('lastRow');
+		detailCont.appendChild(lastRow);
 
 		let lastCol = document.createElement('div');
 		lastCol.classList.add('col');
-		lastRow.appendChild('lastCol');
+		lastRow.appendChild(lastCol);
 
 		let lastText = document.createElement('span');
 		lastText.classList.add('label-text');
 		lastText.textContent = 'Last Purchased:';
-		lastCol.appendChild('lastText');
+		lastCol.appendChild(lastText);
 
 		let lastVal = document.createElement('span');
 		lastVal.id = `${idStr}-last`;
 		lastVal.setAttribute('data-edit-target', true);
-		lastVal.textContent = `${this.history[0]}`;
-		lastCol.appendChild('lastVal');
+		lastVal.textContent = (this.history[0] ? `${this.history[0]}` : '-');
+		lastCol.appendChild(lastVal);
 
 		let intervalRow = document.createElement('div'); // purchase interval row and column
 		intervalRow.classList.add('row');
-		detailCont.appendChild('intervalRow');
+		detailCont.appendChild(intervalRow);
 
 		let intervalCol = document.createElement('div');
 		intervalCol.classList.add('col');
-		intervalRow.appendChild('intervalCol');
+		intervalRow.appendChild(intervalCol);
 
 		let intervalText = document.createElement('span');
 		intervalText.classList.add('label-text');
 		intervalText.textContent = 'Interval:';
-		intervalCol.appendChild('intervalText');
+		intervalCol.appendChild(intervalText);
 
 		let intervalVal = document.createElement('span');
 		intervalVal.id = `${idStr}-interval`;
 		intervalVal.setAttribute('data-edit-target', true);
 		intervalVal.textContent = (this.interval ? `${this.interval}` : '-');
-		intervalCol.appendChild('intervalVal');
+		intervalCol.appendChild(intervalVal);
 
 		// the next two rows get added directly to the acBody element
 
