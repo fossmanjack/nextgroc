@@ -6,24 +6,6 @@
  */
 
 class ListItem {
-	/*
-	constructor(name, qty="") {
-		this.itemName = sanitize(name) ? sanitize(name) : "list item";	// string
-		this.oid = camelize(this.itemName);								// ID string, must be unique
-		this.qty = qty;													// string
-		this.state = 0;													// 0: listed, 1: bought, 2: unlisted
-		this.price = "";												// string
-		this.purBy = "";													// string
-		this.url = "";													// string
-		this.staple = false;											// bool
-		this.interval = 0;												// int
-		this.history = [ ];												// Array of ints
-		this.image = 'default.png';										// string
-		this.creationDate = Date.now();
-		this.modifyDate = this.creationDate;
-		this.DOMElement = this.generateDOM();
-	}
-	*/
 	constructor(props) {
 		let { itemName,
 			qty,
@@ -59,17 +41,6 @@ class ListItem {
 	}
 	getCamelName() { return camelize(this.itemName); }
 	setState(state) {
-		// Mostly updates styles
-		/*
-		state !== 0 ?
-			(state !== 1 ?
-				(state !== 2 ? {
-					console.log(`Invalid state ${state}!`);
-					this.state = 0;
-				} : this.state = 2) :
-			this.state = 1) :
-		this.state = 0);
-		*/
 		if(!state || state !== 0 && state !== 1 && state !== 2)
 		{
 			console.log(`Invalid state ${state}!`);
@@ -150,7 +121,19 @@ class ListItem {
 		checkBox.type = 'button';
 		checkBox.id = `${idStr}-checkbox`;
 		tcol1.appendChild(checkBox);
-
+		checkBox.addEventListener('click', () => {
+			if(!this.state) { // change from 0 to 1
+				title.style.textDecoration = "line-through";
+				checkBox.classList.remove('fa-square');
+				checkBox.classList.add('fa-square-check');
+				this.state = 1;
+			} else { // change from 1 or 2 to 0
+				title.style.textDecoration = "";
+				checkBox.classList.remove('fa-square-check');
+				checkBox.classList.add('fa-square');
+				this.state = 0;
+			}
+		});
 		let title = document.createElement('span'); // item name
 		title.id = `${idStr}-title`;
 		title.textContent = this.itemName;
@@ -233,12 +216,15 @@ class ListItem {
 		btn2.id = `${idStr}-btn2`;
 		btn2.classList.add('btn', 'btn-success', 'fa-solid', 'fa-lg', 'fa-pencil');
 		btnCol.appendChild(btn2);
+		//btn2.addEventListener('click', (
+		btn2.addEventListener('click', this.editItem);
 
 		let btn3 = document.createElement('button');
 		btn3.type = 'button';
 		btn3.id = `${idStr}-btn3`;
 		btn3.classList.add('btn', 'btn-primary', 'fa-solid', 'fa-lg', 'fa-broom');
 		btnCol.appendChild(btn3);
+		btn3.addEventListener('click', this.sweepItem);
 
 		let locRow = document.createElement('div'); // location row and column
 		locRow.classList.add('row');
@@ -386,4 +372,22 @@ class ListItem {
 	updateDOM(prop, str) {
 		document.getElementById(`${this.oid}-${prop}`).textContent = str;
 	}
+	editItem() {
+		//const els = this.DOMElement.getElements().filter((el) => { el.hasAttribute('data-edit-target'); });
+		const idStr = this.oid;
+		const root = document.getElementById(`${this.oid}-root`);
+		const els = root.children().filter((el) => { el.hasAttribute('data-edit-target'); });
+		const btn1 = this.DOMElement.getElementById(`${idStr}-btn1`);
+		const btn2 = this.DOMElement.getElementById(`${idStr}-btn2`);
+		const btn3 = this.DOMElement.getElementById(`${idStr}-btn3`);
+		// btn1 becomes "add photo"
+		// btn2 becomes "commit edit"
+		btn2.classList.remove('btn-primary', 'fa-pencil');
+		btn2.classList.add('btn-success', 'fa-check');
+		btn2.removeEventListener(this.editItem);
+		btn2.addEventListener('click', this.commitEdit);
+
+		// btn3 becomes "cancel edit"
+	}
+
 }

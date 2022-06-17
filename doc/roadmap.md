@@ -1,0 +1,10 @@
+- [X] make ListItem into a class
+- [ ] implement button actions
+	- [ ] checkbox
+	- [ ] sweep item
+	- [ ] edit item
+	- [ ] add picture
+- [ ] implement List class
+- [ ] implement header
+- [ ] implement footer
+- [ ] implement sidebar
