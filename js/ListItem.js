@@ -1,10 +1,3 @@
-/* I was thinking of using a hash identifier but I don't think it's
- * necessary.  Under normal usage the item name won't actually be
- * edited all that often so we can just check for collisions on the
- * rare occasion when it is.  The camelCase name will be the authoritative
- * ID for each object.
- */
-
 class ListItem {
 	constructor(props) {
 		let { itemName,
@@ -373,10 +366,13 @@ class ListItem {
 		document.getElementById(`${this.oid}-${prop}`).textContent = str;
 	}
 	editItem() {
-		//const els = this.DOMElement.getElements().filter((el) => { el.hasAttribute('data-edit-target'); });
+		console.log(this.DOMElement);
+
+		const els = this.DOMElement.children().filter((el) => { el.hasAttribute('data-edit-target'); });
+
 		const idStr = this.oid;
 		const root = document.getElementById(`${this.oid}-root`);
-		const els = root.children().filter((el) => { el.hasAttribute('data-edit-target'); });
+		//const els = root.children().filter((el) => { el.hasAttribute('data-edit-target'); });
 		const btn1 = this.DOMElement.getElementById(`${idStr}-btn1`);
 		const btn2 = this.DOMElement.getElementById(`${idStr}-btn2`);
 		const btn3 = this.DOMElement.getElementById(`${idStr}-btn3`);
