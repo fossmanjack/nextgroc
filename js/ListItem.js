@@ -1,36 +1,37 @@
 class ListItem {
 	constructor(props) {
 		let { itemName,
-			qty,
-			state,
-			loc,
-			price,
-			purBy,
-			url,
-			staple,
-			interval,
-			history,
-			image,
-			notes,
-			creationDate,
-			modifyDate,
+			qty = 1,
+			state = 0,
+			loc = "-",
+			price = "-",
+			purBy = "-",
+			url = "-",
+			staple = false,
+			interval = 0,
+			history = [],
+			image = 'default.png',
+			notes = "",
+			creationDate = Date.now(),
+			modifyDate = creationDate,
 			DOMElement } = props;
 		this.itemName = sanitize(itemName) ? sanitize(itemName) : "list item";
-		this.qty = qty ? qty : "1";
-		this.loc = loc ? loc : "-";
-		this.price = price ? price : "-";
-		this.purBy = purBy ? purBy : "-";
-		this.url = url ? url : "-";
-		this.staple = staple ? true : false;
-		this.interval = interval ? interval : 0;
-		this.history = history && history.length ? history : [ ];
-		this.image = image ? image : 'default.png';
-		this.notes = notes ? notes : "";
+		this.qty = qty; // ? qty : "1";
+		this.loc = loc; // ? loc : "-";
+		this.price = price; // ? price : "-";
+		this.purBy = purBy; // ? purBy : "-";
+		this.url = url; // ? url : "-";
+		this.staple = staple; // ? true : false;
+		this.interval = interval; // ? interval : 0;
+		this.history = history; // && history.length ? history : [ ];
+		this.image = image; // ? image : 'default.png';
+		this.notes = notes; // ? notes : "";
 		this.setState(state) ? null : this.state = 0;
 		this.oid = camelize(this.itemName);
-		this.creationDate = creationDate ? creationDate : Date.now();
-		this.modifyDate = modifyDate ? modifyDate : creationDate;
+		this.creationDate = creationDate; // ? creationDate : Date.now();
+		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
+		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
 	}
 	getCamelName() { return camelize(this.itemName); }
 	setState(state) {
@@ -86,68 +87,72 @@ class ListItem {
 		header.id = `${idStr}-header`;
 		root.appendChild(header);
 
-		let unfurl = document.createElement('button'); // accordion control button
-		unfurl.classList.add('accordion-button', 'collapsed', 'notoggle');
-		//unfurl.classList.add('collapsed');
-		//unfurl.classList.add('notoggle');
-		unfurl.type = 'button';
-		unfurl.setAttribute('data-bs-toggle', 'collapse');
-		unfurl.setAttribute('data-bs-target', `#${idStr}-card`);
-		unfurl.id = `${idStr}-expand`;
-		header.appendChild(unfurl);
-
 		let titleBar = document.createElement('div'); // accordion title bar
 		titleBar.classList.add('container-fluid');
-		unfurl.appendChild(titleBar);
+		header.appendChild(titleBar);
 
 		let trow = document.createElement('div');
 		trow.classList.add('row');
 		titleBar.appendChild(trow);
 
 		let tcol1 = document.createElement('div');
-		tcol1.classList.add('col-8');
+		tcol1.classList.add('col-1', 'd-flex', 'align-items-center', 'justify-content-center');
 		trow.appendChild(tcol1);
 
 		let checkBox = document.createElement('i'); // check box
-		checkBox.classList.add('fa-regular');
+		checkBox.classList.add('fa-regular', 'fa-lg');
 		checkBox.classList.add(this.state === 1 ? 'fa-square-check' : 'fa-square');
 		checkBox.type = 'button';
-		checkBox.id = `${idStr}-checkbox`;
+		checkBox.id = `${idStr}-btn0`;
 		tcol1.appendChild(checkBox);
-		checkBox.addEventListener('click', () => {
-			if(!this.state) { // change from 0 to 1
-				title.style.textDecoration = "line-through";
-				checkBox.classList.remove('fa-square');
-				checkBox.classList.add('fa-square-check');
-				this.state = 1;
-			} else { // change from 1 or 2 to 0
-				title.style.textDecoration = "";
-				checkBox.classList.remove('fa-square-check');
-				checkBox.classList.add('fa-square');
-				this.state = 0;
-			}
-		});
-		let title = document.createElement('span'); // item name
+		checkBox.addEventListener('click', () => { this.btnFuns[0](this) });
+
+		let tcol2 = document.createElement('div');
+		tcol2.classList.add('col');
+		trow.appendChild(tcol2);
+
+		let unfurl = document.createElement('button'); // accordion control button
+		unfurl.classList.add('accordion-button', 'collapsed', 'notoggle');
+		unfurl.type = 'button';
+		unfurl.setAttribute('data-bs-toggle', 'collapse');
+		unfurl.setAttribute('data-bs-target', `#${idStr}-card`);
+		unfurl.id = `${idStr}-expand`;
+		tcol2.appendChild(unfurl);
+
+
+		let acont = document.createElement('div');
+		acont.classList.add('container-fluid');
+		unfurl.appendChild(acont);
+
+		let arow = document.createElement('div');
+		arow.classList.add('row');
+		acont.appendChild(arow);
+
+		let acol1 = document.createElement('div');
+		acol1.classList.add('col-8');
+		arow.appendChild(acol1);
+
+		let title = document.createElement('h4'); // item name
 		title.id = `${idStr}-title`;
 		title.textContent = this.itemName;
 		title.setAttribute('data-edit-target', true);
 		this.state === 1 ? title.style.textDecoration = "line-through" : null;
-		tcol1.appendChild(title);
+		acol1.appendChild(title);
 
-		let qtyDiv = document.createElement('div');
-		qtyDiv.classList.add('col', 'text-end');
+		let acol2 = document.createElement('div');
+		acol2.classList.add('col', 'text-end');
 		//qtyDiv.classList.add('text-end');
-		trow.appendChild(qtyDiv);
+		arow.appendChild(acol2);
 
 		let qtyText = document.createElement('span'); // Qty:
 		qtyText.classList.add('label-text');
 		qtyText.textContent = 'Qty: ';
-		qtyDiv.appendChild(qtyText);
+		acol2.appendChild(qtyText);
 
 		let qty = document.createElement('span'); // item quantity
 		qty.id = `${idStr}-qty`;
 		qty.textContent = (this.qty ? `${this.qty}` : " ");
-		qtyDiv.appendChild(qty);
+		acol2.appendChild(qty);
 /* end header */
 
 /* begin card */
@@ -210,7 +215,8 @@ class ListItem {
 		btn2.classList.add('btn', 'btn-success', 'fa-solid', 'fa-lg', 'fa-pencil');
 		btnCol.appendChild(btn2);
 		//btn2.addEventListener('click', (
-		btn2.addEventListener('click', this.editItem);
+		//btn2.addEventListener('click', this.editItem);
+		btn2.addEventListener('click', () => { this.btnFuns[2](this); });
 
 		let btn3 = document.createElement('button');
 		btn3.type = 'button';
@@ -365,25 +371,94 @@ class ListItem {
 	updateDOM(prop, str) {
 		document.getElementById(`${this.oid}-${prop}`).textContent = str;
 	}
-	editItem() {
-		console.log(this.DOMElement);
+/*
+ * Consider: the reason you're not passing the element as-is is because you
+ * wanted to remove the event listener, but you don't need to do that -- just change
+ * the function that's stored in the event listener variable!
+ *
+ */
+	editItem(ob) {
+		//console.log(this.DOMElement);
 
-		const els = this.DOMElement.children().filter((el) => { el.hasAttribute('data-edit-target'); });
+		const ch = ob.DOMElement.children;
+		//const els = [ ];
+		const idStr = ob.oid;
+		const btn1 = document.getElementById(`${idStr}-btn1`);
+		const btn2 = document.getElementById(`${idStr}-btn2`);
+		const btn3 = document.getElementById(`${idStr}-btn3`);
 
-		const idStr = this.oid;
-		const root = document.getElementById(`${this.oid}-root`);
+		for(let i = 0; i<ch.length; i++) {
+			if(ch[i].hasAttribute('data-edit-target'))
+				ch[i].contentEditable = true;
+		}
+
+		//const els = ch.filter((el) => { el.hasAttribute('data-edit-target'); });
+		//const idStr = this.oid;
+		//const root = document.getElementById(`${this.oid}-root`);
 		//const els = root.children().filter((el) => { el.hasAttribute('data-edit-target'); });
-		const btn1 = this.DOMElement.getElementById(`${idStr}-btn1`);
-		const btn2 = this.DOMElement.getElementById(`${idStr}-btn2`);
-		const btn3 = this.DOMElement.getElementById(`${idStr}-btn3`);
+		// getElementById is apparently only available to the document object, so use find() instead
+		//const btn1 = ch.find((el) => { el.id === `${idStr-btn1}` });
+		//const btn2 = ch.find((el) => { el.id === `${idStr-btn2}` });
+		//const btn3 = ch.find((el) => { el.id === `${idStr-btn3}` });
+		//const btn1 = this.DOMElement.getElementById(`${idStr}-btn1`);
+		//const btn2 = this.DOMElement.getElementById(`${idStr}-btn2`);
+		//const btn3 = this.DOMElement.getElementById(`${idStr}-btn3`);
 		// btn1 becomes "add photo"
 		// btn2 becomes "commit edit"
 		btn2.classList.remove('btn-primary', 'fa-pencil');
 		btn2.classList.add('btn-success', 'fa-check');
-		btn2.removeEventListener(this.editItem);
-		btn2.addEventListener('click', this.commitEdit);
-
+		//btn2.removeEventListener(this.editItem);
+		//btn2.addEventListener('click', this.commitEdit);
+		ob.btnFuns[2] = ob.commitEdit;
 		// btn3 becomes "cancel edit"
+		btn3.classList.remove('btn-primary', 'fa-broom');
+		btn3.classList.add('btn-warning', 'fa-xmark');
 	}
+	commitEdit(ob) {
+		const ch = ob.DOMElement.children;
+		const els = [ ];
+		const idStr = ob.oid;
+		const btn1 = document.getElementById(`${idStr}-btn1`);
+		const btn2 = document.getElementById(`${idStr}-btn2`);
+		const btn3 = document.getElementById(`${idStr}-btn3`);
 
+		for(let i = 0; i<ch.length; i++) {
+			if(ch[i].contentEditable)
+				ch[i].contentEditable = false;
+		}
+
+		// btn1 becomes "staple"
+		// btn2 becomes "edit item"
+		btn2.classList.remove('fa-check');
+		btn2.classList.add('fa-pencil');
+		ob.btnFuns[2] = ob.editItem;
+
+		// btn3 becomes "sweep item"
+		btn3.classList.remove('btn-warning', 'fa-xmark');
+		btn3.classList.add('btn-primary', 'fa-broom');
+	}
+	checkItem(ob) {
+		const idStr = ob.oid;
+		/* this doesn't work, not sure why
+		const ch = ob.DOMElement.children;
+		const btn0 = ch.namedItem(`${idStr}-btn0`);
+		const title = ch.namedItem(`${idStr}-title`);// => { el.id === `${idStr-title}` });
+		*/
+
+		const btn0 = document.getElementById(`${idStr}-btn0`);
+		const title = document.getElementById(`${idStr}-title`);
+
+		// debug ? debugMsg("checkItem", [ idStr, btn0, title ]) : null;
+		if(!ob.state) { // change from 0 to 1
+			title.style.textDecoration = "line-through";
+			btn0.classList.remove('fa-square');
+			btn0.classList.add('fa-square-check');
+			ob.state = 1;
+		} else {
+			title.style.textDecoration = "";
+			btn0.classList.remove('fa-square-check');
+			btn0.classList.add('fa-square');
+			ob.state = 0;
+		}
+	}
 }
