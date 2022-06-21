@@ -475,6 +475,7 @@ class ListItem {
 		else
 		{
 			return (els.find((el) => el === root)) ? [] : [ root ];
+			// return [...new Set(els)]; // this should filter dupes, test tomorrow
 			/*
 			if(els.find((el) => el === root))
 				return [];
