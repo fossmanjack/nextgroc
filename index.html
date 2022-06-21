@@ -46,11 +46,14 @@
 	<script>
 		const _TestList = [ ];
 		const debug = true;
-		fetch('res/TestList.json')
+		fetch('res/OneItemList.json')
 			.then(response => response.json())
 			.then(Data => {
 				Data.forEach((item) => _TestList.push(new ListItem(item)));
-				_TestList.forEach((item) => document.getElementById('list-root').appendChild(item.DOMElement));
+				_TestList.forEach((item) => {
+					document.getElementById('list-root').appendChild(item.DOMElement);
+					item.generateRevEls(item._RevEls);
+				});
 				//Data.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); });
 				console.log(Data);
 			});
