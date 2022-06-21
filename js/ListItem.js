@@ -32,6 +32,7 @@ class ListItem {
 		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
+		this.allEls = this.getAllElements(this.DOMElement, []);
 	}
 	getCamelName() { return camelize(this.itemName); }
 	setState(state) {
@@ -212,7 +213,7 @@ class ListItem {
 		let btn2 = document.createElement('button');
 		btn2.type = 'button';
 		btn2.id = `${idStr}-btn2`;
-		btn2.classList.add('btn', 'btn-success', 'fa-solid', 'fa-lg', 'fa-pencil');
+		btn2.classList.add('btn', 'btn-primary', 'fa-solid', 'fa-lg', 'fa-pencil');
 		btnCol.appendChild(btn2);
 		//btn2.addEventListener('click', (
 		//btn2.addEventListener('click', this.editItem);
@@ -221,7 +222,7 @@ class ListItem {
 		let btn3 = document.createElement('button');
 		btn3.type = 'button';
 		btn3.id = `${idStr}-btn3`;
-		btn3.classList.add('btn', 'btn-primary', 'fa-solid', 'fa-lg', 'fa-broom');
+		btn3.classList.add('btn', 'btn-warning', 'fa-solid', 'fa-lg', 'fa-broom');
 		btnCol.appendChild(btn3);
 		btn3.addEventListener('click', this.sweepItem);
 
@@ -411,8 +412,8 @@ class ListItem {
 		//btn2.addEventListener('click', this.commitEdit);
 		ob.btnFuns[2] = ob.commitEdit;
 		// btn3 becomes "cancel edit"
-		btn3.classList.remove('btn-primary', 'fa-broom');
-		btn3.classList.add('btn-warning', 'fa-xmark');
+		btn3.classList.remove('btn-warning', 'fa-broom');
+		btn3.classList.add('btn-danger', 'fa-xmark');
 	}
 	commitEdit(ob) {
 		const ch = ob.DOMElement.children;
@@ -429,13 +430,13 @@ class ListItem {
 
 		// btn1 becomes "staple"
 		// btn2 becomes "edit item"
-		btn2.classList.remove('fa-check');
-		btn2.classList.add('fa-pencil');
+		btn2.classList.remove('btn-success', 'fa-check');
+		btn2.classList.add('btn-primary', 'fa-pencil');
 		ob.btnFuns[2] = ob.editItem;
 
 		// btn3 becomes "sweep item"
-		btn3.classList.remove('btn-warning', 'fa-xmark');
-		btn3.classList.add('btn-primary', 'fa-broom');
+		btn3.classList.remove('btn-danger', 'fa-xmark');
+		btn3.classList.add('btn-warning', 'fa-broom');
 	}
 	checkItem(ob) {
 		const idStr = ob.oid;
@@ -443,6 +444,8 @@ class ListItem {
 		const ch = ob.DOMElement.children;
 		const btn0 = ch.namedItem(`${idStr}-btn0`);
 		const title = ch.namedItem(`${idStr}-title`);// => { el.id === `${idStr-title}` });
+		It doesn't work because children only contains the direct children, not all
+		children.
 		*/
 
 		const btn0 = document.getElementById(`${idStr}-btn0`);
@@ -460,5 +463,28 @@ class ListItem {
 			btn0.classList.add('fa-square');
 			ob.state = 0;
 		}
+	}
+	getAllElements(root, els) {
+		if(root.children.length) { // this should be a HTML collection
+			for(let i=0; i<root.children.length; i++) {
+				els = els.concat(this.getAllElements(root.children[i], els));
+				debug ? debugMsg("getAllElements", [ root.children[i], els ]) : null;
+			}
+			return els;
+		}
+		else
+		{
+			return (els.find((el) => el === root)) ? [] : [ root ];
+			/*
+			if(els.find((el) => el === root))
+				return [];
+			else
+				return [ root ];
+			*/
+		}
+/* this works, but returns truly massive arrays (~350000 elements).  There
+* has to be a way to prevent items already on the list from being added
+* again
+*/
 	}
 }
