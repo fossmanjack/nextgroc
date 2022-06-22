@@ -70,11 +70,11 @@ class ListItem {
 		el.set("card", document.getElementById(`${idStr}-card`));
 		el.set("img", document.getElementById(`${idStr}-img`));
 		el.set("stpTxt", document.getElementById(`${idStr}-stpTxt`));
-		el.set("loc", document.getElementById(`${idStr}-locVal`));
+		el.set("loc", document.getElementById(`${idStr}-loc`));
 		el.set("price", document.getElementById(`${idStr}-price`));
-		el.set("url", document.getElementById(`${idStr}-urlVal`));
-		el.set("purBy", document.getElementById(`${idStr}-purByVal`));
-		el.set("last", document.getElementById(`${idStr}-lastVal`));
+		el.set("url", document.getElementById(`${idStr}-url`));
+		el.set("purBy", document.getElementById(`${idStr}-purBy`));
+		el.set("last", document.getElementById(`${idStr}-last`));
 	}
 	setState(state) {
 		if(state && state !== 1 && state !== 2)
@@ -499,17 +499,27 @@ class ListItem {
 		// todo: if we're only using allels, idstr, and the buttons,
 		// we can refactor this using destructuring instead of
 		// passing around the whole object
-		const els = ob.allEls;
-		const idStr = ob.oid;
+		//const els = ob._RevEls;
+		//const idStr = ob.oid;
+		//const [[,btn1],[,btn2],[,btn3],[,acBtn]] = ob._RevEls;
+		const btn1 = ob._RevEls.get('btn1');
+		const btn2 = ob._RevEls.get('btn2');
+		const btn3 = ob._RevEls.get('btn3');
+		const acBtn = ob._RevEls.get('acBtn');
 
-		const btn1 = els.find((el) => el.id === `${idStr}-btn1`);
-		const btn2 = els.find((el) => el.id === `${idStr}-btn2`);
-		const btn3 = els.find((el) => el.id === `${idStr}-btn3`);
+		debug && debugMsg("editItem props", [
+			`btn1 data: ${btn1}, ${btn1.id}, ${btn1.classList}`,
+			`btn2: ${btn2}`,
+			`btn3: ${btn3}`
+		]);
+		//const btn1 = els.find((el) => el.id === `${idStr}-btn1`);
+		//const btn2 = els.find((el) => el.id === `${idStr}-btn2`);
+		//const btn3 = els.find((el) => el.id === `${idStr}-btn3`);
 
 		//const root = document.getElementById('list-root');
 		// this isn't working
 		//const acBtn = els.find((el) => el.id === `${idStr}-expand`);
-		const acBtn = document.getElementById(`${idStr}-expand`);
+		//const acBtn = document.getElementById(`${idStr}-expand`);
 		// turn off the accordion
 
 		//root.classList.remove('accordion', 'accordion-flush');
@@ -532,10 +542,20 @@ class ListItem {
 
 		// add edit properties and outlines to all data-edit-target elements
 
-		els.filter((el) => el.hasAttribute('data-edit-target')).forEach((el) => {
+		ob._RevEls.forEach((el) => {
+			debug && debugMsg("_RevEls.forEach", [ el ]);
+			//el.hasAttribute('data-edit-target') && {
+			if(el.hasAttribute('data-edit-target')) {
+				el.contentEditable = true;
+				el.classList.add('edit-target');
+			};
+		});
+		/*
+		ob._RevEls.filter((el) => el.hasAttribute('data-edit-target')).forEach((el) => {
 			el.contentEditable = true;
 			el.classList.add('edit-target');
 		}); // it works!
+		*/
 		/*
 		//console.log(this.DOMElement);
 
@@ -576,6 +596,10 @@ class ListItem {
 	}
 
 	commitEdit(ob) {
+		// this function must parse through _RevEls, grab the textContent, and
+		// set the associated object property to that content
+		// Given that, I wonder if storing the props as a map might not be a
+		// good idea?
 		const ch = ob.DOMElement.children;
 		const els = [ ];
 		const idStr = ob.oid;
@@ -602,6 +626,8 @@ class ListItem {
 
 /* begin button 3 functions: sweepItem and cancelEdit */
 	cancelEdit(ob) {
+		// This function must parse through _RevEls and overwrite the value for
+		// each key with the object's associated property
 		const els = ob.allEls;
 		const idStr = ob.oid;
 
