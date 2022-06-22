@@ -47,6 +47,9 @@ class ListItem {
  * Another thing to consider is that you don't actually need a map here, just, y'know --
  * store the various needed DOM elements as object properties.  The only sticky wicket
  * is you have to reload them all in a big long constructor.
+ * Actually no, we do still want the map because it can be looped through, and we could also
+ * use it to store the current values of the various DOM elements we care about, which will
+ * probably be important when we're setting up the edit and cancel functions
  */
 	}
 	getCamelName() { return camelize(this.itemName); }
