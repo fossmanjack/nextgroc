@@ -15,7 +15,6 @@ class ListItem {
 			creationDate = Date.now(),
 			modifyDate = creationDate,
 			DOMElement } = props;
-			//_Els = new Map() } = props;
 		this.itemName = sanitize(itemName) ? sanitize(itemName) : "list item";
 		this.qty = qty; // ? qty : "1";
 		this.loc = loc; // ? loc : "-";
@@ -31,26 +30,9 @@ class ListItem {
 		this.oid = camelize(this.itemName);
 		this.creationDate = creationDate; // ? creationDate : Date.now();
 		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
-		////this._Els = _Els && _Els.entries().next().value ? _Els : new Map();
-		//debug ? console.log("_Els?", [ //this._Els, _Els, _Els.entries() ]) : null;
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
-		//this.allEls = this.getAllElements(this.DOMElement, []);
-		// //this._Els = new Map();
 		this._RevEls = new Map();
-		//this._RevEls.set("state", this.getState);
-/* A consideration for refactoring: don't store _Els in the object, there's
- * no need.  Instead, generate them after DOMElement is rendered using a function
- * that just calls each document.getElementById(`${idStr}-val`) and maps them
- * accordingly.  You might also be able to do something like add a "data-relevant"
- * field to the elements you want to scoop out and map them based on their ID.
- * Another thing to consider is that you don't actually need a map here, just, y'know --
- * store the various needed DOM elements as object properties.  The only sticky wicket
- * is you have to reload them all in a big long constructor.
- * Actually no, we do still want the map because it can be looped through, and we could also
- * use it to store the current values of the various DOM elements we care about, which will
- * probably be important when we're setting up the edit and cancel functions
- */
 	}
 	getCamelName() { return camelize(this.itemName); }
 	generateRevEls(el) {
@@ -74,7 +56,7 @@ class ListItem {
 		el.set("price", document.getElementById(`${idStr}-price`));
 		el.set("url", document.getElementById(`${idStr}-url`));
 		el.set("purBy", document.getElementById(`${idStr}-purBy`));
-		el.set("last", document.getElementById(`${idStr}-last`));
+		el.set("interval", document.getElementById(`${idStr}-interval`));
 	}
 	setState(state) {
 		if(state && state !== 1 && state !== 2)
@@ -84,18 +66,9 @@ class ListItem {
 		}
 		this.state = state;
 		this.modifyDate = Date.now();
-		//this.DOMElement = this.generateDOM();
-		// the previous line was causing problems and I think it's because the calling
-		// function, in this case setState, is the "this" referent in the lower-order
-		// function, and since setState doesn't have a DOMElement ...
-		// This might have been what Stacey was talking about when she was talking about
-		// "binding"
-		// Anyway it's unnecessary to re-render the DOM element since changing the content
-		// seems to automatically re-render the page
 		return true;
 	}
 	setName(str) {
-	//	this.itemName = sanitize(name) ? sanitize(name) : "list item";
 		str = sanitize(str);
 		debug ? debugMsg('setName', [ str ]) : null;
 		if(str) {
@@ -122,27 +95,17 @@ class ListItem {
 	}
 
 	generateDOM() {
-		// this builds a ... hm.  This might not actually work.  The plan here
-		// was to build a DOM element that the object could carry with it, and
-		// that might actually still work.  I'm pretty sure carrying the DOM with
-		// the object will make ordering the lists easier and might even enable
-		// dragging items from one list to another in the sidebar.
-		// While we're building it, might as well make it an accordion
-		// Also gonna need a Library version since that renders different
 		const idStr = this.oid;
-		//debug ? debugMsg("//this._Els?", [ //this._Els ]) : null;
 
 		let root = document.createElement('div'); // accordion-item
 		root.classList.add('accordion-item');
 		root.id = `${idStr}-root`;
-		//this._Els.set("root", root);
 
 /* begin header */
 		let header = document.createElement('div'); // accordion-header
 		header.classList.add('accordion-header');
 		header.id = `${idStr}-header`;
 		root.appendChild(header);
-		//this._Els.set("header", header);
 
 		let titleBar = document.createElement('div'); // accordion title bar
 		titleBar.classList.add('container-fluid');
@@ -163,10 +126,6 @@ class ListItem {
 		btn0.id = `${idStr}-btn0`;
 		tcol1.appendChild(btn0);
 		btn0.addEventListener('click', () => { this.btnFuns[0](this) });
-		// We can't do this until we figure out how to store state in the _RevEls map
-		// Actually setState() might not be working right
-		//btn0.addEventListener('click', () => this.btnFuns[0](this._RevEls) );
-		//this._Els.set("btn0", btn0);
 
 		let tcol2 = document.createElement('div');
 		tcol2.classList.add('col');
@@ -179,8 +138,6 @@ class ListItem {
 		acBtn.setAttribute('data-bs-target', `#${idStr}-card`);
 		acBtn.id = `${idStr}-acBtn`;
 		tcol2.appendChild(acBtn);
-		//this._Els.set("acBtn", acBtn);
-
 
 		let acont = document.createElement('div');
 		acont.classList.add('container-fluid');
@@ -200,11 +157,9 @@ class ListItem {
 		title.setAttribute('data-edit-target', true);
 		this.state === 1 ? title.style.textDecoration = "line-through" : null;
 		acol1.appendChild(title);
-		//this._Els.set("title", title);
 
 		let acol2 = document.createElement('div');
 		acol2.classList.add('col', 'text-end');
-		//qtyDiv.classList.add('text-end');
 		arow.appendChild(acol2);
 
 		let qtyText = document.createElement('span'); // Qty:
@@ -217,17 +172,14 @@ class ListItem {
 		qty.setAttribute('data-edit-target', true);
 		qty.textContent = (this.qty ? `${this.qty}` : " ");
 		acol2.appendChild(qty);
-		//this._Els.set("qty", qty);
 /* end header */
 
 /* begin card */
 		let card = document.createElement('div'); // accordion card div
 		card.id=`${idStr}-card`
 		card.classList.add('accordion-collapse', 'collapse');
-		//card.classList.add('collapse');
 		card.setAttribute('data-bs-parent', '#list-root'); // make sure to create this in the page
 		root.appendChild(card);
-		//this._Els.set("card", card);
 
 		let acBody = document.createElement('div'); // accordion body
 		acBody.classList.add('accordion-body');
@@ -246,7 +198,6 @@ class ListItem {
 		imgTag.id = `${idStr}-img`;
 		imgTag.src = `img/${this.image}`
 		imgCol.appendChild(imgTag);
-		//this._Els.set("imgTag", imgTag);
 
 		let detailCol = document.createElement('div'); // text on right
 		detailCol.classList.add('col');
@@ -269,7 +220,6 @@ class ListItem {
 		stpTxt.textContent = "Staple?"
 		stpTxt.id = `${idStr}-stpTxt`;
 		btnCol.appendChild(stpTxt);
-		//this._Els.set("stpTxt", stpTxt);
 
 		let btn1 = document.createElement('button');
 		btn1.type = 'button';
@@ -277,17 +227,13 @@ class ListItem {
 		btn1.classList.add('btn', 'fa-solid', 'fa-lg');
 		btn1.classList.add(this.staple ? 'fa-toggle-on' : 'fa-toggle-off');
 		btnCol.appendChild(btn1);
-		//this._Els.set("btn1", btn1);
 
 		let btn2 = document.createElement('button');
 		btn2.type = 'button';
 		btn2.id = `${idStr}-btn2`;
 		btn2.classList.add('btn', 'btn-primary', 'fa-solid', 'fa-lg', 'fa-pencil');
 		btnCol.appendChild(btn2);
-		//btn2.addEventListener('click', (
-		//btn2.addEventListener('click', this.editItem);
 		btn2.addEventListener('click', () => { this.btnFuns[2](this); });
-		//this._Els.set("btn2", btn2);
 
 		let btn3 = document.createElement('button');
 		btn3.type = 'button';
@@ -295,7 +241,6 @@ class ListItem {
 		btn3.classList.add('btn', 'btn-warning', 'fa-solid', 'fa-lg', 'fa-broom');
 		btnCol.appendChild(btn3);
 		btn3.addEventListener('click', () => { this.btnFuns[3](this); });
-		//this._Els.set("btn3", btn3);
 
 		let locRow = document.createElement('div'); // location row and column
 		locRow.classList.add('row');
@@ -315,7 +260,6 @@ class ListItem {
 		locVal.setAttribute('data-edit-target', true);
 		locVal.textContent = (this.loc ? `${this.loc}` : '-');
 		locCol.appendChild(locVal);
-		//this._Els.set("loc", locVal);
 
 		let priceRow = document.createElement('div'); // price row and column
 		priceRow.classList.add('row');
@@ -335,7 +279,6 @@ class ListItem {
 		priceVal.setAttribute('data-edit-target', true);
 		priceVal.textContent = (this.price ? `${this.price}` : '-');
 		priceCol.appendChild(priceVal);
-		//this._Els.set("price", priceVal);
 
 		let urlRow = document.createElement('div'); // url row and column
 		urlRow.classList.add('row');
@@ -355,7 +298,6 @@ class ListItem {
 		urlVal.setAttribute('data-edit-target', true);
 		urlVal.textContent = (this.url ? `${this.url}` : '-');
 		urlCol.appendChild(urlVal);
-		//this._Els.set("url", urlVal);
 
 		let purByRow = document.createElement('div'); // purchase by row and column
 		purByRow.classList.add('row');
@@ -375,7 +317,6 @@ class ListItem {
 		purByVal.setAttribute('data-edit-target', true);
 		purByVal.textContent = (this.purBy ? `${this.purBy}` : '-');
 		purByCol.appendChild(purByVal);
-		//this._Els.set("purBy", purByVal);
 
 		let lastRow = document.createElement('div'); // last purchase row and column
 		lastRow.classList.add('row');
@@ -392,10 +333,8 @@ class ListItem {
 
 		let lastVal = document.createElement('span');
 		lastVal.id = `${idStr}-last`;
-		lastVal.setAttribute('data-edit-target', true);
 		lastVal.textContent = (this.history[0] ? `${this.history[0]}` : '-');
 		lastCol.appendChild(lastVal);
-		//this._Els.set("last", lastVal);
 
 		let intervalRow = document.createElement('div'); // purchase interval row and column
 		intervalRow.classList.add('row');
@@ -415,7 +354,6 @@ class ListItem {
 		intervalVal.setAttribute('data-edit-target', true);
 		intervalVal.textContent = (this.interval ? `${this.interval}` : '-');
 		intervalCol.appendChild(intervalVal);
-		//this._Els.set("interval", intervalVal);
 
 		// the next two rows get added directly to the acBody element
 
@@ -442,7 +380,6 @@ class ListItem {
 		notesValCol.setAttribute('data-edit-target', true);
 		notesValCol.textContent = `${this.notes}`;
 		notesValRow.appendChild(notesValCol);
-		//this._Els.set("notes", notesValCol);
 
 		return root;
 
@@ -450,34 +387,15 @@ class ListItem {
 	updateDOM(prop, str) {
 		document.getElementById(`${this.oid}-${prop}`).textContent = str;
 	}
-/*
- * Consider: the reason you're not passing the element as-is is because you
- * wanted to remove the event listener, but you don't need to do that -- just change
- * the function that's stored in the event listener variable!
- *
- */
 
 /* begin button 0 functions: checkItem */
 	checkItem(ob) {
-		//const idStr = ob.oid;
-		/* this doesn't work, not sure why
-		const ch = ob.DOMElement.children;
-		const btn0 = ch.namedItem(`${idStr}-btn0`);
-		const title = ch.namedItem(`${idStr}-title`);// => { el.id === `${idStr-title}` });
-		It doesn't work because children only contains the direct children, not all
-		children.
-		*/
 		const { state, _RevEls: els } = ob;
-		//const { title, btn0 } = _RevEls;
 
 		const title = els.get('title');
 		const btn0 = els.get('btn0');
 
-		//const btn0 = document.getElementById(`${idStr}-btn0`);
-		//const title = document.getElementById(`${idStr}-title`);
-
-		// debug ? debugMsg("checkItem", [ idStr, btn0, title ]) : null;
-		//if(!ob.state) { // change from 0 to 1
+		// Refactor this to use setState() and move the reformatting there
 		if(!state) {
 			title.style.textDecoration = "line-through";
 			btn0.classList.remove('fa-square');
@@ -496,33 +414,8 @@ class ListItem {
 
 /* begin button 2 functions: editItem and commitEdit */
 	editItem(ob) {
-		// todo: if we're only using allels, idstr, and the buttons,
-		// we can refactor this using destructuring instead of
-		// passing around the whole object
-		//const els = ob._RevEls;
-		//const idStr = ob.oid;
-		//const [[,btn1],[,btn2],[,btn3],[,acBtn]] = ob._RevEls;
-		const btn1 = ob._RevEls.get('btn1');
-		const btn2 = ob._RevEls.get('btn2');
-		const btn3 = ob._RevEls.get('btn3');
-		const acBtn = ob._RevEls.get('acBtn');
-
-		debug && debugMsg("editItem props", [
-			`btn1 data: ${btn1}, ${btn1.id}, ${btn1.classList}`,
-			`btn2: ${btn2}`,
-			`btn3: ${btn3}`
-		]);
-		//const btn1 = els.find((el) => el.id === `${idStr}-btn1`);
-		//const btn2 = els.find((el) => el.id === `${idStr}-btn2`);
-		//const btn3 = els.find((el) => el.id === `${idStr}-btn3`);
-
-		//const root = document.getElementById('list-root');
-		// this isn't working
-		//const acBtn = els.find((el) => el.id === `${idStr}-expand`);
-		//const acBtn = document.getElementById(`${idStr}-expand`);
-		// turn off the accordion
-
-		//root.classList.remove('accordion', 'accordion-flush');
+		const { btn1, btn2, btn3, acBtn } = Object.fromEntries(ob._RevEls);
+		const validator = /a-zA-Z0-9\!@#&()\-+=_ /
 		acBtn.setAttribute('data-bs-toggle', '');
 
 		// btn1 becomes "add picture"
@@ -543,104 +436,30 @@ class ListItem {
 		// add edit properties and outlines to all data-edit-target elements
 
 		ob._RevEls.forEach((el) => {
-			debug && debugMsg("_RevEls.forEach", [ el ]);
-			//el.hasAttribute('data-edit-target') && {
 			if(el.hasAttribute('data-edit-target')) {
 				el.contentEditable = true;
 				el.classList.add('edit-target');
+				// TODO: add event listener to filter out invalid input
+				el.addEventListener('beforeinput', function validateInput(e) {
+					// doesn't quite work
+					if(!validator.test(e.key)) {
+						e.preventDefault();
+						alert("Valid characters for input are A-Z, a-z, 0-9, !@#&()-+=_ and space");
+					}
+				});
 			};
 		});
-		/*
-		ob._RevEls.filter((el) => el.hasAttribute('data-edit-target')).forEach((el) => {
-			el.contentEditable = true;
-			el.classList.add('edit-target');
-		}); // it works!
-		*/
-		/*
-		//console.log(this.DOMElement);
-
-		const ch = ob.DOMElement.children;
-		//const els = [ ];
-		const idStr = ob.oid;
-		const btn1 = document.getElementById(`${idStr}-btn1`);
-		const btn2 = document.getElementById(`${idStr}-btn2`);
-		const btn3 = document.getElementById(`${idStr}-btn3`);
-
-		for(let i = 0; i<ch.length; i++) {
-			if(ch[i].hasAttribute('data-edit-target'))
-				ch[i].contentEditable = true;
-		}
-
-		//const els = ch.filter((el) => { el.hasAttribute('data-edit-target'); });
-		//const idStr = this.oid;
-		//const root = document.getElementById(`${this.oid}-root`);
-		//const els = root.children().filter((el) => { el.hasAttribute('data-edit-target'); });
-		// getElementById is apparently only available to the document object, so use find() instead
-		//const btn1 = ch.find((el) => { el.id === `${idStr-btn1}` });
-		//const btn2 = ch.find((el) => { el.id === `${idStr-btn2}` });
-		//const btn3 = ch.find((el) => { el.id === `${idStr-btn3}` });
-		//const btn1 = this.DOMElement.getElementById(`${idStr}-btn1`);
-		//const btn2 = this.DOMElement.getElementById(`${idStr}-btn2`);
-		//const btn3 = this.DOMElement.getElementById(`${idStr}-btn3`);
-		// btn1 becomes "add photo"
-		// btn2 becomes "commit edit"
-		btn2.classList.remove('btn-primary', 'fa-pencil');
-		btn2.classList.add('btn-success', 'fa-check');
-		//btn2.removeEventListener(this.editItem);
-		//btn2.addEventListener('click', this.commitEdit);
-		ob.btnFuns[2] = ob.commitEdit;
-		// btn3 becomes "cancel edit"
-		btn3.classList.remove('btn-warning', 'fa-broom');
-		btn3.classList.add('btn-danger', 'fa-xmark');
-		*/
 	}
 
 	commitEdit(ob) {
 		// this function must parse through _RevEls, grab the textContent, and
 		// set the associated object property to that content
-		// Given that, I wonder if storing the props as a map might not be a
-		// good idea?
-		const ch = ob.DOMElement.children;
-		const els = [ ];
-		const idStr = ob.oid;
-		const btn1 = document.getElementById(`${idStr}-btn1`);
-		const btn2 = document.getElementById(`${idStr}-btn2`);
-		const btn3 = document.getElementById(`${idStr}-btn3`);
+		const { btn1, btn2, btn3, acBtn } = Object.fromEntries(ob._RevEls);
 
-		for(let i = 0; i<ch.length; i++) {
-			if(ch[i].contentEditable)
-				ch[i].contentEditable = false;
-		}
-
-		// btn1 becomes "staple"
-		// btn2 becomes "edit item"
-		btn2.classList.remove('btn-success', 'fa-check');
-		btn2.classList.add('btn-primary', 'fa-pencil');
-		ob.btnFuns[2] = ob.editItem;
-
-		// btn3 becomes "sweep item"
-		btn3.classList.remove('btn-danger', 'fa-xmark');
-		btn3.classList.add('btn-warning', 'fa-broom');
-		ob.btnFuns[3] = ob.sweepItem;
-	}
-
-/* begin button 3 functions: sweepItem and cancelEdit */
-	cancelEdit(ob) {
-		// This function must parse through _RevEls and overwrite the value for
-		// each key with the object's associated property
-		const els = ob.allEls;
-		const idStr = ob.oid;
-
-		const btn1 = els.find((el) => el.id === `${idStr}-btn1`);
-		const btn2 = els.find((el) => el.id === `${idStr}-btn2`);
-		const btn3 = els.find((el) => el.id === `${idStr}-btn3`);
-
-		const acBtn = document.getElementById(`${idStr}-expand`);
-
-		// turn on accordion
 		acBtn.setAttribute('data-bs-toggle', 'collapse');
 
-		// btn1 becomes "staple toggle"
+		// btn1 becomes "staple"
+
 		/* nyi */
 
 		// btn2 becomes "edit item"
@@ -653,13 +472,49 @@ class ListItem {
 		btn3.classList.add('btn-warning', 'fa-broom');
 		ob.btnFuns[3] = ob.sweepItem;
 
-		// add edit properties and outlines to all data-edit-target elements
+		ob._RevEls.forEach((el, key) => {
+			if(el.hasAttribute('data-edit-target')) {
+				el.contentEditable = false;
+				el.classList.remove('edit-target');
+				el.removeEventListener(validateInput);
+				//el.textContent = ob[`${key}`];
+				!el.textContent && (el.textContent = "-");
+				ob[`${key}`] = el.textContent;// ? el.textContent : "-";
+			};
+		});
 
-		els.filter((el) => el.hasAttribute('data-edit-target')).forEach((el) => {
-			el.contentEditable = false;
-			el.classList.remove('edit-target');
-			// revert all content to what's in the object
-		}); // it works!
+	}
+
+/* begin button 3 functions: sweepItem and cancelEdit */
+	cancelEdit(ob) {
+		// This function must parse through _RevEls and overwrite the value for
+		// each key with the object's associated property
+		const { btn1, btn2, btn3, acBtn } = Object.fromEntries(ob._RevEls);
+
+		acBtn.setAttribute('data-bs-toggle', 'collapse');
+
+		// btn1 becomes "staple"
+
+		/* nyi */
+
+		// btn2 becomes "edit item"
+		btn2.classList.remove('btn-success', 'fa-check');
+		btn2.classList.add('btn-primary', 'fa-pencil');
+		ob.btnFuns[2] = ob.editItem;
+
+		// btn3 becomes "sweep item"
+		btn3.classList.remove('btn-danger', 'fa-xmark');
+		btn3.classList.add('btn-warning', 'fa-broom');
+		ob.btnFuns[3] = ob.sweepItem;
+
+		ob._RevEls.forEach((el, key) => {
+			if(el.hasAttribute('data-edit-target')) {
+				el.contentEditable = false;
+				el.classList.remove('edit-target');
+				el.removeEventListener(validateInput); // undefined?
+				el.textContent = ob[`${key}`];
+			};
+		});
 	}
 
 /* supplementary functions */
@@ -667,27 +522,12 @@ class ListItem {
 		if(root.children.length) { // this should be a HTML collection
 			for(let i=0; i<root.children.length; i++) {
 				els = els.concat(this.getAllElements(root.children[i], els));
-				//debug ? debugMsg("getAllElements", [ root.children[i], els ]) : null;
 			}
 			return [...new Set(els)]; // end of recursion, full array, let's sort it all out
 		}
 		else
 		{
 			return (els.find((el) => el === root)) ? [] : [ root ];
-			//return [...new Set(els)]; // this should filter dupes, test tomorrow
-			/*
-			if(els.find((el) => el === root))
-				return [];
-			else
-				return [ root ];
-			*/
 		}
-/* this works, but returns truly massive arrays (~350000 elements).  There
-* has to be a way to prevent items already on the list from being added
-* again
-* Okay returning the final element as a Set worked sort of, it doesn't seem
-* to return any divs but it does return spans, buttons, inlines, the image, and
-* so on, so this might do the trick
-*/
 	}
 }
