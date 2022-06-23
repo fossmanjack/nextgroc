@@ -46,7 +46,7 @@
 	<script>
 		const _TestList = [ ];
 		const debug = true;
-		fetch('res/OneItemList.json')
+		fetch('res/TestList.json')
 			.then(response => response.json())
 			.then(Data => {
 				Data.forEach((item) => _TestList.push(new ListItem(item)));

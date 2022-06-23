@@ -11,7 +11,7 @@ class ListItem {
 			interval = 0,
 			history = [],
 			image = 'default.png',
-			notes = "",
+			notes = "...",
 			creationDate = Date.now(),
 			modifyDate = creationDate,
 			DOMElement } = props;
@@ -26,13 +26,14 @@ class ListItem {
 		this.history = history; // && history.length ? history : [ ];
 		this.image = image; // ? image : 'default.png';
 		this.notes = notes; // ? notes : "";
-		this.setState(state) ? null : this.state = 0;
 		this.oid = camelize(this.itemName);
 		this.creationDate = creationDate; // ? creationDate : Date.now();
 		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
 		this._RevEls = new Map();
+		this.listParent = ({});
+		this.state = state;
 	}
 	getCamelName() { return camelize(this.itemName); }
 	generateRevEls(el) {
@@ -57,8 +58,42 @@ class ListItem {
 		el.set("url", document.getElementById(`${idStr}-url`));
 		el.set("purBy", document.getElementById(`${idStr}-purBy`));
 		el.set("interval", document.getElementById(`${idStr}-interval`));
+		el.set("notes", document.getElementById(`${idStr}-notes`));
 	}
-	setState(state) {
+	//setState = (function(state) {
+	setState(ob, state) {
+		debugMsg("setState", [ ob, state, this ]);
+		const { title, btn0 } = Object.fromEntries(ob._RevEls);
+
+		switch(state) {
+			case 0: // listed
+				title.style.textDecoration = '';
+				btn0.classList.remove('fa-square-check');
+				btn0.classList.add('fa-square');
+				ob.state = 0;
+				break;
+			case 1: // bought
+				title.style.textDecoration = 'line-through';
+				btn0.classList.remove('fa-square');
+				btn0.classList.add('fa-square-check');
+				ob.state = 1;
+				break;
+			case 2: // unlisted
+				title.style.textDecoration = '';
+				btn0.classList.remove();
+				btn0.classList.add();
+				ob.state = 2;
+				break;
+			default:
+				ob.setState(ob, 0);
+		}
+	//}).bind(this);
+	}
+/*
+		if(state && state !== 1 && state !== 2)
+			return false;
+		this.state = state;
+	setState(ob, state) {
 		if(state && state !== 1 && state !== 2)
 		{
 			console.log(`Invalid state ${state}!`);
@@ -68,6 +103,7 @@ class ListItem {
 		this.modifyDate = Date.now();
 		return true;
 	}
+*/
 	setName(str) {
 		str = sanitize(str);
 		debug ? debugMsg('setName', [ str ]) : null;
@@ -227,6 +263,7 @@ class ListItem {
 		btn1.classList.add('btn', 'fa-solid', 'fa-lg');
 		btn1.classList.add(this.staple ? 'fa-toggle-on' : 'fa-toggle-off');
 		btnCol.appendChild(btn1);
+		btn1.addEventListener('click', () => { this.btnFuns[1](this); });
 
 		let btn2 = document.createElement('button');
 		btn2.type = 'button';
@@ -390,6 +427,12 @@ class ListItem {
 
 /* begin button 0 functions: checkItem */
 	checkItem(ob) {
+		ob.state ? ob.setState(ob, 0) : ob.setState(ob, 1);
+	}
+	/*
+	checkItem = (function() {
+		this.state ? this.setState(0) : this.setState(1);
+		/*
 		const { state, _RevEls: els } = ob;
 
 		const title = els.get('title');
@@ -407,15 +450,33 @@ class ListItem {
 			btn0.classList.add('fa-square');
 			ob.state = 0;
 		}
-	}
+	}).bind(this);
+	*/
 
 /* begin button 1 functions: toggleStaple and editPhoto */
+
+	toggleStaple(ob) {
+		const { btn1 } = Object.fromEntries(ob._RevEls);
+
+		debugMsg("toggleStaple", [ btn1, ob.staple ]);
+		if(ob.staple) {
+			ob.staple = false;
+			btn1.classList.remove('fa-toggle-on');
+			btn1.classList.add('fa-toggle-off');
+		} else {
+			ob.staple = true;
+			btn1.classList.remove('fa-toggle-off');
+			btn1.classList.add('fa-toggle-on');
+		};
+		ob.modifyDate = Date.now();
+	}
 
 
 /* begin button 2 functions: editItem and commitEdit */
 	editItem(ob) {
 		const { btn1, btn2, btn3, acBtn } = Object.fromEntries(ob._RevEls);
-		const validator = /a-zA-Z0-9\!@#&()\-+=_ /
+		const validator = /[a-zA-Z0-9\!@#&()\-+=_ ]/
+		//const validator = /[a-zA-Z0-9]/
 		acBtn.setAttribute('data-bs-toggle', '');
 
 		// btn1 becomes "add picture"
@@ -442,9 +503,10 @@ class ListItem {
 				// TODO: add event listener to filter out invalid input
 				el.addEventListener('beforeinput', function validateInput(e) {
 					// doesn't quite work
-					if(!validator.test(e.key)) {
+					console.log(`Key: ${e.data}, Type: ${e.inputType}`);
+					if(e.inputType !== "deleteContentBackward" && !validator.test(e.data)) {
 						e.preventDefault();
-						alert("Valid characters for input are A-Z, a-z, 0-9, !@#&()-+=_ and space");
+						alert("Valid characters forinput are A-Z, a-z, 0-9, !@#&-+=_ and space");
 					}
 				});
 			};
@@ -476,12 +538,14 @@ class ListItem {
 			if(el.hasAttribute('data-edit-target')) {
 				el.contentEditable = false;
 				el.classList.remove('edit-target');
+				// figure out a way to do this that works -- right now validateInput is not defined
 				el.removeEventListener(validateInput);
 				//el.textContent = ob[`${key}`];
 				!el.textContent && (el.textContent = "-");
 				ob[`${key}`] = el.textContent;// ? el.textContent : "-";
 			};
 		});
+		ob.modifyDate = Date.now();
 
 	}
 
@@ -515,6 +579,12 @@ class ListItem {
 				el.textContent = ob[`${key}`];
 			};
 		});
+	}
+
+	sweepItem(ob) {
+		debugMsg("sweepItem", [ ob ]);
+		ob.setState(ob, 2);
+		ob.history.shift(Date.now());
 	}
 
 /* supplementary functions */
