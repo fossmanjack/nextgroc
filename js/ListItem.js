@@ -1,20 +1,21 @@
 class ListItem {
-	constructor(props) {
-		let { itemName,
-			qty = 1,
-			state = 0,
-			loc = "-",
-			price = "-",
-			purBy = "-",
-			url = "-",
-			staple = false,
-			interval = 0,
-			history = [],
-			image = 'default.png',
-			notes = "...",
-			creationDate = Date.now(),
-			modifyDate = creationDate,
-			DOMElement } = props;
+	constructor( {
+		itemName,
+		qty = 1,
+		state = 0,
+		loc = '-',
+		price = '-',
+		purBy = '-',
+		url = '-',
+		staple = false,
+		interval = 0,
+		history = [],
+		image = 'default.png',
+		notes = '...',
+		creationDate = Date.now(),
+		modifyDate = creationDate,
+		DOMElement
+	} ) {
 		this.itemName = sanitize(itemName) ? sanitize(itemName) : "list item";
 		this.qty = qty; // ? qty : "1";
 		this.loc = loc; // ? loc : "-";
@@ -61,6 +62,7 @@ class ListItem {
 		el.set("notes", document.getElementById(`${idStr}-notes`));
 	}
 	//setState = (function(state) {
+	/*
 	setState(ob, state) {
 		debugMsg("setState", [ ob, state, this ]);
 		const { title, btn0 } = Object.fromEntries(ob._RevEls);
@@ -80,14 +82,32 @@ class ListItem {
 				break;
 			case 2: // unlisted
 				title.style.textDecoration = '';
-				btn0.classList.remove();
-				btn0.classList.add();
+				btn0.classList.remove('fa-square-check');
+				btn0.classList.add('fa-square');
 				ob.state = 2;
+				break;
+			case 3: // library view
+				// In the library view, we click to "add" the item to
+				// the list, which is really just setting its state to 0
+				// so the various display bits need to be rendered by the
+				// list view rather than inherent to the object.  This isn't
+				// a big change, really -- just need to get List.js coded
 				break;
 			default:
 				ob.setState(ob, 0);
 		}
 	//}).bind(this);
+	}
+	*/
+	setState(ob, state) {
+		switch(state) {
+			case 0: case 1: case 2:
+				ob.state = state;
+				break;
+			default:
+				console.log("Invalid state selected!", ob, state);
+				ob.state = 0;
+		}
 	}
 /*
 		if(state && state !== 1 && state !== 2)
@@ -428,6 +448,10 @@ class ListItem {
 /* begin button 0 functions: checkItem */
 	checkItem(ob) {
 		ob.state ? ob.setState(ob, 0) : ob.setState(ob, 1);
+	}
+
+	toggleListing(ob) {
+		(!ob.state || ob.state === 1) ? ob.setState(ob, 2) : ob.setState(ob, 0);
 	}
 	/*
 	checkItem = (function() {

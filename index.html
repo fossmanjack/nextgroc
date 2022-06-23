@@ -27,6 +27,7 @@
 	<div id='list-root' class='accordion accordion-flush'>
 	</div>
 
+	<div id="json-display"></div>
 	<input type="text" name="text" id="item-input">
 	<button class="btn btn-primary" name="sweepButton" id="sweep-button"><span class="fa fa-solid fa-broom"></span></button>
 	<button class="btn btn-success" name="resetButton" id="reset-button"><span class="fa fa-solid fa-refresh"></span></button>
@@ -41,9 +42,11 @@
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="js/scripts.js"></script>
 	<script src="js/ListItem.js"></script>
+	<script src="js/ShoppingList.js"></script>
 	<!-- endbuild -->
 
 	<script>
+		/*
 		const _TestList = [ ];
 		const debug = true;
 		fetch('res/TestList.json')
@@ -57,95 +60,77 @@
 				//Data.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); });
 				console.log(Data);
 			});
+		*/
+		//const _TestList = new List(JSON.parse(fetch('res/testList-Listjs.json')));
+		const debug = true;
+		const jsonDisp = document.getElementById('json-display');
+		let jsonData;
+		const _TestList = new ShoppingList({ itemName: "placeholder" });
 
-
-/*
-		$(document).ready(function() {
-			loadJSON('res/TestList.json', (item) => _TestList.push(new ListItem(item)));
-			_TestList.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); } );
-		});
-		function loadList(Data) {
-			Data.forEach((item) => _TestList.push(new ListItem(item)));
-			for(let i = 0; i<Data.length; i++) {
-				_TestList.push(new ListItem(Data[i]));
-			}
-		}
-*/
-
-
-/*
-		const item1 = new ListItem("Whole milk", "1 gal");
-		const item2 = new ListItem("Bologna");
-		const item3 = new ListItem("White bread");
-		const item4 = new ListItem("American cheese");
-		const item5 = new ListItem("Mayonnaise");
-		const item6 = new ListItem("Potato chips");
-		const item7 = new ListItem("!@#$%^&*()-_=+[]{}\|,.<>?/\'\":;");
-		item4.setState(1);
-
-		const TestList = [ item1, item2, item3, item4, item5, item6, item7 ];
-		TestList.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); } );
-*/
-/*
-		testList.addItem(item1);
-		testList.addItem(item2);
-		testList.addItem(item3);
-		testList.addItem(item4);
-		testList.addItem(item5);
-		testList.addItem(item6);
-		testList.addItem(item7);
-
-		$(document).ready(function() {
-			const tar = document.getElementById("list-goes-here");
-			const inputField = document.getElementById("item-input");
-			const sweeper = document.getElementById("sweep-button");
-			const reset = document.getElementById("reset-button");
-			loadList(testList);
-			generateList(tar, testList);
-			addEditListeners();
-			inputField.addEventListener('keypress', function(e) {
-				if(e.keyCode === 13) {
-					tryAddItem(inputField.value, tar, testList);
-				}
+		fetch('res/testList-Listjs.json')
+			.then(resp => resp.json())
+			//.then(Data => jsonData = Data);
+			.then(Data => {
+				_TestList.listName = Data.listName;
+				_TestList.listID = Data.listID;
+				_TestList.creationDate = Data.creationDate;
+				_TestList.modifyDate = Data.modifyDate;
+				Data.items.forEach((item) => { _TestList.addItem(new ListItem(item), _TestList); });
 			});
-			sweeper.addEventListener('click', function() { sweepList(testList); });
-			reset.addEventListener('click', function() { generateList(tar, testList); });
+		_TestList.getListView(_TestList);
+		_TestList.items.forEach((item) => item.generateRevEls(item._RevEls));
+
+		//jsonDisp.textContent = jsonData;
+/*
+		const _TestList = new ShoppingList({
+			itemName: jsonData.itemName,
+			listID: jsonData.listID,
+			creationDate: jsonData.creationDate,
+			modifyDate: jsonData.modifyDate
 		});
 
-		function tryAddItem(name, tar, tList) {
-			testList.addItemByName(name) ? generateList(tar, tList) : null;
-			document.getElementById("item-input").value = "";
-			addEventListeners();
+		jsonData.items.forEach((item) => _TestList.addItem(new ListItem(item)));
+
+		_TestList.getListView;
+
+//		let response = await fetch('res/testList-Listjs.json');
+//		let result = await response.json();
+/*
+		if(resp.ok) {
+			let jsonData = resp.json();
+		} else {
+			alert('HTTP status:', resp.status);
 		}
 
-		function sweepList(tList) {
-			console.log("Sweeping list...");
-			const tar = document.getElementById("list-goes-here");
-			tList.sweep();
-			generateList(tar, tList);
-		}
+		jsonDisp.textContent = jsonData;
+		//document.getElementById('json-display').textContent = fetch('res/testList-Listjs.json');
 
-		function addEditListeners() {
-			const listEls = document.getElementById('list-goes-here');
-			const spans = listEls.getElementsByTagName('span');
-
-			for(let el of spans) {
-//			spans.forEach(function(el) {
-				debug ? debugMsg("addEventListeners", [ el ]) : null;
-				if(el.contentEditable) {
-					el.addEventListener('blur', function() { commitFieldEdit(el); });
-					el.addEventListener('beforeinput', function(e) {
-						debug ? debugMsg('beforeinput', [ e, e.which ]) : null;
-						if(e.inputType === 'insertParagraph') {
-							el.blur();
-							e.preventDefault();
-						}
+		/*
+		const _TestList = fetch('res/testList-Listjs.json').then(response => response.json())
+			.then(Data => {
+				const _LoadList = new List({
+					listname: Data.listName,
+					listID: Data.listID,
+					creationDate: Data.creationDate,
+					modifyDate: Data.modifyDate
 					});
-				}
-//			});
-			}
-		}
-*/
+				Data.items.forEach((item) => _LoadList.addItem(new ListItem(item), _LoadList));
+				return _LoadList;
+			});
+		_TestList.getListView(_TestList);
+
+
+
+		/*
+		fetch('res/testList-1656013633982.json')
+			.then(response => response.json())
+			.then(Data => {
+				Data.items.forEach((item) => _TestList.addItem(new ListItem(item)));
+				item.generateRevEls(item._RevEls);
+			});
+		*/
+		//_TestList.getListView(_TestList);
+
 	</script>
 
 </body>
