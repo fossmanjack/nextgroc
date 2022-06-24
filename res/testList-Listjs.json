@@ -5,7 +5,7 @@
 	"modifyDate" : "1656013633982",
 	"items":[
 		{
-			"itemName" : "Diet pepsi",
+			"title" : "Diet pepsi",
 			"qty" : "24pk",
 			"loc" : "HEB soda aisle",
 			"state" : 0,
@@ -16,7 +16,7 @@
 			"image" : "diet-pepsi.jpg"
 		},
 		{
-			"itemName" : "Whole milk",
+			"title" : "Whole milk",
 			"qty" : "1 gal",
 			"loc" : "Cold case",
 			"state" : 0,
@@ -27,19 +27,19 @@
 			"image" : "whole-milk.jpg"
 		},
 		{
-			"itemName" : "Bologna",
+			"title" : "Bologna",
 			"loc" : "meat dept",
 			"qty" : "1",
 			"state" : 0,
 			"price" : "1.99"
 		},
 		{
-			"itemName" : "White bread",
+			"title" : "White bread",
 			"loc" : "bakery",
 			"notes" : "Artesano is best"
 		},
 		{
-			"itemName" : "American cheese",
+			"title" : "American cheese",
 			"qty" : "1 lb",
 			"loc" : "dairy case",
 			"staple" : true,
@@ -51,14 +51,14 @@
 			"notes" : "Deluxe singles, none of those individually-wrapped plastic crap"
 		},
 		{
-			"itemName" : "Mayonnaise",
+			"title" : "Mayonnaise",
 			"price" : "2.99",
 			"image" : "dukes-mayo.jpg",
 			"notes" : "Dukes best, hellman's otherwise",
 			"state" : 1
 		},
 		{
-			"itemName" : "Cheese balls",
+			"title" : "Cheese balls",
 			"qty" : "1 jug",
 			"loc" : "Wal-mart bulk",
 			"staple" : true,
@@ -68,7 +68,7 @@
 			"image" : "utz-cheese-balls.jpg"
 		},
 		{
-			"itemName" : "Eggs",
+			"title" : "Eggs",
 			"qty" : "2 dozen",
 			"loc" : "dairy case",
 			"staple" : true,
@@ -78,7 +78,7 @@
 			"image" : "eggs.jpg"
 		},
 		{
-			"itemName" : "Tofu",
+			"title" : "Tofu",
 			"qty" : "1 lb",
 			"loc" : "HEB natural foods",
 			"staple" : true,
@@ -91,7 +91,7 @@
 			"notes" : "Extra-firm"
 		},
 		{
-			"itemName" : "Size 4 diapers",
+			"title" : "Size 4 diapers",
 			"qty" : "1 box",
 			"loc" : "Sam's club",
 			"staple" : true,

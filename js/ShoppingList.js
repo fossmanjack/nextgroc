@@ -10,6 +10,7 @@ class ShoppingList {
 		this.creationDate = creationDate;
 		this.modifyDate = modifyDate;
 		this.items = items;
+		this.docRoot = ({});
 		this.listID = listID ? listID : this.generateListID(listName, creationDate);
 	}
 	generateListID(name, date) {
@@ -24,31 +25,14 @@ class ShoppingList {
 	getListView(list, root) {
 		!root ? root = document.getElementById("list-root") : null;
 
+		root.innerHTML = '';
+		debug ? debugMsg('getListView', [ list, root ]) : null;
 		list.items.filter((item) => item.state !== 2).forEach((item) => {
 		//const items = list.items.filter((item) => item.state !== 2);
 		//items.forEach((item) => {
-			const { btn0, title } = Object.fromEntries(item._RevEls);
-
-			switch(item.state) {
-				case 0:
-					btn0.classList.remove('fa-square-check');
-					btn0.classList.add('fa-square');
-					item.btnFuns[0] = item.checkItem;
-					title.style.textDecoration = '';
-					break;
-				case 1:
-					btn0.classList.remove('fa-square');
-					btn0.classList.add('fa-square-check');
-					title.style.textDecoration = 'line-through';
-					item.btnFuns[0] = item.checkItem;
-					break;
-				default: // default to 0
-					btn0.classList.remove('fa-square-check');
-					btn0.classList.add('fa-square');
-					item.btnFuns[0] = item.checkItem;
-					title.style.textDecoration = '';
-					console.log("Item state default encountered:", item);
-			}
+			debug ? debugMsg("forEach", [ item ]) : null;
+			//const { btn0, title } = Object.fromEntries(item._RevEls);
+			item.btnFuns[0] = item.checkItem;
 
 			root.appendChild(item.DOMElement);
 		});
@@ -56,20 +40,9 @@ class ShoppingList {
 	getLibraryView(list, root) {
 		!root ? root = document.getElementById('list-root') : null;
 
+		//root.innerHTML = '';
 		list.items.forEach((item) => {
-			const { btn0, title } = Object.fromEntries(item._RevEls);
-
-			switch(item.state) {
-				case 0: case 1:
-					btn0.classList.remove('fa-square');
-					btn0.classList.add('fa-square-check');
-					title.style.textDecoration = '';
-					break;
-				default:
-					btn0.classList.remove('fa-square-check');
-					btn0.classList.add('fa-square');
-					title.style.textDecoration = '';
-			}
+			//const { btn0, title } = Object.fromEntries(item._RevEls);
 
 			item.btnFuns[0] = item.toggleListing;
 

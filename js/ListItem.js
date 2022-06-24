@@ -1,6 +1,6 @@
 class ListItem {
 	constructor( {
-		itemName,
+		title,
 		qty = 1,
 		state = 0,
 		loc = '-',
@@ -16,7 +16,7 @@ class ListItem {
 		modifyDate = creationDate,
 		DOMElement
 	} ) {
-		this.itemName = sanitize(itemName) ? sanitize(itemName) : "list item";
+		this.title = sanitize(title) ? sanitize(title) : "list item";
 		this.qty = qty; // ? qty : "1";
 		this.loc = loc; // ? loc : "-";
 		this.price = price; // ? price : "-";
@@ -27,20 +27,22 @@ class ListItem {
 		this.history = history; // && history.length ? history : [ ];
 		this.image = image; // ? image : 'default.png';
 		this.notes = notes; // ? notes : "";
-		this.oid = camelize(this.itemName);
+		this.oid = camelize(this.title);
 		this.creationDate = creationDate; // ? creationDate : Date.now();
 		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
+		this.state = state;
+		this._RevEls = new Map();
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
-		this._RevEls = new Map();
+		//this._RevEls = new Map();
 		this.listParent = ({});
-		this.state = state;
 	}
-	getCamelName() { return camelize(this.itemName); }
+	getCamelName() { return camelize(this.title); }
 	generateRevEls(el) {
 		// call this after List attaches the DOMElement to the root
 		// A "REleVantELement" is one which we need to earmark for later
 		// alteration -- a "state" once we hit the React refactor
+		debug ? debugMsg("generateRevEls", []) : null;
 		const idStr = this.oid;
 		el.set("root", document.getElementById(`${idStr}-root`));
 		el.set("header", document.getElementById(`${idStr}-header`));
@@ -128,7 +130,7 @@ class ListItem {
 		str = sanitize(str);
 		debug ? debugMsg('setName', [ str ]) : null;
 		if(str) {
-			this.itemName = str;
+			this.title = str;
 			return true;
 		} else {
 			return false;
@@ -137,7 +139,7 @@ class ListItem {
 	setProp(prop, str) {
 		debug ? debugMsg('setProp', [ prop, str ]) : null;
 		this.modifyDate = Date.now();
-		if(prop === "itemName") {
+		if(prop === "title") {
 			return this.setName(str);
 		} else {
 			this[prop] = str;
@@ -209,9 +211,9 @@ class ListItem {
 
 		let title = document.createElement('h4'); // item name
 		title.id = `${idStr}-title`;
-		title.textContent = this.itemName;
+		title.textContent = this.title;
 		title.setAttribute('data-edit-target', true);
-		this.state === 1 ? title.style.textDecoration = "line-through" : null;
+		title.style.textDecoration = (this.state === 1 ? 'line-through' : '');
 		acol1.appendChild(title);
 
 		let acol2 = document.createElement('div');
@@ -271,11 +273,11 @@ class ListItem {
 		btnCol.classList.add('col');
 		detailRow.appendChild(btnCol);
 
-		let stpTxt = document.createElement('span');
-		stpTxt.classList.add('label-text');
-		stpTxt.textContent = "Staple?"
-		stpTxt.id = `${idStr}-stpTxt`;
-		btnCol.appendChild(stpTxt);
+		let btn1Label = document.createElement('span');
+		btn1Label.classList.add('label-text');
+		btn1Label.textContent = "Staple?"
+		btn1Label.id = `${idStr}-btn1Label`;
+		btnCol.appendChild(btn1Label);
 
 		let btn1 = document.createElement('button');
 		btn1.type = 'button';
@@ -438,6 +440,26 @@ class ListItem {
 		notesValCol.textContent = `${this.notes}`;
 		notesValRow.appendChild(notesValCol);
 
+		// Trying to set _RevEls here
+		this._RevEls.set("root", root);
+		this._RevEls.set("header", header);
+		this._RevEls.set("btn0", btn0);
+		this._RevEls.set("btn1", btn1);
+		this._RevEls.set("btn2", btn2);
+		this._RevEls.set("btn3", btn3);
+		this._RevEls.set("acBtn", acBtn);
+		this._RevEls.set("title", title);
+		this._RevEls.set("qty", qty);
+		this._RevEls.set("card", card);
+		this._RevEls.set("img", imgTag);
+		this._RevEls.set("btn1Label", btn1Label);
+		this._RevEls.set("loc", locVal);
+		this._RevEls.set("price", priceVal);
+		this._RevEls.set("url", urlVal);
+		this._RevEls.set("purBy", purByVal);
+		this._RevEls.set("interval", intervalVal);
+		this._RevEls.set("notes", notesValCol);
+
 		return root;
 
 	}
@@ -447,11 +469,42 @@ class ListItem {
 
 /* begin button 0 functions: checkItem */
 	checkItem(ob) {
+		const { btn0, title } = Object.fromEntries(ob._RevEls);
+		debug ? debugMsg("checkItem", [ ob ]) : null;
 		ob.state ? ob.setState(ob, 0) : ob.setState(ob, 1);
+		switch(ob.state) {
+			case 0:
+				btn0.classList.remove('fa-square-check');
+				btn0.classList.add('fa-square');
+				title.style.textDecoration = '';
+				break;
+			case 1:
+				btn0.classList.remove('fa-square');
+				btn0.classList.add('fa-square-check');
+				title.style.textDecoration = 'line-through';
+				break;
+			default: // default to 0
+				btn0.classList.remove('fa-square-check');
+				btn0.classList.add('fa-square');
+				title.style.textDecoration = '';
+				console.log("Item state default encountered:", item);
+		}
 	}
 
 	toggleListing(ob) {
+		const { btn0, title } = Object.fromEntries(ob._RevEls);
 		(!ob.state || ob.state === 1) ? ob.setState(ob, 2) : ob.setState(ob, 0);
+		switch(ob.state) {
+			case 0: case 1:
+				btn0.classList.remove('fa-square');
+				btn0.classList.add('fa-square-check');
+				title.style.textDecoration = '';
+				break;
+			default:
+				btn0.classList.remove('fa-square-check');
+				btn0.classList.add('fa-square');
+				title.style.textDecoration = '';
+		}
 	}
 	/*
 	checkItem = (function() {
@@ -525,7 +578,7 @@ class ListItem {
 				el.contentEditable = true;
 				el.classList.add('edit-target');
 				// TODO: add event listener to filter out invalid input
-				el.addEventListener('beforeinput', function validateInput(e) {
+				el.addEventListener('beforeinput', el.validateInput = function validateInput(e) {
 					// doesn't quite work
 					console.log(`Key: ${e.data}, Type: ${e.inputType}`);
 					if(e.inputType !== "deleteContentBackward" && !validator.test(e.data)) {
@@ -563,7 +616,7 @@ class ListItem {
 				el.contentEditable = false;
 				el.classList.remove('edit-target');
 				// figure out a way to do this that works -- right now validateInput is not defined
-				el.removeEventListener(validateInput);
+				el.removeEventListener('beforeinput', el.validateInput);
 				//el.textContent = ob[`${key}`];
 				!el.textContent && (el.textContent = "-");
 				ob[`${key}`] = el.textContent;// ? el.textContent : "-";
@@ -599,15 +652,17 @@ class ListItem {
 			if(el.hasAttribute('data-edit-target')) {
 				el.contentEditable = false;
 				el.classList.remove('edit-target');
-				el.removeEventListener(validateInput); // undefined?
-				el.textContent = ob[`${key}`];
+				el.removeEventListener('beforeinput', el.validateInput); // undefined?
+				el.textContent =  ob[`${key}`];
 			};
 		});
 	}
 
 	sweepItem(ob) {
+		const { listParent } = ob;
 		debugMsg("sweepItem", [ ob ]);
 		ob.setState(ob, 2);
+		listParent.getListView(listParent, listParent.docRoot);
 		ob.history.shift(Date.now());
 	}
 

@@ -65,7 +65,7 @@
 		const debug = true;
 		const jsonDisp = document.getElementById('json-display');
 		let jsonData;
-		const _TestList = new ShoppingList({ itemName: "placeholder" });
+		const _TestList = new ShoppingList({ itemName: "placeholder", docRoot: document.getElementById('list-root') });
 
 		fetch('res/testList-Listjs.json')
 			.then(resp => resp.json())
@@ -75,10 +75,15 @@
 				_TestList.listID = Data.listID;
 				_TestList.creationDate = Data.creationDate;
 				_TestList.modifyDate = Data.modifyDate;
+				debug ? debugMsg('fetch Data', [ Data ]) : null;
 				Data.items.forEach((item) => { _TestList.addItem(new ListItem(item), _TestList); });
+			})
+			.then(() => {
+				debug ? debugMsg('fetch complete', [ _TestList ]) : null;
+				//_TestList.items.forEach((item) => item.generateRevEls(item._RevEls));
+				_TestList.items.forEach((item) => item.listParent = _TestList);
+				_TestList.getListView(_TestList, _TestList.docRoot);
 			});
-		_TestList.getListView(_TestList);
-		_TestList.items.forEach((item) => item.generateRevEls(item._RevEls));
 
 		//jsonDisp.textContent = jsonData;
 /*
