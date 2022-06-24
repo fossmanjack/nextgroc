@@ -20,7 +20,7 @@
 </head>
 
 <body>
-	<header>
+	<header class='nextcloud-header'>
 		<h4 id="list-title">List Title</h4>
 	</header>
 
@@ -28,9 +28,9 @@
 	</div>
 
 	<div id="json-display"></div>
-	<input type="text" name="text" id="item-input">
-	<button class="btn btn-primary" name="sweepButton" id="sweep-button"><span class="fa fa-solid fa-broom"></span></button>
-	<button class="btn btn-success" name="resetButton" id="reset-button"><span class="fa fa-solid fa-refresh"></span></button>
+	<input type="text" name="text" id="inputField">
+	<button class="btn btn-primary fa-solid fa-broom" name="btnX" id="btnX" />
+	<button class="btn btn-success fa-solid fa-bookmark" name="btnY" id="btnY" data-state='list' />
 
 	<footer>
 	</footer>
@@ -43,33 +43,37 @@
 	<script src="js/scripts.js"></script>
 	<script src="js/ListItem.js"></script>
 	<script src="js/ShoppingList.js"></script>
+	<script src="js/funs/addItemByStr.js"></script>
+	<script src="js/funs/sweepList.js"></script>
+	<script src="js/funs/toggleView.js"></script>
+	<script src="js/funs/validateItemInput.js"></script>
 	<!-- endbuild -->
 
 	<script>
-		/*
-		const _TestList = [ ];
-		const debug = true;
-		fetch('res/TestList.json')
-			.then(response => response.json())
-			.then(Data => {
-				Data.forEach((item) => _TestList.push(new ListItem(item)));
-				_TestList.forEach((item) => {
-					document.getElementById('list-root').appendChild(item.DOMElement);
-					item.generateRevEls(item._RevEls);
-				});
-				//Data.forEach((item) => { document.getElementById('list-root').appendChild(item.DOMElement); });
-				console.log(Data);
-			});
-		*/
-		//const _TestList = new List(JSON.parse(fetch('res/testList-Listjs.json')));
 		const debug = true;
 		const jsonDisp = document.getElementById('json-display');
-		let jsonData;
-		const _TestList = new ShoppingList({ itemName: "placeholder", docRoot: document.getElementById('list-root') });
 
+		const _State = new Map();
+		_State.set('mode', 'list');;
+		_State.set('root', document.getElementById('list-root'));
+		_State.set('title', document.getElementById('list-title'));
+		_State.set('inputField', document.getElementById('inputField'));
+		_State.set('btnX', document.getElementById('btnX'));
+		_State.set('btnY', document.getElementById('btnY'));
+		_State.set('funs', {
+					inputFieldBlur: addItemByStr,
+					inputFieldCheck: validateItemInput,
+					btnX: sweepList,
+					btnY: toggleView
+				} );
+		_State.set('list', new ShoppingList( { listName: 'placeholder' } ));
+
+
+		let jsonData;
+
+		const _TestList = _State.get('list');
 		fetch('res/testList-Listjs.json')
 			.then(resp => resp.json())
-			//.then(Data => jsonData = Data);
 			.then(Data => {
 				_TestList.listName = Data.listName;
 				_TestList.listID = Data.listID;
@@ -80,61 +84,18 @@
 			})
 			.then(() => {
 				debug ? debugMsg('fetch complete', [ _TestList ]) : null;
-				//_TestList.items.forEach((item) => item.generateRevEls(item._RevEls));
+				document.getElementById('list-title').textContent = `${_TestList.listName}: List`;
 				_TestList.items.forEach((item) => item.listParent = _TestList);
-				_TestList.getListView(_TestList, _TestList.docRoot);
+				_TestList.getListView(_TestList, _State.get('root'));
 			});
 
-		//jsonDisp.textContent = jsonData;
-/*
-		const _TestList = new ShoppingList({
-			itemName: jsonData.itemName,
-			listID: jsonData.listID,
-			creationDate: jsonData.creationDate,
-			modifyDate: jsonData.modifyDate
-		});
-
-		jsonData.items.forEach((item) => _TestList.addItem(new ListItem(item)));
-
-		_TestList.getListView;
-
-//		let response = await fetch('res/testList-Listjs.json');
-//		let result = await response.json();
-/*
-		if(resp.ok) {
-			let jsonData = resp.json();
-		} else {
-			alert('HTTP status:', resp.status);
-		}
-
-		jsonDisp.textContent = jsonData;
-		//document.getElementById('json-display').textContent = fetch('res/testList-Listjs.json');
-
-		/*
-		const _TestList = fetch('res/testList-Listjs.json').then(response => response.json())
-			.then(Data => {
-				const _LoadList = new List({
-					listname: Data.listName,
-					listID: Data.listID,
-					creationDate: Data.creationDate,
-					modifyDate: Data.modifyDate
-					});
-				Data.items.forEach((item) => _LoadList.addItem(new ListItem(item), _LoadList));
-				return _LoadList;
-			});
-		_TestList.getListView(_TestList);
+		inputField.addEventListener('blur', () => { _State.get('funs').inputFieldBlur(inputField.value, _State) });
+		inputField.addEventListener('beforeinput', (e) => { _State.get('funs').inputFieldCheck(e, _State) });
+		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
+		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
 
 
 
-		/*
-		fetch('res/testList-1656013633982.json')
-			.then(response => response.json())
-			.then(Data => {
-				Data.items.forEach((item) => _TestList.addItem(new ListItem(item)));
-				item.generateRevEls(item._RevEls);
-			});
-		*/
-		//_TestList.getListView(_TestList);
 
 	</script>
 

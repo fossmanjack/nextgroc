@@ -38,6 +38,7 @@ class ListItem {
 		this.listParent = ({});
 	}
 	getCamelName() { return camelize(this.title); }
+/*
 	generateRevEls(el) {
 		// call this after List attaches the DOMElement to the root
 		// A "REleVantELement" is one which we need to earmark for later
@@ -63,44 +64,7 @@ class ListItem {
 		el.set("interval", document.getElementById(`${idStr}-interval`));
 		el.set("notes", document.getElementById(`${idStr}-notes`));
 	}
-	//setState = (function(state) {
-	/*
-	setState(ob, state) {
-		debugMsg("setState", [ ob, state, this ]);
-		const { title, btn0 } = Object.fromEntries(ob._RevEls);
-
-		switch(state) {
-			case 0: // listed
-				title.style.textDecoration = '';
-				btn0.classList.remove('fa-square-check');
-				btn0.classList.add('fa-square');
-				ob.state = 0;
-				break;
-			case 1: // bought
-				title.style.textDecoration = 'line-through';
-				btn0.classList.remove('fa-square');
-				btn0.classList.add('fa-square-check');
-				ob.state = 1;
-				break;
-			case 2: // unlisted
-				title.style.textDecoration = '';
-				btn0.classList.remove('fa-square-check');
-				btn0.classList.add('fa-square');
-				ob.state = 2;
-				break;
-			case 3: // library view
-				// In the library view, we click to "add" the item to
-				// the list, which is really just setting its state to 0
-				// so the various display bits need to be rendered by the
-				// list view rather than inherent to the object.  This isn't
-				// a big change, really -- just need to get List.js coded
-				break;
-			default:
-				ob.setState(ob, 0);
-		}
-	//}).bind(this);
-	}
-	*/
+*/
 	setState(ob, state) {
 		switch(state) {
 			case 0: case 1: case 2:
@@ -112,20 +76,6 @@ class ListItem {
 		}
 	}
 /*
-		if(state && state !== 1 && state !== 2)
-			return false;
-		this.state = state;
-	setState(ob, state) {
-		if(state && state !== 1 && state !== 2)
-		{
-			console.log(`Invalid state ${state}!`);
-			return false;
-		}
-		this.state = state;
-		this.modifyDate = Date.now();
-		return true;
-	}
-*/
 	setName(str) {
 		str = sanitize(str);
 		debug ? debugMsg('setName', [ str ]) : null;
@@ -151,6 +101,7 @@ class ListItem {
 		debug ? debugMsg('getState', [ this.state ]) : null;
 		return this.state;
 	}
+*/
 
 	generateDOM() {
 		const idStr = this.oid;
@@ -472,63 +423,13 @@ class ListItem {
 		const { btn0, title } = Object.fromEntries(ob._RevEls);
 		debug ? debugMsg("checkItem", [ ob ]) : null;
 		ob.state ? ob.setState(ob, 0) : ob.setState(ob, 1);
-		switch(ob.state) {
-			case 0:
-				btn0.classList.remove('fa-square-check');
-				btn0.classList.add('fa-square');
-				title.style.textDecoration = '';
-				break;
-			case 1:
-				btn0.classList.remove('fa-square');
-				btn0.classList.add('fa-square-check');
-				title.style.textDecoration = 'line-through';
-				break;
-			default: // default to 0
-				btn0.classList.remove('fa-square-check');
-				btn0.classList.add('fa-square');
-				title.style.textDecoration = '';
-				console.log("Item state default encountered:", item);
-		}
+		ob.styleHeader(ob);
 	}
 
 	toggleListing(ob) {
-		const { btn0, title } = Object.fromEntries(ob._RevEls);
 		(!ob.state || ob.state === 1) ? ob.setState(ob, 2) : ob.setState(ob, 0);
-		switch(ob.state) {
-			case 0: case 1:
-				btn0.classList.remove('fa-square');
-				btn0.classList.add('fa-square-check');
-				title.style.textDecoration = '';
-				break;
-			default:
-				btn0.classList.remove('fa-square-check');
-				btn0.classList.add('fa-square');
-				title.style.textDecoration = '';
-		}
+		ob.styleHeader(ob);
 	}
-	/*
-	checkItem = (function() {
-		this.state ? this.setState(0) : this.setState(1);
-		/*
-		const { state, _RevEls: els } = ob;
-
-		const title = els.get('title');
-		const btn0 = els.get('btn0');
-
-		// Refactor this to use setState() and move the reformatting there
-		if(!state) {
-			title.style.textDecoration = "line-through";
-			btn0.classList.remove('fa-square');
-			btn0.classList.add('fa-square-check');
-			ob.state = 1;
-		} else {
-			title.style.textDecoration = "";
-			btn0.classList.remove('fa-square-check');
-			btn0.classList.add('fa-square');
-			ob.state = 0;
-		}
-	}).bind(this);
-	*/
 
 /* begin button 1 functions: toggleStaple and editPhoto */
 
@@ -552,7 +453,7 @@ class ListItem {
 /* begin button 2 functions: editItem and commitEdit */
 	editItem(ob) {
 		const { btn1, btn2, btn3, acBtn } = Object.fromEntries(ob._RevEls);
-		const validator = /[a-zA-Z0-9\!@#&()\-+=_ ]/
+		const validator = /[a-zA-Z0-9\!@#&()\-+=_\/:; ]/
 		//const validator = /[a-zA-Z0-9]/
 		acBtn.setAttribute('data-bs-toggle', '');
 
@@ -666,7 +567,39 @@ class ListItem {
 		ob.history.shift(Date.now());
 	}
 
-/* supplementary functions */
+	styleHeader(ob) {
+		const { btn0, title }  = Object.fromEntries(ob._RevEls);
+		const state = ob.state;
+
+		switch(_State.get('mode')) {
+			case 'library':
+				switch(state) {
+					case 0: case 1: // listed -- no strikethrough, box checked
+						btn0.classList.remove('fa-square');
+						btn0.classList.add('fa-square-check');
+						title.style.textDecoration = '';
+						break;
+					default: // unlisted -- no strikethrough, box neutral
+						btn0.classList.remove('fa-square-check');
+						btn0.classList.add('fa-square');
+						title.style.textDecoration = '';
+					}
+					break;
+			default: // list view
+				switch(state) {
+					case 1: // bought -- strikethrough, checked
+						btn0.classList.remove('fa-square');
+						btn0.classList.add('fa-square-check');
+						title.style.textDecoration = 'line-through';
+						break;
+					default: // for state 0 -- unchecked, no strike -- state 2 isn't listed
+						btn0.classList.remove('fa-square-check');
+						btn0.classList.add('fa-square');
+						title.style.textDecoration = '';
+				}
+		}
+	}
+/* supplementary functions
 	getAllElements(root, els) {
 		if(root.children.length) { // this should be a HTML collection
 			for(let i=0; i<root.children.length; i++) {
@@ -679,4 +612,5 @@ class ListItem {
 			return (els.find((el) => el === root)) ? [] : [ root ];
 		}
 	}
+*/
 }
