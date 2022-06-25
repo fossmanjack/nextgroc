@@ -17,54 +17,26 @@ class ListItem {
 		DOMElement
 	} ) {
 		this.title = sanitize(title) ? sanitize(title) : "list item";
-		this.qty = qty; // ? qty : "1";
-		this.loc = loc; // ? loc : "-";
-		this.price = price; // ? price : "-";
-		this.purBy = purBy; // ? purBy : "-";
-		this.url = url; // ? url : "-";
-		this.staple = staple; // ? true : false;
-		this.interval = interval; // ? interval : 0;
-		this.history = history; // && history.length ? history : [ ];
-		this.image = image; // ? image : 'default.png';
-		this.notes = notes; // ? notes : "";
+		this.qty = qty;
+		this.loc = loc;
+		this.price = price;
+		this.purBy = purBy;
+		this.url = url;
+		this.staple = staple;
+		this.interval = interval;
+		this.history = history;
+		this.image = image;
+		this.notes = notes;
 		this.oid = camelize(this.title);
-		this.creationDate = creationDate; // ? creationDate : Date.now();
-		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
+		this.creationDate = creationDate;
+		this.modifyDate = modifyDate;
 		this.state = (state < 3 ? state : 0);
 		this._RevEls = new Map();
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM(this);
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
-		//this._RevEls = new Map();
 		this.listParent = ({});
 	}
 	getCamelName() { return camelize(this.title); }
-/*
-	generateRevEls(el) {
-		// call this after List attaches the DOMElement to the root
-		// A "REleVantELement" is one which we need to earmark for later
-		// alteration -- a "state" once we hit the React refactor
-		debug ? debugMsg("generateRevEls", []) : null;
-		const idStr = this.oid;
-		el.set("root", document.getElementById(`${idStr}-root`));
-		el.set("header", document.getElementById(`${idStr}-header`));
-		el.set("btn0", document.getElementById(`${idStr}-btn0`));
-		el.set("btn1", document.getElementById(`${idStr}-btn1`));
-		el.set("btn2", document.getElementById(`${idStr}-btn2`));
-		el.set("btn3", document.getElementById(`${idStr}-btn3`));
-		el.set("acBtn", document.getElementById(`${idStr}-acBtn`));
-		el.set("title", document.getElementById(`${idStr}-title`));
-		el.set("qty", document.getElementById(`${idStr}-qty`));
-		el.set("card", document.getElementById(`${idStr}-card`));
-		el.set("img", document.getElementById(`${idStr}-img`));
-		el.set("stpTxt", document.getElementById(`${idStr}-stpTxt`));
-		el.set("loc", document.getElementById(`${idStr}-loc`));
-		el.set("price", document.getElementById(`${idStr}-price`));
-		el.set("url", document.getElementById(`${idStr}-url`));
-		el.set("purBy", document.getElementById(`${idStr}-purBy`));
-		el.set("interval", document.getElementById(`${idStr}-interval`));
-		el.set("notes", document.getElementById(`${idStr}-notes`));
-	}
-*/
 	setState(ob, state) {
 		switch(state) {
 			case 0: case 1: case 2:
@@ -75,34 +47,6 @@ class ListItem {
 				ob.state = 0;
 		}
 	}
-/*
-	setName(str) {
-		str = sanitize(str);
-		debug ? debugMsg('setName', [ str ]) : null;
-		if(str) {
-			this.title = str;
-			return true;
-		} else {
-			return false;
-		}
-	}
-	setProp(prop, str) {
-		debug ? debugMsg('setProp', [ prop, str ]) : null;
-		this.modifyDate = Date.now();
-		if(prop === "title") {
-			return this.setName(str);
-		} else {
-			this[prop] = str;
-			this.updateDOM(prop, str);
-			return true;
-		}
-	}
-	getState() {
-		debug ? debugMsg('getState', [ this.state ]) : null;
-		return this.state;
-	}
-*/
-
 	generateDOM(ob) {
 		const idStr = this.oid;
 
@@ -332,7 +276,7 @@ class ListItem {
 		purByCol.appendChild(purByVal);
 		purByCol.addEventListener('focus', (purByCol) => purByCol.type = 'date');
 		purByCol.addEventListener('change', (e) => {
-			debug ? debugMsg("onclick change", [ e, ob, e.target.value ]) : null;
+			//debug ? debugMsg("onclick change", [ e, ob, e.target.value ]) : null;
 			ob.purBy = Date.parse(e.target.value);
 		});
 
@@ -430,7 +374,7 @@ class ListItem {
 /* begin button 0 functions: checkItem */
 	checkItem(ob) {
 		const { btn0, title } = Object.fromEntries(ob._RevEls);
-		debug ? debugMsg("checkItem", [ ob, _State.get('mode') ]) : null;
+		//debug ? debugMsg("checkItem", [ ob, _State.get('mode') ]) : null;
 		ob.state ? ob.setState(ob, 0) : ob.setState(ob, 1);
 		ob.styleHeader(ob, _State.get('mode'));
 	}
@@ -445,7 +389,7 @@ class ListItem {
 	toggleStaple(ob) {
 		const { btn1 } = Object.fromEntries(ob._RevEls);
 
-		debugMsg("toggleStaple", [ btn1, ob.staple ]);
+		//debugMsg("toggleStaple", [ btn1, ob.staple ]);
 		if(ob.staple) {
 			ob.staple = false;
 			btn1.classList.remove('fa-toggle-on');
@@ -525,9 +469,7 @@ class ListItem {
 			if(el.hasAttribute('data-edit-target')) {
 				el.contentEditable = false;
 				el.classList.remove('edit-target');
-				// figure out a way to do this that works -- right now validateInput is not defined
 				el.removeEventListener('beforeinput', el.validateInput);
-				//el.textContent = ob[`${key}`];
 				!el.textContent && (el.textContent = "-");
 				ob[`${key}`] = el.textContent;// ? el.textContent : "-";
 			};
@@ -570,7 +512,7 @@ class ListItem {
 
 	sweepItem(ob) {
 		const { listParent } = ob;
-		debugMsg("sweepItem", [ ob ]);
+		//debugMsg("sweepItem", [ ob ]);
 		ob.state === 1 && ob.updateHistory(ob);
 		ob.setState(ob, 2);
 		listParent.getListView(listParent, _State.get('root'));
@@ -579,7 +521,7 @@ class ListItem {
 	styleHeader(ob, mode) {
 		const { btn0, title }  = Object.fromEntries(ob._RevEls);
 		const state = ob.state;
-		debug ? debugMsg("styleHeader", [ mode, state ]) : null;
+		//debug ? debugMsg("styleHeader", [ mode, state ]) : null;
 
 		switch(mode) {
 			case 'library':
@@ -588,12 +530,12 @@ class ListItem {
 						btn0.classList.remove('fa-regular', 'fa-square', 'fa-square-check', 'fa-plus', 'btn-success');
 						btn0.classList.add('fa-solid', 'fa-minus', 'btn-danger');
 						title.style.textDecoration = '';
-						debug ? debugMsg('styleHeader: library-state detected', [ mode, state ]) : null;
+						//debug ? debugMsg('styleHeader: library-state detected', [ mode, state ]) : null;
 						break;
 					default: // unlisted -- no strikethrough, btn0 is green plus
 						btn0.classList.remove('fa-regular', 'fa-square-check', 'fa-square', 'btn-danger', 'fa-minus');
 						btn0.classList.add('fa-solid', 'fa-plus', 'btn-success');
-						debug ? debugMsg('styleHeader: library-default detected', [ mode, state ]) : null;
+						//debug ? debugMsg('styleHeader: library-default detected', [ mode, state ]) : null;
 						title.style.textDecoration = '';
 					}
 					break;
@@ -603,40 +545,25 @@ class ListItem {
 						btn0.classList.remove('fa-solid', 'fa-square', 'fa-plus', 'fa-minus', 'btn-danger', 'btn-success');
 						btn0.classList.add('fa-regular', 'fa-square-check');
 						title.style.textDecoration = 'line-through';
-						debug ? debugMsg('styleHeader: list-state detected', [ mode, state] ) : null;
+						//debug ? debugMsg('styleHeader: list-state detected', [ mode, state] ) : null;
 						break;
 					default: // for state 0 -- unchecked, btn0 is empty box -- state 2 isn't listed
 						btn0.classList.remove('fa-solid', 'fa-square-check', 'fa-plus', 'fa-minus', 'btn-danger', 'btn-success');
 						btn0.classList.add('fa-regular', 'fa-square');
-						debug ? debugMsg('styleHeader: list-default detected', [ mode, state ]) : null;
+						//debug ? debugMsg('styleHeader: list-default detected', [ mode, state ]) : null;
 						title.style.textDecoration = '';
 				}
 		}
 	}
 	updateHistory(ob) {
 		ob.history.unshift(Date.now());
-		//ob._RevEls.set('last', ob.parseDate(ob.history[0]));
 		ob._RevEls.get('last').textContent = ob.parseDate(ob.history[0]);
 	}
 	parseDate(i) {
-		debug ? debugMsg('parseDate', [ i ]) : null;
+		//debug ? debugMsg('parseDate', [ i ]) : null;
 		return new Date(i).toISOString().split("T")[0];
 	}
 	daysBetween(i, j) {
 		return (j - i) / (86400000);
 	}
-/* supplementary functions
-	getAllElements(root, els) {
-		if(root.children.length) { // this should be a HTML collection
-			for(let i=0; i<root.children.length; i++) {
-				els = els.concat(this.getAllElements(root.children[i], els));
-			}
-			return [...new Set(els)]; // end of recursion, full array, let's sort it all out
-		}
-		else
-		{
-			return (els.find((el) => el === root)) ? [] : [ root ];
-		}
-	}
-*/
 }

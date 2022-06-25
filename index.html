@@ -12,10 +12,8 @@
 
 	<!-- Additional CSS must be placed after bootstrap.css -->
 	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css" />
 	<link rel="stylesheet" href="css/localstyles.css" />
 	<!-- endbuild -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans" />
 	<title>Nextcloud :: Grocery</title>
 </head>
 
@@ -52,25 +50,15 @@
 	</footer>
 
 	<!-- build:js js/main.js -->
-	<!-- jQuery must come first, then Popper.js, then the Bootstrap JavaScript plugins.-->
-	<!--<script src="node_modules/jquery/dist/jquery.slim.min.js"></script> -->
-	<!--<script src="node_modules/popper.js/dist/umd/popper.min.js"></script> -->
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="js/scripts.js"></script>
 	<script src="js/ListItem.js"></script>
 	<script src="js/ShoppingList.js"></script>
 	<script src="js/funs/globalFuns.js"></script>
-	<!--
-	<script src="js/funs/addItemByStr.js"></script>
-	<script src="js/funs/sweepList.js"></script>
-	<script src="js/funs/toggleView.js"></script>
-	<script src="js/funs/validateItemInput.js"></script>
-	<script src="js/funs/addStaples.js"></script>
-	-->
 	<!-- endbuild -->
 
 	<script>
-		const debug = true;
+		const debug = false;
 		const jsonDisp = document.getElementById('json-display');
 
 		const _State = new Map();
@@ -99,11 +87,11 @@
 				_TestList.listID = Data.listID;
 				_TestList.creationDate = Data.creationDate;
 				_TestList.modifyDate = Data.modifyDate;
-				debug ? debugMsg('fetch Data', [ Data ]) : null;
+				//debug ? debugMsg('fetch Data', [ Data ]) : null;
 				Data.items.forEach((item) => { _TestList.addItem(new ListItem(item), _TestList); });
 			})
 			.then(() => {
-				debug ? debugMsg('fetch complete', [ _TestList ]) : null;
+				//debug ? debugMsg('fetch complete', [ _TestList ]) : null;
 				document.getElementById('list-title').textContent = `${_TestList.listName}: List`;
 				_TestList.items.forEach((item) => item.listParent = _TestList);
 				_TestList.getListView(_TestList, _State.get('root'));
@@ -114,24 +102,6 @@
 		inputField.addEventListener('beforeinput', (e) => { _State.get('funs').inputFieldCheck(e, _State) });
 		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
 		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
-
-		// sweep button gets changed to "add staples" button
-// What follows is the beginning of the cookie revamp
-// the page first initializes the _State map, then grabs the cookie and processes
-// the JSON data
-//
-// Save JSON.stringify(_State.get('_Lists'));
-// _Lists should be a map of ShoppingList.listID : ShoppingList
-//
-
-/*
-	const _State = new Map();
-	_State.set('mode', 'list');
-	_State.set('list-root', document.getElementById('list-root'));
-	_State.set('sidebar', null);
-
-
-*/
 	</script>
 
 </body>

@@ -4,7 +4,7 @@ const addItemByStr = (val, m) => {
 	if(!val) return false; // if there's no text in the field don't add an item
 
 	let [ name, qty ] = val.split(',', 2);
-	debug ? debugMsg('addItemByStr', [ name, qty ]) : null;
+	//debug ? debugMsg('addItemByStr', [ name, qty ]) : null;
 
 	if(!qty) qty = 1;
 
@@ -12,17 +12,6 @@ const addItemByStr = (val, m) => {
 	const item = list.findItem(send, list);
 
 	item ? item.setState(item, 0) : list.addItem(send, list);
-	/*
-	if(item) {
-		item.setState(0);
-	} else {
-		list.addItem(send, list);
-	}
-	if(!list.addItem(send, list)) {
-		alert(`Item with ID "${send.oid}" already on list!`);
-		return false;
-	}
-*/
 	m.get('mode') === 'library' ? list.getLibraryView(list, root) : list.getListView(list, root);
 	inputField.value = '';
 	return true;
@@ -50,16 +39,6 @@ const sweepList = m => {
 		m.get('list').getLibraryView(m.get('list'), m.get('root'));
 }
 
-/*
-		document.getElementById('sweepButton').addEventListener('click', () => {
-			_TestList.items.filter((item) => item.state === 1)
-				.forEach((item) => item.setState(item, 2));
-			document.getElementById('toggleButton').getAttribute('data-state') === 'list' ?
-				_TestList.getListView(_TestList, _TestList.docRoot) :
-				_TestList.getLibraryView(_TestList, _TestList.docRoot);
-		});
-*/
-
 const toggleView = m => {
 	const { mode, title, btnX, btnY, list, root } = Object.fromEntries(m);
 
@@ -83,31 +62,10 @@ const toggleView = m => {
 		list.getListView(list, root);
 	}
 }
-/*
-		document.getElementById('toggleButton').addEventListener('click', () => {
-			title = document.getElementById('list-title');
-			btnX = document.getElementById('toggleButton');
-			state = btnX.getAttribute('data-state');
-
-			if(state === "list") { // switch to library view
-				btnX.setAttribute('data-state', 'library');
-				btnX.classList.remove('fa-refrigerator');
-				btnX.classList.add('fa-list');
-				title.textContent = `${_TestList.listName}: Library`;
-				_TestList.getLibraryView(_TestList, _TestList.docRoot);
-			} else { // switch to list
-				btnX.setAttribute('data-state', 'list');
-				btnX.classList.remove('fa-list');
-				btnX.classList.add('fa-bookmark');
-				title.textContent = `${_TestList.listName}: List`;
-				_TestList.getListView(_TestList, _TestList.docRoot);
-			}
-		});
-*/
 
 const validateItemInput = (e, m) => {
 	const { inputField } = Object.fromEntries(m);
-	debug ? debugMsg('e.data and e.inputType', [ e.data, e.inputType ]) : null;
+	//debug ? debugMsg('e.data and e.inputType', [ e.data, e.inputType ]) : null;
 	validator = /[^<>?\/\\]/
 
 	if(!validator.test(e.data)) {
@@ -116,7 +74,7 @@ const validateItemInput = (e, m) => {
 	}
 	if(e.inputType === 'insertLineBreak')
 	{
-		debug ? debugMsg('validateItemInput', [ e.inputType ]) : null;
+		//debug ? debugMsg('validateItemInput', [ e.inputType ]) : null;
 		inputField.blur;
 	}
 }

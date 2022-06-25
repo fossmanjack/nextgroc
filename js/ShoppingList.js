@@ -17,7 +17,6 @@ class ShoppingList {
 		return camelize(name)+"-"+date;
 	}
 	addItem(item, list) {
-		//if(list.items.find((ob) => ob === item)) return false;
 		if(list.findItem(item, list)) return false;
 		list.items.push(item);
 		return true;
@@ -37,17 +36,12 @@ class ShoppingList {
 		return list.items.find((item) => ob.oid === item.oid);
 	}
 	getListView(list, root = document.getElementById('list-root')) {
-		//!root ? root = document.getElementById("list-root") : null;
-		//debug ? debugMsg("getListView", [ list, root ]) : null;
-		debug ? debugMsg('getListView-pre', [ root ]) : null;
+		//debug ? debugMsg('getListView-pre', [ root ]) : null;
 
 		root.innerHTML = '';
-		debug ? debugMsg('getListView', [ list, root ]) : null;
+		//debug ? debugMsg('getListView', [ list, root ]) : null;
 		list.items.filter((item) => item.state !== 2).forEach((item) => {
-		//const items = list.items.filter((item) => item.state !== 2);
-		//items.forEach((item) => {
-			debug ? debugMsg("forEach", [ item ]) : null;
-			//const { btn0, title } = Object.fromEntries(item._RevEls);
+			//debug ? debugMsg("forEach", [ item ]) : null;
 			item.btnFuns[0] = item.checkItem;
 			item.styleHeader(item, _State.get('mode'));
 
@@ -55,11 +49,9 @@ class ShoppingList {
 		});
 	}
 	getLibraryView(list, root = document.getElementById('list-root')) {
-		//!root ? root = document.getElementById('list-root') : null;
 
 		root.innerHTML = '';
 		list.items.forEach((item) => {
-			//const { btn0, title } = Object.fromEntries(item._RevEls);
 
 			item.btnFuns[0] = item.toggleListing;
 			item.styleHeader(item, 'library');
