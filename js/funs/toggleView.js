@@ -5,14 +5,14 @@ const toggleView = m => {
 		btnY.classList.remove('fa-bookmark');
 		btnY.classList.add('fa-list');
 		title.textContent = `${list.listName}: Library`;
-		list.getLibraryView(list, root);
 		m.set('mode', 'library');
+		list.getLibraryView(list, root);
 	} else {
 		btnY.classList.remove('fa-list');
 		btnY.classList.add('fa-bookmark');
 		title.textContent = `${list.listName}: List`;
-		list.getListView(list, root);
 		m.set('mode', 'list');
+		list.getListView(list, root);
 	}
 }
 /*

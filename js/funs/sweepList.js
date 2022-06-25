@@ -3,10 +3,11 @@ const sweepList = m => {
 		.forEach((item) => {
 			item.setState(item, 2);
 			item.styleHeader(item, m.get('mode'));
+			item.updateHistory(item);
 		});
 	m.get('mode') === 'list' ?
-		m.get('list').getListView(m.get('list'), m.get('list').docRoot) :
-		m.get('list').getLibraryView(m.get('list'), m.get('list').docRoot);
+		m.get('list').getListView(m.get('list'), m.get('root')) :
+		m.get('list').getLibraryView(m.get('list'), m.get('root'));
 }
 
 /*

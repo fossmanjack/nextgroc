@@ -17,10 +17,21 @@ class ShoppingList {
 		return camelize(name)+"-"+date;
 	}
 	addItem(item, list) {
-		if(list.items.find((ob) => ob === item)) return false;
-		if(list.findByName(item, list)) return false;
+		//if(list.items.find((ob) => ob === item)) return false;
+		if(list.findItem(item, list)) return false;
 		list.items.push(item);
 		return true;
+	}
+	findItem(input, list) {
+		switch(typeof input)
+		{
+			case 'string':
+				return list.items.find((item) => item.oid === camelize(input));
+			case 'object':
+				return list.items.find((item) => item.oid === input.oid);
+			default:
+				return false;
+		}
 	}
 	findByName(ob, list) {
 		return list.items.find((item) => ob.oid === item.oid);
@@ -51,7 +62,7 @@ class ShoppingList {
 			//const { btn0, title } = Object.fromEntries(item._RevEls);
 
 			item.btnFuns[0] = item.toggleListing;
-			item.styleHeader(item, _State.get('mode'));
+			item.styleHeader(item, 'library');
 
 			root.appendChild(item.DOMElement);
 		});

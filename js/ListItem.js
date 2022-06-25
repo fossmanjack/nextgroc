@@ -30,7 +30,7 @@ class ListItem {
 		this.oid = camelize(this.title);
 		this.creationDate = creationDate; // ? creationDate : Date.now();
 		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
-		this.state = state;
+		this.state = (state < 3 ? state : 0);
 		this._RevEls = new Map();
 		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
@@ -128,8 +128,8 @@ class ListItem {
 		tcol1.classList.add('col-1', 'd-flex', 'align-items-center', 'justify-content-center');
 		trow.appendChild(tcol1);
 
-		let btn0 = document.createElement('i'); // check box
-		btn0.classList.add('fa-regular', 'fa-lg');
+		let btn0 = document.createElement('button'); // check box
+		btn0.classList.add('btn', 'fa-regular', 'fa-lg');
 		btn0.classList.add(this.state === 1 ? 'fa-square-check' : 'fa-square');
 		btn0.type = 'button';
 		btn0.id = `${idStr}-btn0`;
@@ -343,7 +343,7 @@ class ListItem {
 
 		let lastVal = document.createElement('span');
 		lastVal.id = `${idStr}-last`;
-		lastVal.textContent = (this.history[0] ? `${this.history[0]}` : '-');
+		lastVal.textContent = (this.history[0] ? `${this.parseDate(this.history[0])}` : '-');
 		lastCol.appendChild(lastVal);
 
 		let intervalRow = document.createElement('div'); // purchase interval row and column
@@ -409,6 +409,7 @@ class ListItem {
 		this._RevEls.set("url", urlVal);
 		this._RevEls.set("purBy", purByVal);
 		this._RevEls.set("interval", intervalVal);
+		this._RevEls.set("last", lastVal);
 		this._RevEls.set("notes", notesValCol);
 
 		return root;
@@ -421,14 +422,14 @@ class ListItem {
 /* begin button 0 functions: checkItem */
 	checkItem(ob) {
 		const { btn0, title } = Object.fromEntries(ob._RevEls);
-		debug ? debugMsg("checkItem", [ ob ]) : null;
+		debug ? debugMsg("checkItem", [ ob, _State.get('mode') ]) : null;
 		ob.state ? ob.setState(ob, 0) : ob.setState(ob, 1);
-		ob.styleHeader(ob);
+		ob.styleHeader(ob, _State.get('mode'));
 	}
 
 	toggleListing(ob) {
 		(!ob.state || ob.state === 1) ? ob.setState(ob, 2) : ob.setState(ob, 0);
-		ob.styleHeader(ob);
+		ob.styleHeader(ob, _State.get('mode'));
 	}
 
 /* begin button 1 functions: toggleStaple and editPhoto */
@@ -562,42 +563,55 @@ class ListItem {
 	sweepItem(ob) {
 		const { listParent } = ob;
 		debugMsg("sweepItem", [ ob ]);
+		ob.state === 1 && ob.updateHistory(ob);
 		ob.setState(ob, 2);
-		listParent.getListView(listParent, listParent.docRoot);
-		ob.history.shift(Date.now());
+		listParent.getListView(listParent, _State.get('root'));
 	}
 
-	styleHeader(ob) {
+	styleHeader(ob, mode) {
 		const { btn0, title }  = Object.fromEntries(ob._RevEls);
 		const state = ob.state;
+		debug ? debugMsg("styleHeader", [ mode, state ]) : null;
 
-		switch(_State.get('mode')) {
+		switch(mode) {
 			case 'library':
 				switch(state) {
-					case 0: case 1: // listed -- no strikethrough, box checked
-						btn0.classList.remove('fa-square');
-						btn0.classList.add('fa-square-check');
+					case 0: case 1: // listed -- no strikethrough, btn0 is red minus
+						btn0.classList.remove('fa-regular', 'fa-square', 'fa-square-check', 'fa-plus', 'btn-success');
+						btn0.classList.add('fa-solid', 'fa-minus', 'btn-danger');
 						title.style.textDecoration = '';
+						debug ? debugMsg('styleHeader: library-state detected', [ mode, state ]) : null;
 						break;
-					default: // unlisted -- no strikethrough, box neutral
-						btn0.classList.remove('fa-square-check');
-						btn0.classList.add('fa-square');
+					default: // unlisted -- no strikethrough, btn0 is green plus
+						btn0.classList.remove('fa-regular', 'fa-square-check', 'fa-square', 'btn-danger', 'fa-minus');
+						btn0.classList.add('fa-solid', 'fa-plus', 'btn-success');
+						debug ? debugMsg('styleHeader: library-default detected', [ mode, state ]) : null;
 						title.style.textDecoration = '';
 					}
 					break;
 			default: // list view
 				switch(state) {
-					case 1: // bought -- strikethrough, checked
-						btn0.classList.remove('fa-square');
-						btn0.classList.add('fa-square-check');
+					case 1: // bought -- strikethrough, btn0 is checked box
+						btn0.classList.remove('fa-solid', 'fa-square', 'fa-plus', 'fa-minus', 'btn-danger', 'btn-success');
+						btn0.classList.add('fa-regular', 'fa-square-check');
 						title.style.textDecoration = 'line-through';
+						debug ? debugMsg('styleHeader: list-state detected', [ mode, state] ) : null;
 						break;
-					default: // for state 0 -- unchecked, no strike -- state 2 isn't listed
-						btn0.classList.remove('fa-square-check');
-						btn0.classList.add('fa-square');
+					default: // for state 0 -- unchecked, btn0 is empty box -- state 2 isn't listed
+						btn0.classList.remove('fa-solid', 'fa-square-check', 'fa-plus', 'fa-minus', 'btn-danger', 'btn-success');
+						btn0.classList.add('fa-regular', 'fa-square');
+						debug ? debugMsg('styleHeader: list-default detected', [ mode, state ]) : null;
 						title.style.textDecoration = '';
 				}
 		}
+	}
+	updateHistory(ob) {
+		ob.history.unshift(Date.now());
+		//ob._RevEls.set('last', ob.parseDate(ob.history[0]));
+		ob._RevEls.get('last').textContent = ob.parseDate(ob.history[0]);
+	}
+	parseDate(i) {
+		return i;
 	}
 /* supplementary functions
 	getAllElements(root, els) {

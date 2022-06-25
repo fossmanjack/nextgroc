@@ -6,12 +6,21 @@ const addItemByStr = (val, m) => {
 
 	if(!qty) qty = 1;
 
-	send = new ListItem({ title: name, qty: qty, listParent: list });
+	const send = new ListItem({ title: name, qty: qty, listParent: list });
+	const item = list.findItem(send, list);
 
+	item ? item.setState(item, 0) : list.addItem(send, list);
+	/*
+	if(item) {
+		item.setState(0);
+	} else {
+		list.addItem(send, list);
+	}
 	if(!list.addItem(send, list)) {
 		alert(`Item with ID "${send.oid}" already on list!`);
 		return false;
 	}
+*/
 	m.get('mode') === 'library' ? list.getLibraryView(list, root) : list.getListView(list, root);
 	inputField.value = '';
 	return true;
