@@ -20,7 +20,7 @@
 </head>
 
 <body>
-	<header class='jumbotron jumbotron-fluid nextcloud-header'>
+	<header class='jumbotron jumbotron-fluid sticky-top nextcloud-header'>
 		<div class="container-flush">
 			<div class="row">
 				<div class="col-10">
@@ -38,11 +38,17 @@
 	</div>
 
 	<div id="json-display"></div>
-	<input type="text" name="text" id="inputField">
-	<button class="btn btn-primary fa-solid fa-broom" name="btnX" id="btnX" />
-	<button class="btn btn-success fa-solid fa-bookmark" name="btnY" id="btnY" data-state='list' />
+	<footer class='sticky-footer'>
+		<div class='container-fluid'>
+			<div class='row'>
+				<div class='col'>
+					<input type="text" name="text" id="inputField">
+					<button class="btn btn-primary fa-solid fa-broom" name="btnX" id="btnX" />
+					<button class="btn btn-success fa-solid fa-bookmark" name="btnY" id="btnY" data-state='list' />
+				</div>
+			</div>
+		</div>
 
-	<footer>
 	</footer>
 
 	<!-- build:js js/main.js -->
@@ -76,8 +82,8 @@
 					btnX: sweepList,
 					btnY: toggleView
 				} );
+		_State.set('_Lists', new Map()); // not doing anything with this yet but we'll need it later
 		_State.set('list', new ShoppingList( { listName: 'placeholder' } ));
-
 
 		let jsonData;
 
@@ -99,14 +105,29 @@
 				_TestList.getListView(_TestList, _State.get('root'));
 			});
 
+		_State.get('_Lists').set(`${_TestList.listID}`, _TestList);
 		inputField.addEventListener('blur', () => { _State.get('funs').inputFieldBlur(inputField.value, _State) });
 		inputField.addEventListener('beforeinput', (e) => { _State.get('funs').inputFieldCheck(e, _State) });
 		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
 		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
 
+		// sweep button gets changed to "add staples" button
+// What follows is the beginning of the cookie revamp
+// the page first initializes the _State map, then grabs the cookie and processes
+// the JSON data
+//
+// Save JSON.stringify(_State.get('_Lists'));
+// _Lists should be a map of ShoppingList.listID : ShoppingList
+//
+
+/*
+	const _State = new Map();
+	_State.set('mode', 'list');
+	_State.set('list-root', document.getElementById('list-root'));
+	_State.set('sidebar', null);
 
 
-
+*/
 	</script>
 
 </body>

@@ -1,8 +1,8 @@
 {
 	"listName" : "Test List",
 	"listID" : "testList-1656013633982",
-	"creationDate" : "1656013633982",
-	"modifyDate" : "1656013633982",
+	"creationDate" : 1656013633982,
+	"modifyDate" : 1656013633982,
 	"items":[
 		{
 			"title" : "Diet pepsi",
@@ -12,7 +12,7 @@
 			"price" : "7.99",
 			"staple" : true,
 			"interval" : 7,
-			"history" : [ "2022-06-16", "2022-06-09", "2022-06-02", "2022-05-31" ],
+			"history" : [ 1655337600000, 1654732800000, 1654128000000, 1653955200000 ],
 			"image" : "diet-pepsi.jpg"
 		},
 		{
@@ -23,7 +23,7 @@
 			"price" : "4.59",
 			"staple" : true,
 			"interval" : 4,
-			"history" : [ "2022-06-16", "2022-06-13", "2022-06-04" ],
+			"history" : [ 1655337600000, 1655078400000, 1654300800000 ],
 			"image" : "whole-milk.jpg"
 		},
 		{
@@ -45,8 +45,8 @@
 			"staple" : true,
 			"price" : "3.59",
 			"interval" : 14,
-			"purBy" : "2022-06-19",
-			"history" : [ "2022-06-05" ],
+			"purBy" : 1655596000000,
+			"history" : [ 1654387200000 ],
 			"image" : "american-cheese.jpg",
 			"notes" : "Deluxe singles, none of those individually-wrapped plastic crap"
 		},
@@ -64,7 +64,7 @@
 			"staple" : true,
 			"price" : "5.99",
 			"interval" : 14,
-			"purBy" : "2022-06-19",
+			"purBy" : 1655596000000,
 			"image" : "utz-cheese-balls.jpg"
 		},
 		{
@@ -74,7 +74,7 @@
 			"staple" : true,
 			"price" : "1.99",
 			"interval" : 7,
-			"purBy" : "2022-06-19",
+			"purBy" : 1655596000000,
 			"image" : "eggs.jpg"
 		},
 		{
@@ -84,8 +84,8 @@
 			"staple" : true,
 			"price" : "3.59",
 			"interval" : 7,
-			"purBy" : "2022-06-15",
-			"history" : [ "2022-06-15", "2022-06-08" ],
+			"purBy" : 1655251200000,
+			"history" : [ 1655251200000, 1654646400000 ],
 			"state" : 2,
 			"image" : "tofu.jpg",
 			"notes" : "Extra-firm"
@@ -96,8 +96,8 @@
 			"loc" : "Sam's club",
 			"staple" : true,
 			"interval" : 30,
-			"purBy" : "2022-07-01",
-			"history" : [ "2022-06-01", "2022-05-01" ],
+			"purBy" : 1656633600000,
+			"history" : [ 1654041600000, 1651363200000 ],
 			"state" : 3,
 			"notes" : "Pampers or Huggies",
 			"image" : "size-4-diapers.jpg"

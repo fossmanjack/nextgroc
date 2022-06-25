@@ -1,6 +1,8 @@
 const addItemByStr = (val, m) => {
 	const { list, root, inputField } = Object.fromEntries(m);
 
+	if(!val) return false; // if there's no text in the field don't add an item
+
 	let [ name, qty ] = val.split(',', 2);
 	debug ? debugMsg('addItemByStr', [ name, qty ]) : null;
 

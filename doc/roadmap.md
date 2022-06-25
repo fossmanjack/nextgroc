@@ -5,12 +5,20 @@
 	- [X] edit item
 	- [ ] add picture
 - [ ] Figure out why formatting isn't working right
-- [X] implement List class
+- [X] implement ShoppingList class
 - [ ] implement header
 - [ ] implement footer
 - [ ] implement sidebar
+	- [ ] add new list
+	- [ ] delete list
 - [ ] implement help modals
+- [ ] implement settings
 - [ ] save lists with cookies for now
+	- [ ] write to cookie
+	- [ ] read from cookie
+- [ ] Date parser -- convert now() to human-readable strings
+- [ ] Add date selector to "purchase by"
+- [ ] Make overdue items show in [red](red)
 
 Understand that in order to get this to work correctly you're probably going to
 need to use Node.js to interact with a sqlite database on the back end.  It's

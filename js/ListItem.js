@@ -5,7 +5,7 @@ class ListItem {
 		state = 0,
 		loc = '-',
 		price = '-',
-		purBy = '-',
+		purBy = 0,
 		url = '-',
 		staple = false,
 		interval = 0,
@@ -32,7 +32,7 @@ class ListItem {
 		this.modifyDate = modifyDate; // ? modifyDate : creationDate;
 		this.state = (state < 3 ? state : 0);
 		this._RevEls = new Map();
-		this.DOMElement = DOMElement ? DOMElement : this.generateDOM();
+		this.DOMElement = DOMElement ? DOMElement : this.generateDOM(this);
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
 		//this._RevEls = new Map();
 		this.listParent = ({});
@@ -103,7 +103,7 @@ class ListItem {
 	}
 */
 
-	generateDOM() {
+	generateDOM(ob) {
 		const idStr = this.oid;
 
 		let root = document.createElement('div'); // accordion-item
@@ -321,12 +321,28 @@ class ListItem {
 		purByText.classList.add('label-text');
 		purByText.textContent = 'Purchase By:';
 		purByCol.appendChild(purByText);
-
+/*
 		let purByVal = document.createElement('span');
 		purByVal.id = `${idStr}-purBy`;
 		purByVal.setAttribute('data-edit-target', true);
 		purByVal.textContent = (this.purBy ? `${this.purBy}` : '-');
 		purByCol.appendChild(purByVal);
+*/
+		let purByVal = document.createElement('input');
+		purByVal.id = `${idStr}-purBy`;
+		purByVal.classList.add('form-control');
+		purByVal.type = 'date';
+		//purByVal.onfocus = "(this.type='date')"
+		//purByVal.onblur = "(this.type='text')"
+		purByVal.name = `${idStr}-purBy`;
+		purByVal.placeholder = (this.purBy ? this.parseDate(parseInt(this.purBy)) : '-');
+		purByCol.appendChild(purByVal);
+		purByCol.addEventListener('focus', (purByCol) => purByCol.type = 'date');
+		purByCol.addEventListener('change', (e) => { // this isn't really working, look into it
+			debug ? debugMsg("onclick change", [ e, ob, this.value ]) : null;
+			ob.purBy = Date.parse(this.value);
+			this.type = 'text';
+		});
 
 		let lastRow = document.createElement('div'); // last purchase row and column
 		lastRow.classList.add('row');
@@ -611,7 +627,11 @@ class ListItem {
 		ob._RevEls.get('last').textContent = ob.parseDate(ob.history[0]);
 	}
 	parseDate(i) {
-		return i;
+		debug ? debugMsg('parseDate', [ i ]) : null;
+		return new Date(i).toISOString().split("T")[0];
+	}
+	daysBetween(i, j) {
+		return (j - i) / (86400000);
 	}
 /* supplementary functions
 	getAllElements(root, els) {
