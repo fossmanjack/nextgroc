@@ -41,3 +41,5 @@ disappear.
 
 Oh!  Add color-changing pluses and minuses to btn0 in library mode instead of
 the checkbox.  More intuitive.
+
+Next: implement _Lists in index.html and store and retrieve from cookies
