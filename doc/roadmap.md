@@ -16,8 +16,8 @@
 - [ ] save lists with cookies for now
 	- [ ] write to cookie
 	- [ ] read from cookie
-- [ ] Date parser -- convert now() to human-readable strings
-- [ ] Add date selector to "purchase by"
+- [X] Date parser -- convert now() to human-readable strings
+- [X] Add date selector to "purchase by"
 - [ ] Make overdue items show in [red](red)
 
 Understand that in order to get this to work correctly you're probably going to

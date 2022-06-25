@@ -321,27 +321,19 @@ class ListItem {
 		purByText.classList.add('label-text');
 		purByText.textContent = 'Purchase By:';
 		purByCol.appendChild(purByText);
-/*
-		let purByVal = document.createElement('span');
-		purByVal.id = `${idStr}-purBy`;
-		purByVal.setAttribute('data-edit-target', true);
-		purByVal.textContent = (this.purBy ? `${this.purBy}` : '-');
-		purByCol.appendChild(purByVal);
-*/
+
 		let purByVal = document.createElement('input');
 		purByVal.id = `${idStr}-purBy`;
 		purByVal.classList.add('form-control');
 		purByVal.type = 'date';
-		//purByVal.onfocus = "(this.type='date')"
-		//purByVal.onblur = "(this.type='text')"
+		purByVal.min = this.parseDate(Date.now());
 		purByVal.name = `${idStr}-purBy`;
-		purByVal.placeholder = (this.purBy ? this.parseDate(parseInt(this.purBy)) : '-');
+		purByVal.value = (this.purBy ? this.parseDate(this.purBy) : '-');
 		purByCol.appendChild(purByVal);
 		purByCol.addEventListener('focus', (purByCol) => purByCol.type = 'date');
-		purByCol.addEventListener('change', (e) => { // this isn't really working, look into it
-			debug ? debugMsg("onclick change", [ e, ob, this.value ]) : null;
-			ob.purBy = Date.parse(this.value);
-			this.type = 'text';
+		purByCol.addEventListener('change', (e) => {
+			debug ? debugMsg("onclick change", [ e, ob, e.target.value ]) : null;
+			ob.purBy = Date.parse(e.target.value);
 		});
 
 		let lastRow = document.createElement('div'); // last purchase row and column
