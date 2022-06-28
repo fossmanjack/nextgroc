@@ -32,6 +32,11 @@ const addItemByStr = (val, m) => {
 const addStaples = m => {
 	m.get('list').items.filter((item) => item.staple).forEach((item) => {
 		item.setState(item, 0);
+		if(item.interval)
+			debugMsg('addStaples-pre', [ item.purBy, item.history[0], item.interval ]);
+			item.purBy = (item.history[0] ? item.history[0] : Date.now()) + (item.interval * 86400000);
+			item._RevEls.get('purBy').value = (item.purBy ? item.parseDate(item.purBy) : '-');
+			debugMsg('addStaples', [ item.purBy ]);
 		item.styleHeader(item, m.get('mode'));
 	});
 	m.get('mode') === 'list' ?
@@ -60,7 +65,7 @@ const toggleView = m => {
 		m.get('funs')['btnX'] = addStaples;
 		btnY.classList.remove('fa-bookmark');
 		btnY.classList.add('fa-list');
-		title.textContent = `${list.listName}: Library`;
+		title.textContent = `${list.listName}: Pantry`;
 		m.set('mode', 'library');
 		list.getLibraryView(list, root);
 	} else {

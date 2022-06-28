@@ -36,44 +36,6 @@
 	</div>
 
 	<div id="json-display"></div>
-
-<!-- help modal -->
-	<div class='modal' id='helpModal' tabindex='-1'>
-		<div class='modal-dialog'>
-			<div class='modal-content'>
-				<div class='modal-header'>
-					<h4>Grocery Help</h4>
-				</div>
-				<div class='modal-body'>
-					<div id='helpCarousel' class='carousel slide' data-bs-ride='carousel'>
-						<div class='carousel-indicators'>
-							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='0' class='active' />
-							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='1' />
-							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='2' />
-						</div>
-						<div class='carousel-inner'>
-							<div class='carousel-item active'>
-								<h5>Slide 1</h5>
-								<p>Sample text</p>
-							</div>
-							<div class='carousel-item'>
-								<h5>Slide 2</h5>
-								<p>Sample text</p>
-							</div>
-							<div class='carousel-item'>
-								<h5>Slide 5</h5>
-								<p>Sample text</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class='modal-footer'>
-				</div>
-			</div>
-		</div>
-	</div>
-
-<!-- end modal -->
 	<footer class='sticky-footer'>
 		<div class='container-fluid'>
 			<div class='row'>
@@ -86,6 +48,84 @@
 		</div>
 
 	</footer>
+
+<!-- help modal -->
+	<div class='modal' id='helpModal' tabindex='-1'>
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+				<div class='modal-header'>
+					<h4>Grocery Help</h4>
+				</div>
+				<div class='modal-body'>
+					<div id='helpCarousel' class='carousel carousel-dark slide' data-bs-ride='carousel'>
+						<div class='carousel-indicators'>
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='0' class='active' />
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='1' />
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='2' />
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='3' />
+						</div>
+						<div class='carousel-inner'>
+							<div class='carousel-item active'>
+								<h5>Adding Items</h5>
+								<p>To add an item, type the name of the item you'd like to add in the
+								text area at the bottom of the screen.  The item name can include letters,
+								numbers, spaces, and most symbols and punctuation.  If you'd like to enter a
+								quantity, include it after a comma, like so:</p>
+								<div>
+									Whole milk, 1 gal
+								</div>
+								<p>Then click anywhere on the page to add the item.  If the item already
+								exists in your pantry, the existing entry will be added to the list,
+								otherwise a new entry will be created and added.
+								<p>If you change your mind about adding an item, simply delete all text
+								in the text box and click away.
+							</div>
+							<div class='carousel-item'>
+								<h5>Mode</h5>
+								<p>There are two "modes:" "List" and "Pantry."  They can be switched between
+								by using the green button on the footer:</p>
+								<p><span class="fa fa-lg fa-bookmark btn btn-success"></span>: Switches to Pantry mode</p>
+								<p><span class="fa fa-lg fa-list btn btn-success"></span>: Switches to List mode</p>
+								<p>List mode is for shopping.  You can click the checkbox to indicate that you
+								have put the given item in your cart.  Then, when you have finished your purchases,
+								click the "sweep" button (<span class='fa fa-lg fa-broom btn btn-primary'></span>).  All
+								checked items will be "swept," removed from the working list.
+								<p>Pantry mode is for managing your purchased items.  You can easily add or remove
+								a previously-bought item to or from the list, or you can automatically add all your
+								"staple" items (see below).</p>
+							</div>
+							<div class='carousel-item'>
+								<h5>Item Detail</h5>
+								<p>Click on the item title or quantity to expand the item detail, where you can see
+								a variety of information about the item.  You can edit these details by clicking the "edit"
+								button (<span class="fa fa-lg fa-pencil btn btn-primary"></span>), which will convert all
+								editable fields into text entry boxes.  When you are finished making changes, click the
+								"commit" button (<span class="fa fa-lg fa-check btn btn-success"></span>) and the changes
+								will be saved, or you can click the "cancel" button (<span class="fa fa-lg fa-x btn btn-danger"></span>)
+								to clear the changes.</p>
+								<p>Also in the item detail, you can designate an item as a "staple," and select a due date
+								for the purchase.  Finally, you can sweep an individual item from the shopping list, or delete it
+								from your pantry altogether, depending on the current mode.
+							</div>
+							<div class='carousel-item'>
+								<h5>Staples</h5>
+								<p>A "staple" is an item you purchase regularly.  Clicking the "Add Staples" button
+								(<span class='fa fa-lg fa-plus btn btn-primary'></span>) while in pantry view will automatically
+								add all items designated as staples to your shopping list.  If an "interval" has been set for
+								that item, a "purchase by" equal to the last purchase date plus the interval will automatically
+								be set for the item.</p>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class='modal-footer'>
+				</div>
+				-->
+			</div>
+		</div>
+	</div>
+
+<!-- end modal -->
 
 	<!-- build:js js/main.js -->
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

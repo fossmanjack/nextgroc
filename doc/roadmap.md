@@ -11,14 +11,12 @@
 - [ ] implement sidebar
 	- [ ] add new list
 	- [ ] delete list
-- [ ] implement help modals
+- [X] implement help modals
 - [ ] implement settings
-- [ ] save lists with cookies for now
-	- [ ] write to cookie
-	- [ ] read from cookie
 - [X] Date parser -- convert now() to human-readable strings
 - [X] Add date selector to "purchase by"
 - [ ] Make overdue items show in [red](red)
+- [ ] Save and load lists from localStorage
 
 Understand that in order to get this to work correctly you're probably going to
 need to use Node.js to interact with a sqlite database on the back end.  It's
