@@ -22,22 +22,18 @@ body {
   color: #aaaaaa;
   margin-right: 5px; }
 
-/*
 .container {
-	outline-style: dotted;
-	outline-color: blue;
-}
+  outline-style: dotted;
+  outline-color: blue; }
 
 .row {
-	outline-style: dotted;
-	outline-color: green;
-}
+  outline-style: dotted;
+  outline-color: green; }
 
 .col {
-	outline-style: dotted;
-	outline-color: red;
-}
-*/
+  outline-style: dotted;
+  outline-color: red; }
+
 .item-pic {
   display: block;
   max-height: 100%;

@@ -11,110 +11,174 @@
 	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
 
 	<!-- Additional CSS must be placed after bootstrap.css -->
-	<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="node_modules/bootstrap-social/bootstrap-social.css" />
+	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/localstyles.css" />
 	<!-- endbuild -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster|Open+Sans" />
 	<title>Nextcloud :: Grocery</title>
 </head>
 
 <body>
-	<header>
-		<h4 id="list-title">List Title</h4>
+	<header class='jumbotron jumbotron-fluid sticky-top nextcloud-header'>
+		<div class="container-flush">
+			<div class="row">
+				<div class="col-10">
+					<h4 id="list-title">List Title</h4>
+				</div>
+				<div class="col-2">
+					<button class="btn text-light fa-lg fa-regular fa-circle-question" name="btnHelp" id="btnHelp" data-bs-toggle='modal' data-bs-target='#helpModal' />
+					<button class="btn text-light fa-lg fa-solid fa-gear" name="btnSettings" id="btnSettings" />
+				</div>
+			</div>
+		</div>
 	</header>
 
-	<div id="list-goes-here">
+	<div id='list-root' class='accordion accordion-flush'>
 	</div>
 
-	<input type="text" name="text" id="item-input">
-	<button class="btn btn-primary" name="sweepButton" id="sweep-button"><span class="fa fa-solid fa-broom"></span></button>
-	<button class="btn btn-success" name="resetButton" id="reset-button"><span class="fa fa-solid fa-refresh"></span></button>
+	<div id="json-display"></div>
+	<footer class='sticky-footer'>
+		<div class='container-fluid'>
+			<div class='row'>
+				<div class='col'>
+					<input type="text" name="text" id="inputField">
+					<button class="btn btn-primary fa-solid fa-broom" name="btnX" id="btnX" />
+					<button class="btn btn-success fa-solid fa-bookmark" name="btnY" id="btnY" />
+				</div>
+			</div>
+		</div>
 
-	<footer>
 	</footer>
 
+<!-- help modal -->
+	<div class='modal' id='helpModal' tabindex='-1'>
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+				<div class='modal-header'>
+					<h4>Grocery Help</h4>
+				</div>
+				<div class='modal-body'>
+					<div id='helpCarousel' class='carousel carousel-dark slide' data-bs-ride='carousel'>
+						<div class='carousel-indicators'>
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='0' class='active' />
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='1' />
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='2' />
+							<button type='button' data-bs-target='#helpCarousel' data-bs-slide-to='3' />
+						</div>
+						<div class='carousel-inner'>
+							<div class='carousel-item active'>
+								<h5>Adding Items</h5>
+								<p>To add an item, type the name of the item you'd like to add in the
+								text area at the bottom of the screen.  The item name can include letters,
+								numbers, spaces, and most symbols and punctuation.  If you'd like to enter a
+								quantity, include it after a comma, like so:</p>
+								<div>
+									Whole milk, 1 gal
+								</div>
+								<p>Then click anywhere on the page to add the item.  If the item already
+								exists in your pantry, the existing entry will be added to the list,
+								otherwise a new entry will be created and added.
+								<p>If you change your mind about adding an item, simply delete all text
+								in the text box and click away.
+							</div>
+							<div class='carousel-item'>
+								<h5>Mode</h5>
+								<p>There are two "modes:" "List" and "Pantry."  They can be switched between
+								by using the green button on the footer:</p>
+								<p><span class="fa fa-lg fa-bookmark btn btn-success"></span>: Switches to Pantry mode</p>
+								<p><span class="fa fa-lg fa-list btn btn-success"></span>: Switches to List mode</p>
+								<p>List mode is for shopping.  You can click the checkbox to indicate that you
+								have put the given item in your cart.  Then, when you have finished your purchases,
+								click the "sweep" button (<span class='fa fa-lg fa-broom btn btn-primary'></span>).  All
+								checked items will be "swept," removed from the working list.
+								<p>Pantry mode is for managing your purchased items.  You can easily add or remove
+								a previously-bought item to or from the list, or you can automatically add all your
+								"staple" items (see below).</p>
+							</div>
+							<div class='carousel-item'>
+								<h5>Item Detail</h5>
+								<p>Click on the item title or quantity to expand the item detail, where you can see
+								a variety of information about the item.  You can edit these details by clicking the "edit"
+								button (<span class="fa fa-lg fa-pencil btn btn-primary"></span>), which will convert all
+								editable fields into text entry boxes.  When you are finished making changes, click the
+								"commit" button (<span class="fa fa-lg fa-check btn btn-success"></span>) and the changes
+								will be saved, or you can click the "cancel" button (<span class="fa fa-lg fa-x btn btn-danger"></span>)
+								to clear the changes.</p>
+								<p>Also in the item detail, you can designate an item as a "staple," and select a due date
+								for the purchase.  Finally, you can sweep an individual item from the shopping list, or delete it
+								from your pantry altogether, depending on the current mode.
+							</div>
+							<div class='carousel-item'>
+								<h5>Staples</h5>
+								<p>A "staple" is an item you purchase regularly.  Clicking the "Add Staples" button
+								(<span class='fa fa-lg fa-plus btn btn-primary'></span>) while in pantry view will automatically
+								add all items designated as staples to your shopping list.  If an "interval" has been set for
+								that item, a "purchase by" equal to the last purchase date plus the interval will automatically
+								be set for the item.</p>
+						</div>
+					</div>
+				</div>
+				<!--
+				<div class='modal-footer'>
+				</div>
+				-->
+			</div>
+		</div>
+	</div>
+
+<!-- end modal -->
+
 	<!-- build:js js/main.js -->
-	<!-- jQuery must come first, then Popper.js, then the Bootstrap JavaScript plugins.-->
-	<script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
-	<script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="https://kit.fontawesome.com/50affd80b8.js" crossorigin="anonymous"></script>
 	<script src="js/scripts.js"></script>
-	<script src="js/debug.js"></script>
-	<script src="js/basicClasses.js"></script>
-	<script src="js/generateList.js"></script>
+	<script src="js/ListItem.js"></script>
+	<script src="js/ShoppingList.js"></script>
 	<!-- endbuild -->
 
 	<script>
-		const testList = new BasicList("Test List");
-		const item1 = new BasicItem("Whole milk", "1 gal");
-		const item2 = new BasicItem("Bologna");
-		const item3 = new BasicItem("White bread");
-		const item4 = new BasicItem("American cheese");
-		const item5 = new BasicItem("Mayonnaise");
-		const item6 = new BasicItem("Potato chips");
-		const item7 = new BasicItem("!@#$%^&*()-_=+[]{}\|,.<>?/\'\":;");
-		item4.bought = true;
+		const debug = false;
+		const jsonDisp = document.getElementById('json-display');
 
-		testList.addItem(item1);
-		testList.addItem(item2);
-		testList.addItem(item3);
-		testList.addItem(item4);
-		testList.addItem(item5);
-		testList.addItem(item6);
-		testList.addItem(item7);
+		const _State = new Map();
+		_State.set('mode', 'list');;
+		_State.set('root', document.getElementById('list-root'));
+		_State.set('title', document.getElementById('list-title'));
+		_State.set('inputField', document.getElementById('inputField'));
+		_State.set('btnX', document.getElementById('btnX'));
+		_State.set('btnY', document.getElementById('btnY'));
+		_State.set('funs', {
+					inputFieldBlur: addItemByStr,
+					inputFieldCheck: validateItemInput,
+					btnX: sweepList,
+					btnY: toggleView
+				} );
+		_State.set('_Lists', new Map()); // not doing anything with this yet but we'll need it later
+		_State.set('list', new ShoppingList( { listName: 'placeholder' } ));
 
-		$(document).ready(function() {
-			const tar = document.getElementById("list-goes-here");
-			const inputField = document.getElementById("item-input");
-			const sweeper = document.getElementById("sweep-button");
-			const reset = document.getElementById("reset-button");
-			loadList(testList);
-			generateList(tar, testList);
-			addEditListeners();
-			inputField.addEventListener('keypress', function(e) {
-				if(e.keyCode === 13) {
-					tryAddItem(inputField.value, tar, testList);
-				}
+		let jsonData;
+
+		const _TestList = _State.get('list');
+		fetch('res/testList-Listjs.json')
+			.then(resp => resp.json())
+			.then(Data => {
+				_TestList.listName = Data.listName;
+				_TestList.listID = Data.listID;
+				_TestList.creationDate = Data.creationDate;
+				_TestList.modifyDate = Data.modifyDate;
+				//debug ? debugMsg('fetch Data', [ Data ]) : null;
+				Data.items.forEach((item) => { _TestList.addItem(new ListItem(item), _TestList); });
+			})
+			.then(() => {
+				//debug ? debugMsg('fetch complete', [ _TestList ]) : null;
+				document.getElementById('list-title').textContent = `${_TestList.listName}: List`;
+				_TestList.items.forEach((item) => item.listParent = _TestList);
+				_TestList.getListView(_TestList, _State.get('root'));
 			});
-			sweeper.addEventListener('click', function() { sweepList(testList); });
-			reset.addEventListener('click', function() { generateList(tar, testList); });
-		});
 
-		function tryAddItem(name, tar, tList) {
-			testList.addItemByName(name) ? generateList(tar, tList) : null;
-			document.getElementById("item-input").value = "";
-			addEventListeners();
-		}
-
-		function sweepList(tList) {
-			console.log("Sweeping list...");
-			const tar = document.getElementById("list-goes-here");
-			tList.sweep();
-			generateList(tar, tList);
-		}
-
-		function addEditListeners() {
-			const listEls = document.getElementById('list-goes-here');
-			const spans = listEls.getElementsByTagName('span');
-
-			for(let el of spans) {
-//			spans.forEach(function(el) {
-				debug ? debugMsg("addEventListeners", [ el ]) : null;
-				if(el.contentEditable) {
-					el.addEventListener('blur', function() { commitFieldEdit(el); });
-					el.addEventListener('beforeinput', function(e) {
-						debug ? debugMsg('beforeinput', [ e, e.which ]) : null;
-						if(e.inputType === 'insertParagraph') {
-							el.blur();
-							e.preventDefault();
-						}
-					});
-				}
-//			});
-			}
-		}
+		_State.get('_Lists').set(`${_TestList.listID}`, _TestList);
+		inputField.addEventListener('blur', () => { _State.get('funs').inputFieldBlur(inputField.value, _State) });
+		inputField.addEventListener('beforeinput', (e) => { _State.get('funs').inputFieldCheck(e, _State) });
+		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
+		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
 	</script>
 
 </body>

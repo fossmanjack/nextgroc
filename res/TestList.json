@@ -1,0 +1,100 @@
+[
+	{
+		"itemName" : "Diet pepsi",
+		"qty" : "24pk",
+		"loc" : "HEB soda aisle",
+		"state" : 0,
+		"price" : "7.99",
+		"staple" : true,
+		"interval" : 7,
+		"history" : [ "2022-06-16", "2022-06-09", "2022-06-02", "2022-05-31" ],
+		"image" : "diet-pepsi.jpg"
+	},
+	{
+		"itemName" : "Whole milk",
+		"qty" : "1 gal",
+		"loc" : "Cold case",
+		"state" : 0,
+		"price" : "4.59",
+		"staple" : true,
+		"interval" : 4,
+		"history" : [ "2022-06-16", "2022-06-13", "2022-06-04" ],
+		"image" : "whole-milk.jpg"
+	},
+	{
+		"itemName" : "Bologna",
+		"loc" : "meat dept",
+		"qty" : "1",
+		"state" : 0,
+		"price" : "1.99"
+	},
+	{
+		"itemName" : "White bread",
+		"loc" : "bakery",
+		"notes" : "Artesano is best"
+	},
+	{
+		"itemName" : "American cheese",
+		"qty" : "1 lb",
+		"loc" : "dairy case",
+		"staple" : true,
+		"price" : "3.59",
+		"interval" : 14,
+		"purBy" : "2022-06-19",
+		"history" : [ "2022-06-05" ],
+		"image" : "american-cheese.jpg",
+		"notes" : "Deluxe singles, none of those individually-wrapped plastic crap"
+	},
+	{
+		"itemName" : "Mayonnaise",
+		"price" : "2.99",
+		"image" : "dukes-mayo.jpg",
+		"notes" : "Dukes best, hellman's otherwise",
+		"state" : 1
+	},
+	{
+		"itemName" : "Cheese balls",
+		"qty" : "1 jug",
+		"loc" : "Wal-mart bulk",
+		"staple" : true,
+		"price" : "5.99",
+		"interval" : 14,
+		"purBy" : "2022-06-19",
+		"image" : "utz-cheese-balls.jpg"
+	},
+	{
+		"itemName" : "Eggs",
+		"qty" : "2 dozen",
+		"loc" : "dairy case",
+		"staple" : true,
+		"price" : "1.99",
+		"interval" : 7,
+		"purBy" : "2022-06-19",
+		"image" : "eggs.jpg"
+	},
+	{
+		"itemName" : "Tofu",
+		"qty" : "1 lb",
+		"loc" : "HEB natural foods",
+		"staple" : true,
+		"price" : "3.59",
+		"interval" : 7,
+		"purBy" : "2022-06-15",
+		"history" : [ "2022-06-15", "2022-06-08" ],
+		"state" : 2,
+		"image" : "tofu.jpg",
+		"notes" : "Extra-firm"
+	},
+	{
+		"itemName" : "Size 4 diapers",
+		"qty" : "1 box",
+		"loc" : "Sam's club",
+		"staple" : true,
+		"interval" : 30,
+		"purBy" : "2022-07-01",
+		"history" : [ "2022-06-01", "2022-05-01" ],
+		"state" : 3,
+		"notes" : "Pampers or Huggies",
+		"image" : "size-4-diapers.jpg"
+	}
+]

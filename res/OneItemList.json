@@ -1,0 +1,13 @@
+[
+	{
+		"itemName" : "Diet pepsi",
+		"qty" : "24pk",
+		"loc" : "HEB soda aisle",
+		"state" : 0,
+		"price" : "7.99",
+		"staple" : true,
+		"interval" : 7,
+		"history" : [ "2022-06-16", "2022-06-09", "2022-06-02", "2022-05-31" ],
+		"image" : "diet-pepsi.jpg"
+	}
+]
