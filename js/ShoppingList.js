@@ -14,7 +14,7 @@ class ShoppingList {
 		this.listID = listID ? listID : this.generateListID(listName, creationDate);
 	}
 	generateListID(name, date) {
-		return camelize(name)+"-"+date;
+		return `${name}-${date}`;
 	}
 	addItem(item, list) {
 		if(list.findItem(item, list)) return false;
