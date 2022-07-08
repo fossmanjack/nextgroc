@@ -51,12 +51,26 @@ class ShoppingList {
 	getLibraryView(list, root = document.getElementById('list-root')) {
 
 		root.innerHTML = '';
-		list.items.forEach((item) => {
+		// This is mostly for testing.  Implement "sort" buttons that select each
+		// sort view.  This does work, however, as-is.
+		const retarr = this.sorter(list.items, "title", true);
+//		list.items.forEach((item) => {
+		retarr.forEach((item) => {
 
 			item.btnFuns[0] = item.toggleListing;
 			item.styleHeader(item, 'library');
 
 			root.appendChild(item.DOMElement);
+		});
+	}
+	sorter(list, field, asc) {
+		debug ? debugMsg("sorter", [ list, field, acc ]) : null;
+		return list.sort((a, b) => {
+			let x = a[field].toString().toLowerCase();
+			let y = b[field].toString().toLowerCase();
+
+			if(asc) return x > y ? 1 : x < y ? -1 : 0;
+			else return x > y ? -1 : x < y ? 1 : 0;
 		});
 	}
 }

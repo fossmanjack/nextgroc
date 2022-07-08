@@ -26,7 +26,7 @@
 				</div>
 				<div class="col-2">
 					<button class="btn text-light fa-lg fa-regular fa-circle-question" name="btnHelp" id="btnHelp" data-bs-toggle='modal' data-bs-target='#helpModal' />
-					<button class="btn text-light fa-lg fa-solid fa-gear" name="btnSettings" id="btnSettings" />
+					<button class="btn text-light fa-lg fa-solid fa-gear" name="btnSettings" id="btnSettings" data-bs-toggle='modal' data-bs-target='#sortModal' />
 				</div>
 			</div>
 		</div>
@@ -79,6 +79,29 @@
 		</div>
 	</div>
 -->
+
+<!-- sort modal -->
+	<div class='modal' id='sortModal' tabindex='-1'>
+		<div class='modal-dialog'>
+			<div class='modal-content'>
+				<div class='modal-header'>
+					<h4>Sort By</h4>
+				</div>
+				<div class='modal-body'>
+					<ul>
+						<li id='nameAsc'>Name: Ascending</li>
+						<li id='nameDesc'>Name: Descending</li>
+						<li id='locAsc'>Location: Ascending</li>
+						<li id='locDesc'>Location: Descending</li>
+						<li id='dueAsc'>Purchase By: Ascending</li>
+						<li id='dueDesc'>Purchase By: Descending</li>
+						<li id='priceAsc'>Price: Ascending</li>
+						<li id='priceDesc'>Price: Descending</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 
 <!-- help modal -->
 	<div class='modal' id='helpModal' tabindex='-1'>

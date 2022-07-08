@@ -18,7 +18,7 @@
 - [ ] Make overdue items show in [red](red)
 - [ ] Save and load lists from localStorage
 - [ ] item search modal
-- [ ] ???
+- [ ] implement sorting
 
 Understand that in order to get this to work correctly you're probably going to
 need to use Node.js to interact with a sqlite database on the back end.  It's
