@@ -62,6 +62,7 @@
 		</div>
 		-->
 	</div>
+	<div><img id='image-display' /></div>
 
 	<div id="json-display"></div>
 	<footer class='sticky-footer'>
@@ -185,18 +186,20 @@
 
 	<!-- build:js js/main.js -->
 	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="node_modules/uuid/dist/v4.js"></script>
+	<!--<script src="node_modules/uuid/dist/v4.js"></script>-->
+	<script src="js/headers.js"></script>
 	<script src="js/scripts.js"></script>
 	<script src="js/ListItem.js"></script>
 	<script src="js/ShoppingList.js"></script>
 	<!-- endbuild -->
 
 	<script>
-		const debug = false;
+		//const debug = false;
 		const jsonDisp = document.getElementById('json-display');
-		const uuid = require('node_modules/uuid/dist/v4');
+		//const uuid = require('node_modules/uuid/dist/v4');
+		//const { v4: uuidv4 } = require('uuid');
 
-		const _State = new Map();
+		//const _State = new Map();
 		_State.set('mode', 'list');;
 		_State.set('root', document.getElementById('list-root'));
 		_State.set('title', document.getElementById('list-title'));
@@ -237,7 +240,8 @@
 		inputField.addEventListener('beforeinput', (e) => { _State.get('funs').inputFieldCheck(e, _State) });
 		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
 		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
-		document.getElementById('json-display').textContent = uuid.v4();
+//		document.getElementById('json-display').textContent = uuid.v4();
+		//document.getElementById('image-display').src = defaultImage; // this works
 	</script>
 
 </body>

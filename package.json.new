@@ -1,0 +1,50 @@
+{
+  "name": "NextCloud Grocery",
+  "version": "1.0.0",
+  "description": "A NextCloud application to track and share shopping lists",
+  "main": "index.html",
+  "scripts": {
+    "lite": "lite-server",
+    "start": "npm run watch:all",
+    "scss": "node-sass -o css/ css/",
+    "watch:scss": "onchange 'css/*.scss' -- npm run scss",
+    "watch:all": "parallelshell 'npm run watch:scss' 'npm run lite'",
+    "concat:css": "concat -o dist/css/styles.css css/localstyles.css",
+    "concat:js": "mkdir -p dist/js && concat -o dist/js/scripts.js js/*.js",
+    "concat": "npm run concat:css && npm run concat:js",
+    "cssmin": "cleancss -o dist/css/styles.min.css dist/css/styles.css",
+    "uglify": "uglifyjs -o dist/js/scripts.min.js dist/js/scripts.js",
+    "squoosh": "squoosh-cli --mozjpeg '{quality:70}' assets/img -d dist/img",
+    "build:css": "npm run scss && npm run concat:css && npm run cssmin",
+    "build:js": "npm run concat:js && npm run uglify",
+    "build:img": "npm run squoosh",
+    "build": "npm run build:css && npm run build:js && npm run build:img"
+  },
+  "author": "Jack Meyers",
+  "license": "GPLv3",
+  "devDependencies": {
+    "@squoosh/cli": "^0.7.2",
+    "clean-css-cli": "^5.6.0",
+    "concat": "^1.0.3",
+    "copyfiles": "^2.2.0",
+    "imagemin-cli": "^5.1.0",
+    "lite-server": "^2.6.1",
+    "node-sass": "^6.0.1",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0",
+    "parallelshell": "^3.0.1",
+    "rimraf": "^3.0.2",
+    "sass": "^1.53.0",
+    "uglify-js": "^3.16.1",
+    "usemin-cli": "^0.6.0"
+  },
+  "dependencies": {
+    "@clarencep/parallelshell": "^3.0.4",
+    "bootstrap": "^5.0.2",
+    "bootstrap-social": "^5.1.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1",
+    "uuid": "^8.3.2"
+  }
+}
