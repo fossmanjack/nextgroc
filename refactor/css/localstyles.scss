@@ -1,0 +1,76 @@
+$header-bg-dark: #0082C9;
+$header-bg-light: #5dc3fb;
+$color-pale: #aaaaaa;
+$edit-outline: #999999;
+
+body {
+	color: black;
+}
+
+.nextcloud-header {
+	background-image: linear-gradient(to right, $header-bg-dark, $header-bg-light);
+	color: white;
+}
+
+// for debugging
+.list-item {
+	border: 1px solid #aaaaaa;
+}
+
+.needItem {
+
+}
+
+.boughtItem {
+	text-decoration: line-through;
+}
+
+.listItem {
+	a, a:hover, a:focus, a:active, a:link, a:visited {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+
+.notoggle::after {
+	content: none;
+}
+
+.label-text {
+	color: $color-pale;
+	margin-right: 5px;
+}
+
+/*
+.container {
+	outline-style: dotted;
+	outline-color: blue;
+}
+
+.row {
+	outline-style: dotted;
+	outline-color: green;
+}
+
+.col {
+	outline-style: dotted;
+	outline-color: red;
+}
+*/
+.item-pic {
+	display: block;
+	max-height: 100%;
+	width: auto;
+}
+
+.edit-target {
+	outline-style: solid;
+	outline-color: $edit-outline;
+}
+
+.sticky-footer {
+	position: fixed;
+	width: 100%;
+	left: 0;
+	bottom: 0;
+}

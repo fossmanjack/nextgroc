@@ -1,0 +1,54 @@
+body {
+  color: black; }
+
+.nextcloud-header {
+  background-image: linear-gradient(to right, #0082C9, #5dc3fb);
+  color: white; }
+
+.list-item {
+  border: 1px solid #aaaaaa; }
+
+.boughtItem {
+  text-decoration: line-through; }
+
+.listItem a, .listItem a:hover, .listItem a:focus, .listItem a:active, .listItem a:link, .listItem a:visited {
+  color: inherit;
+  text-decoration: none; }
+
+.notoggle::after {
+  content: none; }
+
+.label-text {
+  color: #aaaaaa;
+  margin-right: 5px; }
+
+/*
+.container {
+	outline-style: dotted;
+	outline-color: blue;
+}
+
+.row {
+	outline-style: dotted;
+	outline-color: green;
+}
+
+.col {
+	outline-style: dotted;
+	outline-color: red;
+}
+*/
+.item-pic {
+  display: block;
+  max-height: 100%;
+  width: auto; }
+
+.edit-target {
+  outline-style: solid;
+  outline-color: #999999; }
+
+.sticky-footer {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: 0; }

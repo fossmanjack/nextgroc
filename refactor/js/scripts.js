@@ -10,6 +10,18 @@ const debugMsg = (fun, params) => {
 	console.log("*******************");
 }
 
+const renderList = _ => { // render list display
+	const mode, root, list, options = { _State };
+	const dispArr = sortList(list.items, _State.sortOrder, mode);
+
+	root.innerHTML = '';
+	dispArr.forEach((item) => {
+		item.btnFuns[0] = mode === viewList ? checkItem : toggleListing;
+		item.styleHeader(item, mode);
+		root.appendChild(item.DOMElement);
+	}
+}
+
 const updateState = (prop, val) => { // immutably update and save state object
 	const newState = { ..._State, prop: val };
 	window.localStorage.setItem("_State", JSON.stringify(newState));
@@ -46,7 +58,7 @@ const initState = _ => { // create and return a state object
 	return st;
 }
 
-const initLists = _ => {
+const initLists = _ => { // initialize _Lists object, used for storage
 	const newList = createList();
 	const lss = {};
 
@@ -56,7 +68,11 @@ const initLists = _ => {
 	return lss;
 }
 
-const createList = _ => {
+const saveLists = _ => { // we'll be doing this a lot
+	window.localStorage.setItem("_Lists", JSON.stringify(_Lists));
+}
+
+const createList = _ => { // create a new list
 	return {
 		listID: genuuid(),
 		listName: "New List",
@@ -66,13 +82,13 @@ const createList = _ => {
 	}
 }
 
-const addList = ls => {
+const addList = ls => { // add list to _Lists object (for storage)
 	_Lists[ls.listID] = ls;
-	window.localStorage.setItem("_Lists", JSON.stringify(_Lists));
+	saveLists();
 }
 
-const addItemByStr = (val, m) => {
-	const { list, root, inputField } = Object.fromEntries(m);
+const addItemByStr = (val, st) => { // add item from input field
+	const { list, root, inputField } = st;
 
 	if(!val) return false; // if there's no text in the field don't add an item
 
@@ -87,22 +103,22 @@ const addItemByStr = (val, m) => {
 	item ? item.setState(item, 0) : list.addItem(send, list);
 	m.get('mode') === 'library' ? list.getLibraryView(list, root) : list.getListView(list, root);
 	inputField.value = '';
+	saveLists();
 	return true;
 }
 
-const addStaples = m => {
-	m.get('list').items.filter((item) => item.staple).forEach((item) => {
+const addStaples = st => {
+	const { mode, list, root } = st;
+	list.items.filter((item) => item.staple).forEach((item) => {
 		item.setState(item, 0);
 		if(item.interval)
 			debugMsg('addStaples-pre', [ item.purBy, item.history[0], item.interval ]);
 			item.purBy = (item.history[0] ? item.history[0] : Date.now()) + (item.interval * 86400000);
 			item._RevEls.get('purBy').value = (item.purBy ? item.parseDate(item.purBy) : '-');
 			debugMsg('addStaples', [ item.purBy ]);
-		item.styleHeader(item, m.get('mode'));
+		item.styleHeader(item, st.mode);
 	});
-	m.get('mode') === 'list' ?
-		m.get('list').getListView(m.get('list'), m.get('root')) :
-		m.get('list').getLibraryView(m.get('list'), m.get('root'));
+	mode === list ? list.getListView(list, root) : list.getPantryView(list, root);
 }
 
 const sweepList = m => {
@@ -160,3 +176,7 @@ const validateItemInput = (e, m) => {
 const genuuid = _ => {
 	return crypto.randomUUID();
 }
+
+// Shopping List functions
+
+
