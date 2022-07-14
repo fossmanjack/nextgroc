@@ -1,5 +1,5 @@
-const _State = new Map();
-const _Lists = [];
+const _RevEls = new Map();
+const _Els = new Map();
 const viewList = 0;
 const viewPantry = 1;
 const itemListed = 0;

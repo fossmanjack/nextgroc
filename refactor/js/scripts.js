@@ -10,6 +10,14 @@ const debugMsg = (fun, params) => {
 	console.log("*******************");
 }
 
+// this should build a DOM for each list element and store it in a map, hopefully
+// The "_RevEls" are accessible from the map value _Els.get(item).desiredElement
+// This isn't strictly necessary as you could access the elements directly using
+// document.getElementById(`${idStr}-val`) but storing the reference is easier to
+// manage, at least I think
+const loadList = _ => _State.list.items.forEach((item) => _Els.set(item, buildDOM(item)));
+
+
 const renderList = _ => { // render list display
 	const mode, root, list, options = { _State };
 	const dispArr = sortList(list.items, _State.sortOrder, mode);
@@ -87,8 +95,8 @@ const addList = ls => { // add list to _Lists object (for storage)
 	saveLists();
 }
 
-const addItemByStr = (val, st) => { // add item from input field
-	const { list, root, inputField } = st;
+const addItemByStr = val => { // add item from input field
+	const { list, root, inputField } = _State;
 
 	if(!val) return false; // if there's no text in the field don't add an item
 
@@ -107,18 +115,18 @@ const addItemByStr = (val, st) => { // add item from input field
 	return true;
 }
 
-const addStaples = st => {
-	const { mode, list, root } = st;
+const addStaples = _ => {
+	const { mode, list, root } = _State;
 	list.items.filter((item) => item.staple).forEach((item) => {
-		item.setState(item, 0);
+		item.listed = true;
 		if(item.interval)
-			debugMsg('addStaples-pre', [ item.purBy, item.history[0], item.interval ]);
+			debug && debugMsg('addStaples-pre', [ item.purBy, item.history[0], item.interval ]);
 			item.purBy = (item.history[0] ? item.history[0] : Date.now()) + (item.interval * 86400000);
 			item._RevEls.get('purBy').value = (item.purBy ? item.parseDate(item.purBy) : '-');
-			debugMsg('addStaples', [ item.purBy ]);
+			debug && debugMsg('addStaples', [ item.purBy ]);
 		item.styleHeader(item, st.mode);
 	});
-	mode === list ? list.getListView(list, root) : list.getPantryView(list, root);
+	renderList();
 }
 
 const sweepList = m => {
@@ -133,32 +141,31 @@ const sweepList = m => {
 		m.get('list').getLibraryView(m.get('list'), m.get('root'));
 }
 
-const toggleView = m => {
-	const { mode, title, btnX, btnY, list, root } = Object.fromEntries(m);
+const toggleView = _ => {
+	const { mode, title, btnX, btnY, list, root } = _State;
 
-	if(mode === 'list') { // switch to library view
+	if(mode === viewList) { // switch to pantry view
 		btnX.classList.remove('fa-broom');
 		btnX.classList.add('fa-plus');
-		m.get('funs')['btnX'] = addStaples;
+		updateState('funs', { ..._State.funs, 'btnX': addStaples });
 		btnY.classList.remove('fa-bookmark');
 		btnY.classList.add('fa-list');
 		title.textContent = `${list.listName}: Pantry`;
-		m.set('mode', 'library');
-		list.getLibraryView(list, root);
+		updateState('mode', viewPantry);
 	} else {
 		btnX.classList.remove('fa-plus');
 		btnX.classList.add('fa-broom');
-		m.get('funs')['btnX'] = sweepList;
+		updateState('funs', { ..._State.funs, 'btnX': sweepList });
 		btnY.classList.remove('fa-list');
 		btnY.classList.add('fa-bookmark');
 		title.textContent = `${list.listName}: List`;
-		m.set('mode', 'list');
-		list.getListView(list, root);
+		updateState('mode', viewList);
 	}
+	renderList();
 }
 
-const validateItemInput = (e, m) => {
-	const { inputField } = Object.fromEntries(m);
+const validateItemInput = e => {
+	const { inputField } = _State;
 	//debug ? debugMsg('e.data and e.inputType', [ e.data, e.inputType ]) : null;
 	validator = /[^<>?\/\\]/
 
@@ -179,4 +186,5 @@ const genuuid = _ => {
 
 // Shopping List functions
 
+// List Item functions
 

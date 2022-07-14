@@ -36,6 +36,11 @@ class ListItem {
 		this.btnFuns = [ this.checkItem, this.toggleStaple, this.editItem, this.sweepItem ];
 		this.listParent = ({});
 	}
+}
+
+// Everything below gets exported to scripts.js and modified to simply take
+// an item as argument
+
 	getCamelName() { return camelize(this.title); }
 	setState(ob, state) {
 		switch(state) {
