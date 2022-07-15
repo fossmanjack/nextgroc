@@ -191,7 +191,7 @@
 	<script src="js/ListItem.js"></script>
 	<script src="js/ShoppingList.js"></script>
 	<!-- endbuild -->
-
+<!--
 	<script>
 		const jsonDisp = document.getElementById('json-display');
 
@@ -236,27 +236,31 @@
 		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
 		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
 	</script>
-<!-- rewrite below
+-->
+<!--
 	// We want to save _State and _Lists in localStorage for now
 	// Eventually we'll be doing something with webDAV or a node API or something
 	// To make this easier, we're removing classes and using objects for everything
 	// in order to play nice with JSON
 	// object methods will become functions
 	// could actually keep classes for sake of constructor but it's not necessary
+-->
 	<script>
-		_State = JSON.parse(window.localStorage.getItem("_State")) || initState();
-		_Lists = JSON.parse(window.localStorage.getItem("_Lists")) || initLists();
+		var _State = JSON.parse(window.localStorage.getItem("_State")) || initState();
+		var _Lists = JSON.parse(window.localStorage.getItem("_Lists")) || initLists();
 
-		const { inputField, btnX, btnY, title, currentList } = _State;
-		inputField.addEventListener('blur', () => { _State.funs.inputFieldBlur(inputField.value, _State) });
-		inputField.addEventListener('beforeinput', e => { _State.funs.inputFieldCheck(e, _State) });
-		btnX.addEventListener('click', () => { _State.funs.btnX(_State) });
-		btnY.addEventListener('click', () => { _State.funs.btnY(_State) });
+		const { inputField, btnX, btnY, funs, title } = _State;
+		inputField.addEventListener('blur', () => { funs.inputFieldBlur(inputField.value, _State) });
+		inputField.addEventListener('beforeinput', e => { funs.inputFieldCheck(e, _State) });
+		btnX.addEventListener('click', () => { funs.btnX(_State) });
+		btnY.addEventListener('click', () => { funs.btnY(_State) });
 
-		title.textContent = `${currentList.listName}: List`;
+		title.textContent = `${_State.list.listName}: List View`;
+
+		renderList();
+
 	</script>
 
--->
 
 </body>
 

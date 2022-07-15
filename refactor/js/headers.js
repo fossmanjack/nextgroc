@@ -1,8 +1,8 @@
 const _RevEls = new Map();
-const _Els = new Map();
+const _DOM = new Map();
 const _History = [];
-const viewList = 0;
-const viewPantry = 1;
+const modeList = 0;
+const modePantry = 1;
 const itemListed = 0;
 const itemBought = 1;
 const itemUnlisted = 2;
