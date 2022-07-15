@@ -1,5 +1,6 @@
 const _RevEls = new Map();
 const _Els = new Map();
+const _History = [];
 const viewList = 0;
 const viewPantry = 1;
 const itemListed = 0;

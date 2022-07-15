@@ -17,24 +17,23 @@ const debugMsg = (fun, params) => {
 // manage, at least I think
 const loadList = _ => _State.list.items.forEach((item) => _Els.set(item, buildDOM(item)));
 
-
 const renderList = _ => { // render list display
 	const mode, root, list, options = { _State };
-	const dispArr = sortList(list.items, _State.sortOrder, mode);
+	const dispArr = sortList(list.items, options.sortOrder, mode);
 
 	root.innerHTML = '';
 	dispArr.forEach((item) => {
 		item.btnFuns[0] = mode === viewList ? checkItem : toggleListing;
-		item.styleHeader(item, mode);
-		root.appendChild(item.DOMElement);
+		styleHeader(item, mode);
+		root.appendChild(_Els.get(item).root);
 	}
 }
 
 const updateState = (prop, val) => { // immutably update and save state object
 	const newState = { ..._State, prop: val };
 	window.localStorage.setItem("_State", JSON.stringify(newState));
+	_History.push(_State);
 	return newState;
-	// could save current state to _History or something
 }
 
 const updateLists = (prop, val) => { // probably not actually needed
@@ -76,9 +75,7 @@ const initLists = _ => { // initialize _Lists object, used for storage
 	return lss;
 }
 
-const saveLists = _ => { // we'll be doing this a lot
-	window.localStorage.setItem("_Lists", JSON.stringify(_Lists));
-}
+const saveLists = _ => window.localStorage.setItem("_Lists", JSON.stringify(_Lists));
 
 const createList = _ => { // create a new list
 	return {
@@ -106,14 +103,16 @@ const addItemByStr = val => { // add item from input field
 	if(!qty) qty = 1;
 
 	const send = new ListItem({ title: name, qty: qty, listParent: list });
-	const item = list.findItem(send, list);
+	const item = findItem(send, list);
 
-	item ? item.setState(item, 0) : list.addItem(send, list);
-	m.get('mode') === 'library' ? list.getLibraryView(list, root) : list.getListView(list, root);
-	inputField.value = '';
+	item ? item.state = 0 : addItemToList(list, item);
 	saveLists();
+	inputField.value = '';
+	renderList();
 	return true;
 }
+
+// above this line should be converted, maybe
 
 const addStaples = _ => {
 	const { mode, list, root } = _State;
