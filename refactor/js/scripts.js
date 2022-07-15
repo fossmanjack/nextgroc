@@ -134,6 +134,12 @@ const toggleMode = _ => { // toggle between list and pantry modes
 
 /***** List management functions *****/
 
+const editListName = list, str => {
+	list.listName = sanitize(str);
+	list.modifyDate = Date.now();
+	saveLists();
+	renderList();
+}
 
 // sort and return the passed list according to the options
 // _State.options.sortOrder should be [ itemField, ascending ? true : false ]
