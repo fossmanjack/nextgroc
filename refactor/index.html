@@ -27,6 +27,7 @@
 				<div class="col-2">
 					<button class="btn text-light fa-lg fa-regular fa-circle-question" name="btnHelp" id="btnHelp" data-bs-toggle='modal' data-bs-target='#helpModal' />
 					<button class="btn text-light fa-lg fa-solid fa-gear" name="btnSettings" id="btnSettings" data-bs-toggle='modal' data-bs-target='#sortModal' />
+					<button class="btn text-light fa-lg fa-xmark" name="btnReset" id="btnReset" />
 				</div>
 			</div>
 		</div>
@@ -254,6 +255,11 @@
 		inputField.addEventListener('beforeinput', e => { funs.inputFieldCheck(e, _State) });
 		btnX.addEventListener('click', () => { funs.btnX(_State) });
 		btnY.addEventListener('click', () => { funs.btnY(_State) });
+		btnReset.addEventListener('click', () => {
+			window.localStorage.clear();
+			_State = initState();
+			_Lists = initLists();
+		});
 
 		title.textContent = `${_State.list.listName}: List View`;
 
