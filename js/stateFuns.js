@@ -2,7 +2,7 @@
 
 const initState = _ => { // create and return a state object
 	const st = {
-		mode: list,
+		mode: modeList,
 		list: null,
 		root: document.getElementById('list-root'),
 		title: document.getElementById('list-title'),
@@ -10,10 +10,10 @@ const initState = _ => { // create and return a state object
 		btnX: document.getElementById('btnX'),
 		btnY: document.getElementById('btnY'),
 		funs: {
-			inputFieldBlur: addItemByStr,
+			inputFieldBlur: addItem,
 			inputFieldCheck: validateItemInput,
 			btnX: sweepList,
-			btnY: toggleView
+			btnY: toggleMode
 		},
 		options: {
 			sortOrder: [ 'title', true ] // make this more bitwise

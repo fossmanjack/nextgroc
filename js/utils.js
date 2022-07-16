@@ -16,7 +16,7 @@ const debugMsg = (fun, params) => {
 }
 
 const renderList = _ => { // render list display
-	const mode, root, list, options = { _State };
+	const { mode, root, list, options } = _State;
 	const dispArr = sortList(list.items, options.sortOrder);
 
 	root.innerHTML = '';
@@ -24,5 +24,5 @@ const renderList = _ => { // render list display
 		item.btnFuns[0] = mode === modeList ? checkItem : toggleListing;
 		styleHeader(item, mode);
 		root.appendChild(_DOM.get(item).root);
-	}
+	});
 }

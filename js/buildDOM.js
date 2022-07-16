@@ -1,4 +1,4 @@
-buildDOM(item) {
+const buildDOM = item => {
 	const idStr = camelize(item.title);
 
 	let root = document.createElement('div'); // accordion-item

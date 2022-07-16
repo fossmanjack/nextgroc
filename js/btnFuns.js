@@ -104,7 +104,7 @@ const commitEdit = item => {
 			el.contentEditable = false;
 			el.classList.remove('edit-target');
 			el.removeEventListener('beforeinput', validateInput);
-			!el.textContent && el.textContent = '-';
+			if(!el.textContent) el.textContent = '-';
 			item[key] = el.textContent;
 		}
 	});
