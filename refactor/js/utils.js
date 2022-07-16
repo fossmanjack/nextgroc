@@ -15,3 +15,14 @@ const debugMsg = (fun, params) => {
 	console.log("*******************");
 }
 
+const renderList = _ => { // render list display
+	const mode, root, list, options = { _State };
+	const dispArr = sortList(list.items, options.sortOrder);
+
+	root.innerHTML = '';
+	dispArr.forEach((item) => {
+		item.btnFuns[0] = mode === modeList ? checkItem : toggleListing;
+		styleHeader(item, mode);
+		root.appendChild(_DOM.get(item).root);
+	}
+}

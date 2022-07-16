@@ -1,5 +1,5 @@
 buildDOM(item) {
-	const idStr = camelize(ob.title);
+	const idStr = camelize(item.title);
 
 	let root = document.createElement('div'); // accordion-item
 	root.classList.add('accordion-item');
@@ -100,7 +100,7 @@ buildDOM(item) {
 	let imgTag = document.createElement('img'); // eventually a carousel
 	imgTag.classList.add('img-fluid');
 	imgTag.id = `${idStr}-img`;
-	imgTag.src = `img/${item.image}`
+	imgTag.src = item.images.length ? item.images[0] : defaultImage;
 	imgCol.appendChild(imgTag);
 
 	let detailCol = document.createElement('div'); // text on right
@@ -293,6 +293,9 @@ buildDOM(item) {
 	notesValCol.setAttribute('data-edit-target', true);
 	notesValCol.textContent = `${item.notes}`;
 	notesValRow.appendChild(notesValCol);
+
+	// now we return the elements we'll need to access later as an object to
+	// map to the item key in _DOM
 
 	return {
 		'root': root,

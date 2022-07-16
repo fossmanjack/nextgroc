@@ -154,7 +154,34 @@ const sweepItem = item => {
 	renderList();
 }
 
-// Button X: sweepList and ???
+// Button X: sweepList and addStaples
+
+const sweepList = _ => { // remove all items flagged as bought from the list view
+	const { mode, list } = _State;
+	list.items.filter((item) => item.state === itemBought)
+		.forEach((item) => {
+			item.state = itemUnlisted;
+			styleHeader(item, mode);
+			updateHistory(item);
+		});
+	saveLists();
+	renderList();
+}
+
+const addStaples = _ => { // add all items flagged as staples to the list view
+	const { mode, list, root } = _State;
+	list.items.filter((item) => item.staple).forEach((item) => {
+		item.state = itemListed;
+		if(item.interval)
+			debug && debugMsg('addStaples-pre', [ item.purBy, item.history[0], item.interval ]);
+			item.purBy = (item.history[0] ? item.history[0] : Date.now()) + (item.interval * 86400000);
+			_DOM.get(item).purBy = (item.purBy ? parseDate(item.purBy) : '-');
+			debug && debugMsg('addStaples', [ item.purBy ]);
+		styleHeader(item);
+	});
+	saveLists();
+	renderList();
+}
 
 // Button Y: toggleView
 
