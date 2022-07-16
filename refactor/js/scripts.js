@@ -1,51 +1,3 @@
-/***** Utility Functions *****/
-
-const camelize = str => str ? str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, c) => c.toUpperCase()) : false;
-const sanitize = str => str ? str.replace(/[~!@#$%^&*().,<>?_=+:;\'\"\/\-\[\]\{\}\\\|\`]/g, '') : false;
-const genuuid = _ => crypto.randomUUID();
-const parseDate = i => new Date(i).toISOString().split("T")[0];
-const daysBetween = (i, j) => (j - i) / (86400000);
-
-const debugMsg = (fun, params) => {
-	console.log("****** DEBUG ******");
-	console.log(`Calling function ${fun} with:`);
-	for(i in params) {
-		console.log("\t", params[i]);
-	}
-	console.log("*******************");
-}
-
-/***** _State management *****/
-
-const initState = _ => { // create and return a state object
-	const st = {
-		mode: list,
-		list: null,
-		root: document.getElementById('list-root'),
-		title: document.getElementById('list-title'),
-		inputField: document.getElementById('inputField'),
-		btnX: document.getElementById('btnX'),
-		btnY: document.getElementById('btnY'),
-		funs: {
-			inputFieldBlur: addItemByStr,
-			inputFieldCheck: validateItemInput,
-			btnX: sweepList,
-			btnY: toggleView
-		},
-		options: {
-			sortOrder: [ 'title', true ] // make this more bitwise
-		}
-	};
-	window.localStorage.setItem("_State", JSON.stringify(st));
-	return st;
-}
-
-const updateState = (prop, val) => { // immutably update and save state object
-	const newState = { ..._State, prop: val };
-	window.localStorage.setItem("_State", JSON.stringify(newState));
-	_History.push(_State);
-	_State = newState;
-}
 
 /***** _Lists management *****/
 
@@ -95,42 +47,6 @@ const switchList = list => {
 	renderList();
 }
 
-/***** Display and Rendering *****/
-
-const renderList = _ => { // render list display
-	const mode, root, list, options = { _State };
-	const dispArr = sortList(list.items, options.sortOrder);
-
-	root.innerHTML = '';
-	dispArr.forEach((item) => {
-		item.btnFuns[0] = mode === modeList ? checkItem : toggleListing;
-		styleHeader(item, mode);
-		root.appendChild(_DOM.get(item).root);
-	}
-}
-
-const toggleMode = _ => { // toggle between list and pantry modes
-	const { mode, title, btnX, btnY, list, root } = _State;
-
-	if(mode === modeList) { // switch to pantry view
-		btnX.classList.remove('fa-broom');
-		btnX.classList.add('fa-plus');
-		_State = updateState('funs', { ..._State.funs, 'btnX': addStaples });
-		btnY.classList.remove('fa-bookmark');
-		btnY.classList.add('fa-list');
-		title.textContent = `${list.listName}: Pantry`;
-		_State = updateState('mode', modePantry);
-	} else {
-		btnX.classList.remove('fa-plus');
-		btnX.classList.add('fa-broom');
-		_State = updateState('funs', { ..._State.funs, 'btnX': sweepList });
-		btnY.classList.remove('fa-list');
-		btnY.classList.add('fa-bookmark');
-		title.textContent = `${list.listName}: List`;
-		_State = updateState('mode', modeList);
-	}
-	renderList();
-}
 
 /***** List management functions *****/
 
@@ -139,21 +55,6 @@ const editListName = list, str => {
 	list.modifyDate = Date.now();
 	saveLists();
 	renderList();
-}
-
-// sort and return the passed list according to the options
-// _State.options.sortOrder should be [ itemField, ascending ? true : false ]
-const sortList = (items, opts) => {
-	const [ field, asc ] = opts;
-	sr = mode === modeList ? items.filter((item) => item.state !== 2) : items;
-
-	return sr.sort((a, b) => {
-		let x = a[field].toString().toLowerCase();
-		let y = b[field].toString().toLowerCase();
-
-		if(asc) return x > y ? 1 : x < y ? -1 : 0;
-		else return x > y ? -1 : x < y ? 1 : 0;
-	});
 }
 
 const addItemByStr = val => { // add item from input field
@@ -172,6 +73,7 @@ const addItemByStr = val => { // add item from input field
 	item ? item.state = itemListed : addItemToList(list, item);
 	saveLists();
 	inputField.value = '';
+	_DOM.set(item, buildDOM(item));
 	renderList();
 	return true;
 }
@@ -254,160 +156,3 @@ const styleHeader = item => { // changes the title style and btn0 function based
 	}
 }
 
-/***** Button functions *****/
-
-// Button 0: checkItem and toggleListed
-
-const checkItem = item => {
-	item.state = !item.state;
-	styleHeader(item);
-	saveLists();
-}
-
-const toggleListed = item => {
-	(!item.state || item.state === itemBought) ? item.state = itemUnlisted : item.state = itemListed;
-	styleHeader(item);
-	saveLists();
-}
-
-// Button 1: toggleStaple and editPhoto
-
-const toggleStaple = item => {
-	const { btn1 } = _DOM.get(item);
-
-	if(item.staple) {
-		item.staple = false;
-		btn1.classList.remove('fa-toggle-on');
-		btn1.classList.add('fa-toggle-off');
-	} else {
-		item.staple = true;
-		btn1.classList.remove('fa-toggle-off');
-		btn1.classList.add('fa-toggle-on');
-	}
-	ob.modifyDate = Date.now();
-	saveLists();
-}
-
-const editPhoto = item => {
-	/* nyi */
-	return false;
-}
-
-// Button 2: editItem and commitEdit
-
-const editItem = item => {
-	const { btn1, btn2, btn3, acBtn } = _DOM.get(item);
-	const validator = /[a-zA-Z0-9\!@#&()\-+=_\/:; ]/;
-
-	acBtn.setAttribute('data-bs-toggle', ''); // turn off accordion button
-
-	// btn1 becomes "add picture"
-
-	/* nyi */
-
-	// btn2 becomes "commit changes"
-
-	btn2.classList.remove('btn-primary', 'fa-pencil');
-	btn2.classList.add('btn-success', 'fa-check');
-	item.btnFuns[2] = commitEdit;
-
-	// btn3 becomes "cancel changes"
-
-	btn3.classList.remove('btn-warning', 'fa-broom');
-	btn3.classList.add('btn-danger', 'fa-xmark');
-	item.btnFuns[3] = cancelEdit;
-
-	// add edit properties and outlines to all data-edit-target elements
-
-	Object.values(_DOM.get(item)).forEach((el) => {
-		if(el.hasAttribute('data-edit-target')) {
-			el.contentEditable = true;
-			el.classList.add('edit-target');
-			el.addEventListener('beforeinput', el.validateInput = function validateInput(e) {
-				debug && console.log(`Key: ${e.data}, Type: ${e.inputType}`);
-				if(e.inputType !== 'deleteContentBackward' && !validator.test(e.data)) {
-					e.preventDefault();
-					alert('Valid characters for input are A-Z, a-z, 0-9, !@#&-+=_ and space');
-				}
-			});
-		};
-	});
-}
-
-const commitEdit = item => {
-	const { btn1, btn2, btn3, acBtn } = _DOM.get(item);
-
-	acBtn.setAttribute('data-bs-toggle', 'collapse'); // turn on accordion button
-
-	// btn1 becomes "toggleStaple"
-
-	/* nyi */
-
-	// btn2 becomes "edit item"
-
-	btn2.classList.remove('btn-success', 'fa-check');
-	btn2.classList.add('btn-primary', 'fa-pencil');
-	item.btnFuns[2] = editItem;
-
-	// btn3 becomes "sweep item"
-
-	btn3.classList.remove('btn-danger', 'fa-xmark');
-	btn3.classList.add('btn-warning', 'fa-broom');
-	item.btnFuns[3] = sweepItem;
-
-	Object.entries(_DOM.get(item)).forEach((entry) => {
-		const [ key, el ] = entry;
-
-		if(el.hasAttribute('data-edit-target')) {
-			el.contentEditable = false;
-			el.classList.remove('edit-target');
-			el.removeEventListener('beforeinput', validateInput);
-			!el.textContent && el.textContent = '-';
-			item[key] = el.textContent;
-		}
-	});
-	item.modifyDate = Date.now();
-	saveLists();
-}
-
-// Button 3: sweepItem and cancelEdit
-
-const cancelEdit = item => {
-	const { btn1, btn2, btn3, acBtn } = _DOM.get(item);
-
-	acBtn.setAttribute('data-bs-toggle', 'collapse');
-
-	// btn1 becomes "toggleStaple"
-
-	/* nyi */
-
-	// btn2 becomes "edit item"
-
-	btn2.classList.remove('btn-success', 'fa-check');
-	btn2.classList.add('btn-primary', 'fa-pencil');
-	item.btnFuns[2] = editItem;
-
-	// btn3 becomes "sweep item"
-
-	btn3.classList.remove('btn-danger', 'fa-xmark');
-	btn3.classList.add('btn-warning', 'fa-broom');
-	item.btnFuns[3] = sweepItem;
-
-	Object.entries(_DOM.get(item)).forEach((entry) => {
-		const [ key, el ] = entry;
-
-		if(el.hasAttribute('data-edit-target')) {
-			el.contentEditable = false;
-			el.classList.remove('edit-target');
-			el.removeEventListener('beforeinput', validateInput);
-			el.textContent = item[key];
-		}
-	});
-}
-
-const sweepItem = item => {
-	item.state === 1 && updateHistory(item);
-	item.state = 2;
-	saveLists();
-	renderList();
-}
