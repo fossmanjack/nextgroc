@@ -316,6 +316,6 @@ const buildDOM = item => {
 		'purBy': purByVal,
 		'interval': intervalVal,
 		'last': lastVal,
-		'notes': notesVal
+		'notes': notesValCol
 	};
 }

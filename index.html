@@ -250,8 +250,13 @@
 	// could actually keep classes for sake of constructor but it's not necessary
 -->
 	<script>
-		var _State = JSON.parse(window.localStorage.getItem("_State")) || initState();
-		var _Lists = JSON.parse(window.localStorage.getItem("_Lists")) || initLists();
+		window.localStorage.clear(); // for now
+//		var _State = JSON.parse(window.localStorage.getItem("_State")) || initState();
+		let _State = initState();
+		debug && console.log("_State initialized in index with", _State);
+		//var _Lists = JSON.parse(window.localStorage.getItem("_Lists")) || initLists();
+		let _Lists = initLists();
+		debug && console.log("_Lists initialized in index with", _Lists);
 
 		const { inputField, btnX, btnY, funs, title } = _State;
 		inputField.addEventListener('blur', () => { funs.inputFieldBlur(inputField.value, _State) });
@@ -264,8 +269,9 @@
 			_Lists = initLists();
 		});
 
-		title.textContent = `${_State.list.listName}: List View`;
+		title.textContent = `${currentList().listName}: List View`;
 
+		loadList();
 		renderList();
 
 	</script>

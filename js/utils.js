@@ -16,12 +16,13 @@ const debugMsg = (fun, params) => {
 }
 
 const renderList = _ => { // render list display
-	const { mode, root, list, options } = _State;
+	const { mode, root, options } = _State;
+	const list = currentList();
 	const dispArr = sortList(list.items, options.sortOrder);
 
 	root.innerHTML = '';
 	dispArr.forEach((item) => {
-		item.btnFuns[0] = mode === modeList ? checkItem : toggleListing;
+		item.btnFuns[0] = mode === modeList ? checkItem : toggleListed;
 		styleHeader(item, mode);
 		root.appendChild(_DOM.get(item).root);
 	});

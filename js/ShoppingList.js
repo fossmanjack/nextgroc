@@ -1,6 +1,10 @@
 /***** ShoppingList class definition *****/
+// I'm not gonna do this tonight but you have to make it so that _State.list
+// points to the ID of the list, not the list itself, and instead of list you
+// want to get _Lists[_State.list] as the actual list reference.
 
 class ShoppingList {
+/*
 	constructor( {
 		listName = 'New List',
 		creationDate = Date.now(),
@@ -14,17 +18,41 @@ class ShoppingList {
 		this.items = items;
 		this.listID = listID || genuuid();
 	}
+*/
+	constructor(params) {
+		params = typeof(params) === 'object' ? params : {};
+
+		const { listName, creationDate, modifyDate, items, listID } = params;
+
+		this.listName = listName ? listName : 'New List';
+		this.creationDate = creationDate ? creationDate : Date.now();
+		this.modifyDate = modifyDate ? modifyDate : creationDate;
+		this.items = items && items.length ? items : [ new ListItem( { title: "Sample item", qty: 1 } ) ];
+		this.listID = listID ? listID : genuuid();
+	}
 }
 
 /***** _Lists management *****/
 
 const initLists = _ => { // initialize _Lists object, used for storage
+	if(window.localStorage.getItem("_Lists")) {
+		debug && console.log('_Lists found in local storage!', window.localStorage.getItem("_Lists"));
+		return window.localStorage.getItem("_Lists");
+	}
+
+	//debug && debugMsg("initLists", [ _State, _Lists ]);
+
 	const newList = new ShoppingList();
 	const lss = {};
 
+	debug && console.log('Creating new _Lists with list', newList);
 	lss[newList.listID] = newList;
-	_State = updateState("list", lss[newList.listID]);
+	debug && debugMsg("initLists 1", [ _State ]);
+	updateState("list", newList.listID);
+	debug && debugMsg("initLists 2", [ _State]);
 	window.localStorage.setItem("_Lists", JSON.stringify(lss));
+	debug && debugMsg("initLists: addItem", [ newList, _State ]);
+	//addItem(new ListItem( { name: "Sample item", qty: 1 } ));
 	return lss;
 }
 
@@ -53,17 +81,17 @@ const getList = str => {
 // This isn't strictly necessary as you could access the elements directly using
 // document.getElementById(`${idStr}-val`) but storing the reference is easier to
 // manage, at least I think
-const loadList = _ => _State.list.items.forEach((item) => _DOM.set(item, buildDOM(item)));
+const loadList = _ => currentList().items.forEach((item) => _DOM.set(item, buildDOM(item)));
 
 const switchList = list => {
-	updateState('list', list);
+	updateState('list', list.listID);
 	loadList();
 	renderList();
 }
 
 const sortList = (items, opts) => {
 	const [ field, asc ] = opts;
-	sr = mode === modeList ? items.filter((item) => item.state !== 2) : items;
+	sr = _State.mode === modeList ? items.filter((item) => item.state !== 2) : items;
 
 	return sr.sort((a, b) => {
 		let x = a[field].toString().toLowerCase();
@@ -73,13 +101,15 @@ const sortList = (items, opts) => {
 		else return x > y ? -1 : x < y ? 1 : 0;
 	});
 }
+
+const currentList = _ => _Lists[_State.list];
 /***** ShoppingList management *****/
 // ShoppingList originally had class methods but it's just easier to save and load
 // from JSON making most everything simple objects and shifting the methods to
 // functions
 
 const findItem = input => {
-	const { list } = _State;
+	const list = currentList();
 
 	switch(typeof input) {
 		case 'string':
@@ -102,7 +132,8 @@ const addItem = item => {
 */
 
 const addItem = input => {
-	const { list, inputField } = _State;
+	const { inputField } = _State;
+	const list = currentList();
 	var item, itemToAdd;
 
 	if(!input) return false;
@@ -159,7 +190,7 @@ const addItemByStr = val => { // add item from input field
 */
 
 const removeItem = item => {
-	const { list } = _State;
+	const list = currentList();
 	const rem = findItem(item);
 
 	if(rem) {
@@ -172,7 +203,7 @@ const removeItem = item => {
 }
 
 const editListName = str => {
-	const { list } = _State;
+	const list = currentList();
 
 	list.listName = sanitize(str);
 	list.modifyDate = Date.now();

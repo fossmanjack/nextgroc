@@ -26,7 +26,7 @@ const toggleStaple = item => {
 		btn1.classList.remove('fa-toggle-off');
 		btn1.classList.add('fa-toggle-on');
 	}
-	ob.modifyDate = Date.now();
+	item.modifyDate = Date.now();
 	saveLists();
 }
 
@@ -65,7 +65,7 @@ const editItem = item => {
 		if(el.hasAttribute('data-edit-target')) {
 			el.contentEditable = true;
 			el.classList.add('edit-target');
-			el.addEventListener('beforeinput', el.validateInput = function validateInput(e) {
+			el.addEventListener('beforeinput', el.validateItemInput = function validateItemInput(e) {
 				debug && console.log(`Key: ${e.data}, Type: ${e.inputType}`);
 				if(e.inputType !== 'deleteContentBackward' && !validator.test(e.data)) {
 					e.preventDefault();
@@ -103,7 +103,7 @@ const commitEdit = item => {
 		if(el.hasAttribute('data-edit-target')) {
 			el.contentEditable = false;
 			el.classList.remove('edit-target');
-			el.removeEventListener('beforeinput', validateInput);
+			el.removeEventListener('beforeinput', validateItemInput);
 			if(!el.textContent) el.textContent = '-';
 			item[key] = el.textContent;
 		}
@@ -141,7 +141,7 @@ const cancelEdit = item => {
 		if(el.hasAttribute('data-edit-target')) {
 			el.contentEditable = false;
 			el.classList.remove('edit-target');
-			el.removeEventListener('beforeinput', validateInput);
+			el.removeEventListener('beforeinput', validateItemInput);
 			el.textContent = item[key];
 		}
 	});
@@ -157,7 +157,9 @@ const sweepItem = item => {
 // Button X: sweepList and addStaples
 
 const sweepList = _ => { // remove all items flagged as bought from the list view
-	const { mode, list } = _State;
+	const { mode } = _State;
+	const list = currentList();
+
 	list.items.filter((item) => item.state === itemBought)
 		.forEach((item) => {
 			item.state = itemUnlisted;
@@ -169,7 +171,9 @@ const sweepList = _ => { // remove all items flagged as bought from the list vie
 }
 
 const addStaples = _ => { // add all items flagged as staples to the list view
-	const { mode, list, root } = _State;
+	const { mode, root } = _State;
+	const list = currentList();
+
 	list.items.filter((item) => item.staple).forEach((item) => {
 		item.state = itemListed;
 		if(item.interval)
@@ -186,24 +190,25 @@ const addStaples = _ => { // add all items flagged as staples to the list view
 // Button Y: toggleView
 
 const toggleMode = _ => { // toggle between list and pantry modes
-	const { mode, title, btnX, btnY, list, root } = _State;
+	const { mode, title, btnX, btnY, root } = _State;
+	const list = currentList();
 
 	if(mode === modeList) { // switch to pantry view
 		btnX.classList.remove('fa-broom');
 		btnX.classList.add('fa-plus');
-		_State = updateState('funs', { ..._State.funs, 'btnX': addStaples });
+		updateState('funs', { ..._State.funs, 'btnX': addStaples });
 		btnY.classList.remove('fa-bookmark');
 		btnY.classList.add('fa-list');
 		title.textContent = `${list.listName}: Pantry`;
-		_State = updateState('mode', modePantry);
+		updateState('mode', modePantry);
 	} else {
 		btnX.classList.remove('fa-plus');
 		btnX.classList.add('fa-broom');
-		_State = updateState('funs', { ..._State.funs, 'btnX': sweepList });
+		updateState('funs', { ..._State.funs, 'btnX': sweepList });
 		btnY.classList.remove('fa-list');
 		btnY.classList.add('fa-bookmark');
 		title.textContent = `${list.listName}: List`;
-		_State = updateState('mode', modeList);
+		updateState('mode', modeList);
 	}
 	renderList();
 }
