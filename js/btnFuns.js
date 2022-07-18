@@ -1,13 +1,13 @@
 // Button 0: checkItem and toggleListed
 
 const checkItem = item => {
-	item.state = !item.state;
+	item.state = item.state === itemListed ? itemBought : itemListed;
 	styleHeader(item);
 	saveLists();
 }
 
 const toggleListed = item => {
-	(!item.state || item.state === itemBought) ? item.state = itemUnlisted : item.state = itemListed;
+	item.state = item.state === itemUnlisted ? itemListed : itemUnlisted;
 	styleHeader(item);
 	saveLists();
 }
@@ -171,8 +171,8 @@ const sweepList = _ => { // remove all items flagged as bought from the list vie
 }
 
 const addStaples = _ => { // add all items flagged as staples to the list view
-	const { mode, root } = _State;
 	const list = currentList();
+	debug && debugMsg('addStaples', [ list ]);
 
 	list.items.filter((item) => item.staple).forEach((item) => {
 		item.state = itemListed;
@@ -190,10 +190,13 @@ const addStaples = _ => { // add all items flagged as staples to the list view
 // Button Y: toggleView
 
 const toggleMode = _ => { // toggle between list and pantry modes
-	const { mode, title, btnX, btnY, root } = _State;
+	const { title, btnX, btnY, root } = Object.fromEntries(_DOM);;
 	const list = currentList();
+	//const mode = { _State };
+	debug && debugMsg('toggleMode', [ _State ]);
 
-	if(mode === modeList) { // switch to pantry view
+	if(_State.mode === modeList) { // switch to pantry view
+		debug && debugMsg('toggleMode: list to pantry', []);
 		btnX.classList.remove('fa-broom');
 		btnX.classList.add('fa-plus');
 		updateState('funs', { ..._State.funs, 'btnX': addStaples });
@@ -202,6 +205,7 @@ const toggleMode = _ => { // toggle between list and pantry modes
 		title.textContent = `${list.listName}: Pantry`;
 		updateState('mode', modePantry);
 	} else {
+		debug && debugMsg('toggleMode: pantry to list', []);
 		btnX.classList.remove('fa-plus');
 		btnX.classList.add('fa-broom');
 		updateState('funs', { ..._State.funs, 'btnX': sweepList });

@@ -195,81 +195,30 @@
 	<script src="js/btnFuns.js"></script>
 	<script src="js/stateFuns.js"></script>
 	<!-- endbuild -->
-<!--
 	<script>
-		const jsonDisp = document.getElementById('json-display');
-
-		_State.set('mode', 'list');;
-		_State.set('root', document.getElementById('list-root'));
-		_State.set('title', document.getElementById('list-title'));
-		_State.set('inputField', document.getElementById('inputField'));
-		_State.set('btnX', document.getElementById('btnX'));
-		_State.set('btnY', document.getElementById('btnY'));
-		_State.set('funs', {
-					inputFieldBlur: addItemByStr,
-					inputFieldCheck: validateItemInput,
-					btnX: sweepList,
-					btnY: toggleView
-				} );
-		_State.set('_Lists', new Map()); // not doing anything with this yet but we'll need it later
-		_State.set('list', new ShoppingList( { listName: 'placeholder' } ));
-
-		let jsonData;
-
-		const _TestList = _State.get('list');
-		fetch('res/testList-Listjs.json')
-			.then(resp => resp.json())
-			.then(Data => {
-				_TestList.listName = Data.listName;
-				_TestList.listID = Data.listID;
-				_TestList.creationDate = Data.creationDate;
-				_TestList.modifyDate = Data.modifyDate;
-				debug && debugMsg('fetch Data', [ Data ]);
-				Data.items.forEach((item) => { _TestList.addItem(new ListItem(item), _TestList); });
-			})
-			.then(() => {
-				//debug ? debugMsg('fetch complete', [ _TestList ]) : null;
-				document.getElementById('list-title').textContent = `${_TestList.listName}: List`;
-				_TestList.items.forEach((item) => item.listParent = _TestList);
-				_TestList.getListView(_TestList, _State.get('root'));
-			});
-
-		_State.get('_Lists').set(`${_TestList.listID}`, _TestList);
-		inputField.addEventListener('blur', () => { _State.get('funs').inputFieldBlur(inputField.value, _State) });
-		inputField.addEventListener('beforeinput', (e) => { _State.get('funs').inputFieldCheck(e, _State) });
-		btnX.addEventListener('click', () => { _State.get('funs').btnX(_State) });
-		btnY.addEventListener('click', () => { _State.get('funs').btnY(_State) });
-	</script>
--->
-<!--
-	// We want to save _State and _Lists in localStorage for now
-	// Eventually we'll be doing something with webDAV or a node API or something
-	// To make this easier, we're removing classes and using objects for everything
-	// in order to play nice with JSON
-	// object methods will become functions
-	// could actually keep classes for sake of constructor but it's not necessary
--->
-	<script>
-		window.localStorage.clear(); // for now
+	//	window.localStorage.clear(); // for now
 //		var _State = JSON.parse(window.localStorage.getItem("_State")) || initState();
-		let _State = initState();
+		let _State = new State(JSON.parse(window.localStorage.getItem('_State')) || {});
+		saveState();
 		debug && console.log("_State initialized in index with", _State);
 		//var _Lists = JSON.parse(window.localStorage.getItem("_Lists")) || initLists();
 		let _Lists = initLists();
 		debug && console.log("_Lists initialized in index with", _Lists);
+		initDOM();
 
-		const { inputField, btnX, btnY, funs, title } = _State;
-		inputField.addEventListener('blur', () => { funs.inputFieldBlur(inputField.value, _State) });
-		inputField.addEventListener('beforeinput', e => { funs.inputFieldCheck(e, _State) });
-		btnX.addEventListener('click', () => { funs.btnX(_State) });
-		btnY.addEventListener('click', () => { funs.btnY(_State) });
+		const { inputField, btnX, btnY, title } = Object.fromEntries(_DOM);
+		const { funs } = _State;
+		inputField.addEventListener('blur', () => { funs.inputFieldBlur(inputField.value) });
+		inputField.addEventListener('beforeinput', e => { funs.inputFieldCheck(e) });
+		btnX.addEventListener('click', () => { funs.btnX() });
+		btnY.addEventListener('click', () => { funs.btnY() });
 		btnReset.addEventListener('click', () => {
 			window.localStorage.clear();
-			_State = initState();
+			_State = new State({});
 			_Lists = initLists();
 		});
 
-		title.textContent = `${currentList().listName}: List View`;
+		//title.textContent = `${currentList().listName}: List View`;
 
 		loadList();
 		renderList();

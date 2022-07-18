@@ -16,14 +16,15 @@ const debugMsg = (fun, params) => {
 }
 
 const renderList = _ => { // render list display
-	const { mode, root, options } = _State;
+	const { mode, options } = _State;
 	const list = currentList();
 	const dispArr = sortList(list.items, options.sortOrder);
+	_DOM.get('title').textContent = `${currentList().listName}: ${mode === modeList ? "List" : "Pantry"} View`;
 
-	root.innerHTML = '';
+	_DOM.get('root').innerHTML = '';
 	dispArr.forEach((item) => {
 		item.btnFuns[0] = mode === modeList ? checkItem : toggleListed;
-		styleHeader(item, mode);
-		root.appendChild(_DOM.get(item).root);
+		styleHeader(item);
+		_DOM.get('root').appendChild(_DOM.get(item).root);
 	});
 }

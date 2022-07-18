@@ -1,3 +1,11 @@
+const initDOM = _ => {
+	_DOM.set('root', document.getElementById('list-root'));
+	_DOM.set('title', document.getElementById('list-title'));
+	_DOM.set('btnX', document.getElementById('btnX'));
+	_DOM.set('btnY', document.getElementById('btnY'));
+	_DOM.set('inputField', document.getElementById('inputField'));
+}
+
 const buildDOM = item => {
 	const idStr = camelize(item.title);
 
@@ -316,6 +324,6 @@ const buildDOM = item => {
 		'purBy': purByVal,
 		'interval': intervalVal,
 		'last': lastVal,
-		'notes': notesValCol
+		'notes': notesValCol,
 	};
 }

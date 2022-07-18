@@ -37,7 +37,7 @@ class ShoppingList {
 const initLists = _ => { // initialize _Lists object, used for storage
 	if(window.localStorage.getItem("_Lists")) {
 		debug && console.log('_Lists found in local storage!', window.localStorage.getItem("_Lists"));
-		return window.localStorage.getItem("_Lists");
+		return JSON.parse(window.localStorage.getItem("_Lists"));
 	}
 
 	//debug && debugMsg("initLists", [ _State, _Lists ]);
@@ -81,7 +81,10 @@ const getList = str => {
 // This isn't strictly necessary as you could access the elements directly using
 // document.getElementById(`${idStr}-val`) but storing the reference is easier to
 // manage, at least I think
-const loadList = _ => currentList().items.forEach((item) => _DOM.set(item, buildDOM(item)));
+const loadList = _ => currentList().items.forEach((item) => {
+	initFuns(item);
+	_DOM.set(item, buildDOM(item));
+})
 
 const switchList = list => {
 	updateState('list', list.listID);
@@ -132,7 +135,6 @@ const addItem = item => {
 */
 
 const addItem = input => {
-	const { inputField } = _State;
 	const list = currentList();
 	var item, itemToAdd;
 
@@ -161,7 +163,7 @@ const addItem = input => {
 
 	item.state = itemListed;
 	_DOM.set(item, buildDOM(item));
-	inputField.value = '';
+	_DOM.get('inputField').value = '';
 	saveLists();
 	renderList();
 }
@@ -213,7 +215,6 @@ const editListName = str => {
 
 
 const validateItemInput = e => { // validate the input field input
-	const { inputField } = _State;
 	//debug ? debugMsg('e.data and e.inputType', [ e.data, e.inputType ]) : null;
 	validator = /[^<>?\/\\]/
 
@@ -224,7 +225,7 @@ const validateItemInput = e => { // validate the input field input
 	if(e.inputType === 'insertLineBreak')
 	{
 		//debug ? debugMsg('validateItemInput', [ e.inputType ]) : null;
-		inputField.blur;
+		_DOM.get('inputField').blur;
 	}
 }
 

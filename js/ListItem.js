@@ -70,3 +70,7 @@ const styleHeader = item => { // changes the title style and btn0 function based
 	}
 }
 
+const initFuns = item => item.btnFuns = _State.mode === modeList ?
+		[ checkItem, toggleStaple, editItem, sweepItem ] :
+		[ toggleListed, toggleStaple, editItem, sweepItem ];
+
